@@ -1,29 +1,32 @@
-// prisma/schema.prisma
-
-// Connect to MongoDB using environment variable
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
-
-// Generate Prisma client
 generator client {
   provider = "prisma-client-js"
 }
 
-// Define your collections / tables
-// Example: Users, Tours, Bookings
+// Example models for Phoenix Tour
 
 model User {
-  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  id        String    @id @map("_id") @default(auto()) @db.ObjectId
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   bookings  Booking[]
 }
 
 model Tour {
   id          String    @id @map("_id") @default(auto()) @db.ObjectId
   title       String
-  }
+  description String
+  price       Float
+  createdAt   DateTime  @default(now())
+  bookings    Booking[]
+}
+
+model Booking {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  tour      Tour     @relation(fields: [tourId], references: [id])
+  tourId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+}
