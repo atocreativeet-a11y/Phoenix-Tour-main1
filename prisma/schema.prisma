@@ -26,3 +26,4 @@ model User {
 model Tour {
   id          String    @id @map("_id") @default(auto()) @db.ObjectId
   title       String
+  }
