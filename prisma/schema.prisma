@@ -2,8 +2,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Example models for Phoenix Tour
-
+// Example models
 model User {
   id        String    @id @map("_id") @default(auto()) @db.ObjectId
   name      String
