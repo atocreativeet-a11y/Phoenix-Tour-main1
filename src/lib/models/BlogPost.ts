@@ -1,9 +1,10 @@
-import { BlogPost } from '@/lib/models/BlogPost';
+import mongoose, { Schema, model, models } from 'mongoose';
 
-// Example: create a new blog post
-await BlogPost.create({
-  title: 'My First Post',
-  content: 'Hello world!',
-  category: 'Tech',
-  published: true
+const blogPostSchema = new Schema({
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  author: { type: String },
+  createdAt: { type: Date, default: Date.now },
 });
+
+export const BlogPost = models.BlogPost || model('BlogPost', blogPostSchema);
