@@ -87,27 +87,23 @@ export default function HomePage() {
       {/* Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(homepageSchema),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema) }}
       />
 
       <FAQSchema questions={faqData} />
 
       <main className="min-h-screen">
-
-        {/*  Hero */}
+        {/* Hero */}
         <Hero />
 
-        {/*  Featured Tours */}
+        {/* Featured Tours */}
         <FeaturedTours id="tours" />
 
-        {/*  Testimonials */}
+        {/* Testimonials */}
         <Testimonials />
-
       </main>
 
-      {/*  WhatsApp Floating Button */}
+      {/* WhatsApp Floating Button */}
       <SimpleWhatsAppButton />
 
       {/* Hidden but kept for SEO */}

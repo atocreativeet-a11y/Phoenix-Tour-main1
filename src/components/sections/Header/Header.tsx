@@ -36,18 +36,29 @@ export default function Header() {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      const clickedOutside = Object.values(dropdownRefs.current)
-        .every(ref => ref && !ref.contains(e.target as Node)) &&
-        Object.values(navItemRefs.current)
-        .every(ref => ref && !ref.contains(e.target as Node));
+      const clickedOutside =
+        Object.values(dropdownRefs.current).every(
+          ref => !ref || !ref.contains(e.target as Node)
+        ) &&
+        Object.values(navItemRefs.current).every(
+          ref => !ref || !ref.contains(e.target as Node)
+        );
 
       if (clickedOutside) setActiveDropdown(null);
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => () => timeoutRef.current && clearTimeout(timeoutRef.current), []);
+  // ✅ FIXED CLEANUP (NO NULL RETURN)
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const navItems: NavItem[] = [
     { label: 'Home', href: '/' },
@@ -80,44 +91,56 @@ export default function Header() {
   ];
 
   const openDropdown = useCallback((label: string) => {
-    timeoutRef.current && clearTimeout(timeoutRef.current);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setActiveDropdown(label);
   }, []);
 
   const closeDropdown = useCallback(() => {
-    timeoutRef.current && clearTimeout(timeoutRef.current);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
   }, []);
 
-  const handleDropdownRef = useCallback((label: string) => (el: HTMLDivElement | null) => {
-    dropdownRefs.current[label] = el;
-  }, []);
+  const handleDropdownRef = useCallback(
+    (label: string) => (el: HTMLDivElement | null) => {
+      dropdownRefs.current[label] = el;
+    },
+    []
+  );
 
-  const handleNavItemRef = useCallback((label: string) => (el: HTMLDivElement | null) => {
-    navItemRefs.current[label] = el;
-  }, []);
+  const handleNavItemRef = useCallback(
+    (label: string) => (el: HTMLDivElement | null) => {
+      navItemRefs.current[label] = el;
+    },
+    []
+  );
 
-  const handleMobileDropdownToggle = useCallback((label: string) => {
-    if (window.innerWidth < 1024) {
-      setActiveDropdown(activeDropdown === label ? null : label);
-    }
-  }, [activeDropdown]);
+  const handleMobileDropdownToggle = useCallback(
+    (label: string) => {
+      if (window.innerWidth < 1024) {
+        setActiveDropdown(activeDropdown === label ? null : label);
+      }
+    },
+    [activeDropdown]
+  );
 
   return (
     <>
       {/* Announcement Bar */}
       <div className="bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2 px-4">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-2" />
+          <div />
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <select className="bg-transparent border-none outline-none text-white">
-                <option value="en">EN</option>
-                <option value="es">ES</option>
-                <option value="fr">FR</option>
-                <option value="am">አማርኛ</option>
-              </select>
-            </div>
+            <select className="bg-transparent outline-none text-white">
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+              <option value="fr">FR</option>
+              <option value="am">አማርኛ</option>
+            </select>
+
             <div className="hidden md:flex items-center gap-2">
               <Phone className="w-4 h-4" />
               <span>+251 911 - 92 04 11</span>
@@ -126,51 +149,41 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Main Navbar */}
+      {/* Navbar */}
       <header className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-primary-100' : 'bg-white'
       }`}>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/">
               <Logo />
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-10">
               {navItems.map(item => (
                 <div
                   key={item.label}
-                  className="relative group"
+                  className="relative"
                   ref={handleNavItemRef(item.label)}
                   onMouseEnter={() => openDropdown(item.label)}
                   onMouseLeave={closeDropdown}
                 >
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-1 text-gray-700 hover:text-primary-500 font-medium transition-colors duration-200"
-                  >
+                  <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
                     {item.label === 'Blog' && <BookOpen className="w-4 h-4 mr-1" />}
                     {item.label}
                     {item.dropdown && <ChevronDown className="w-4 h-4" />}
                   </Link>
 
-                  {/* Dropdown */}
                   {item.dropdown && activeDropdown === item.label && (
                     <div
                       ref={handleDropdownRef(item.label)}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50"
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2"
                     >
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-t border-l border-gray-100 rotate-45" />
                       {item.dropdown.map(sub => (
-                        <Link
-                          key={sub.label}
-                          href={sub.href}
-                          className="flex items-center gap-2 px-5 py-3 text-gray-600 hover:text-primary-500 hover:bg-primary-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
-                        >
-                          {sub.icon && sub.icon}
+                        <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
+                          {sub.icon}
                           {sub.label}
                         </Link>
                       ))}
@@ -180,110 +193,20 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-4">
-              <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                <Search className="w-5 h-5 text-gray-600" />
-              </button>
-              <button
-                onClick={() => setIsApplyModalOpen(true)}
-                className="px-6 py-3 bg-gradient-to-r from-primary-500 to-orange-500 text-white font-semibold rounded-full hover:from-primary-600 hover:to-orange-600 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary-500/30"
-              >
-                Travel
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6 text-gray-700" /> : <Menu className="w-6 h-6 text-gray-700" />}
+            {/* Mobile Button */}
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden">
+              {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
-          </div>
 
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <MobileMenu
-              navItems={navItems}
-              activeDropdown={activeDropdown}
-              setActiveDropdown={setActiveDropdown}
-              closeMenu={() => setIsMobileMenuOpen(false)}
-              openModal={() => setIsApplyModalOpen(true)}
-              handleMobileDropdownToggle={handleMobileDropdownToggle}
-            />
-          )}
+          </div>
         </div>
       </header>
 
-      {/* Apply Tour Modal */}
       <ApplyTourModal
         isOpen={isApplyModalOpen}
         onClose={() => setIsApplyModalOpen(false)}
         tour={{ name: 'General Inquiry', duration: 'Customizable', difficulty: 'All Levels' }}
       />
     </>
-  );
-}
-
-/** Mobile Menu */
-interface MobileMenuProps {
-  navItems: NavItem[];
-  activeDropdown: string | null;
-  setActiveDropdown: (label: string | null) => void;
-  closeMenu: () => void;
-  openModal: () => void;
-  handleMobileDropdownToggle: (label: string) => void;
-}
-
-function MobileMenu({
-  navItems, activeDropdown, setActiveDropdown, closeMenu, openModal, handleMobileDropdownToggle
-}: MobileMenuProps) {
-  return (
-    <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-100 shadow-2xl z-50">
-      <div className="px-4 py-6 space-y-1">
-        {navItems.map(item => (
-          <div key={item.label} className="border-b border-gray-100 last:border-0">
-            <div className="flex items-center justify-between">
-              <Link
-                href={item.href}
-                className="flex items-center gap-2 py-4 text-gray-700 hover:text-primary-500 font-medium"
-                onClick={closeMenu}
-              >
-                {item.label === 'Blog' && <BookOpen className="w-4 h-4" />}
-                {item.label}
-              </Link>
-              {item.dropdown && (
-                <button onClick={() => handleMobileDropdownToggle(item.label)} className="p-2">
-                  <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
-                </button>
-              )}
-            </div>
-
-            {item.dropdown && activeDropdown === item.label && (
-              <div className="pl-4 pb-2 space-y-1">
-                {item.dropdown.map(sub => (
-                  <Link
-                    key={sub.label}
-                    href={sub.href}
-                    className="flex items-center gap-2 py-2 text-gray-500 hover:text-primary-500 pl-4 border-l-2 border-gray-200"
-                    onClick={() => { setActiveDropdown(null); closeMenu(); }}
-                  >
-                    {sub.icon && sub.icon} {sub.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-
-        {/* Mobile Actions */}
-        <div className="pt-4 border-t border-gray-100 space-y-3">
-          <button onClick={openModal} className="block w-full text-center py-3 bg-gradient-to-r from-primary-500 to-orange-500 text-white font-semibold rounded-lg hover:from-primary-600 hover:to-orange-600 transition-colors">
-            Travel
-          </button>
-        </div>
-      </div>
-    </div>
   );
 }

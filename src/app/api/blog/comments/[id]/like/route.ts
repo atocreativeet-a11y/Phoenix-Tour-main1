@@ -1,39 +1,26 @@
-// src/app/api/blog/comments/[id]/like/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import { BlogComment } from '@/lib/models/BlogComment';
+import BlogComment from '@/lib/models/BlogComment';
 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> } // <-- TS expects Promise
 ) {
   try {
-    const { id } = await context.params;
-    
     await connectDB();
-    
-    const comment = await BlogComment.findByIdAndUpdate(
-      id,
-      { $inc: { likes: 1 } },
-      { new: true }
-    );
-    
-    if (!comment) {
-      return NextResponse.json(
-        { success: false, error: 'Comment not found' },
-        { status: 404 }
-      );
-    }
-    
-    return NextResponse.json({
-      success: true,
-      likes: comment.likes
-    });
-  } catch (error: any) {
-    console.error('Error liking comment:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to like comment' },
-      { status: 500 }
-    );
+
+    const { id } = await context.params; // <-- await the params
+    if (!id) return NextResponse.json({ success: false, error: 'Comment ID required' }, { status: 400 });
+
+    const comment = await BlogComment.findById(id);
+    if (!comment) return NextResponse.json({ success: false, error: 'Comment not found' }, { status: 404 });
+
+    comment.likes = (comment.likes || 0) + 1;
+    await comment.save();
+
+    return NextResponse.json({ success: true, likes: comment.likes });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ success: false, error: 'Failed to like comment' }, { status: 500 });
   }
 }

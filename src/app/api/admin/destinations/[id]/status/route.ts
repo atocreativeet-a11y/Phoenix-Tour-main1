@@ -5,15 +5,16 @@ import { NextRequest, NextResponse } from "next/server";
 // src/app/api/admin/destinations/[id]/status/route.ts
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
+
+    const { id } = await context.params;
     const { isActive } = await request.json();
-    
+
     const destination = await Destination.findByIdAndUpdate(
-      params.id,
+      id,
       { isActive, updatedAt: new Date() },
       { new: true }
     ).select('-__v');

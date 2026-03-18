@@ -1,8 +1,7 @@
-// src/app/(dashboard)/dashboard/layout.tsx
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { redirect, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
 import { Loader2 } from 'lucide-react';
@@ -15,42 +14,42 @@ export default function DashboardLayout({
 }) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
-  
+  const router = useRouter();
+
   // Check authentication pages
   const isLoginPage = pathname === '/dashboard/login';
   const isSignupPage = pathname === '/dashboard/signup';
   const isAuthPage = isLoginPage || isSignupPage;
 
   useEffect(() => {
-    // Only run redirect logic after session is loaded
-    if (status === 'loading') {
-      return;
-    }
+    if (status === 'loading') return;
 
-    // If user is authenticated and on auth pages, redirect to dashboard
+    // If user is authenticated and on auth pages → go to dashboard
     if (status === 'authenticated' && isAuthPage) {
-      redirect('/dashboard');
+      router.push('/dashboard');
       return;
     }
 
-    // If user is not authenticated and not on auth pages, redirect to login
+    // If user is not authenticated → go to login
     if (status === 'unauthenticated' && !isAuthPage) {
-      redirect('/dashboard/login');
+      router.push('/dashboard/login');
       return;
     }
 
-    // Check admin role if authenticated
+    // Role protection
     if (status === 'authenticated' && session?.user) {
-      const isAdmin = session.user.role === 'admin' || session.user.role === 'super_admin';
-      
+      const isAdmin =
+        session.user.role === 'admin' ||
+        session.user.role === 'super_admin';
+
       if (!isAdmin && pathname.startsWith('/dashboard')) {
-        redirect('/');
+        router.push('/');
         return;
       }
     }
-  }, [session, status, pathname, isAuthPage]);
+  }, [session, status, pathname, isAuthPage, router]);
 
-  // Show loading state
+  // Loading state
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
@@ -60,13 +59,15 @@ export default function DashboardLayout({
             <Loader2 className="w-8 h-8 animate-spin text-green-500 mx-auto mb-4 absolute inset-0 m-auto" />
           </div>
           <p className="text-gray-600 font-medium">Loading dashboard...</p>
-          <p className="text-gray-400 text-sm mt-2">Preparing your workspace</p>
+          <p className="text-gray-400 text-sm mt-2">
+            Preparing your workspace
+          </p>
         </div>
       </div>
     );
   }
 
-  // Don't show layout on auth pages (login/signup)
+  // Auth pages (login/signup) → no dashboard layout
   if (isAuthPage) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
@@ -79,24 +80,23 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50/20 flex">
       {/* Sidebar for mobile */}
       <div className="lg:hidden">
-        <Sidebar  />
+        <Sidebar />
       </div>
-      
+
       {/* Sidebar for desktop */}
       <div className="hidden lg:block fixed inset-y-0 left-0 z-30 w-64">
         <Sidebar />
       </div>
-      
+
       {/* Main Content */}
       <div className="flex-1 lg:ml-64 min-w-0">
         <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b border-gray-200/50">
           <Header />
         </div>
+
         <main className="py-6">
           <div className="mx-auto px-4 sm:px-6 md:px-8">
-            <div className="max-w-7xl mx-auto">
-              {children}
-            </div>
+            <div className="max-w-7xl mx-auto">{children}</div>
           </div>
         </main>
       </div>

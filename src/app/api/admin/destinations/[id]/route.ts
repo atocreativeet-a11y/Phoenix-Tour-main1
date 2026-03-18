@@ -1,4 +1,3 @@
-// src/app/api/admin/destinations/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Destination from '@/lib/models/Destination';
@@ -6,13 +5,15 @@ import Destination from '@/lib/models/Destination';
 // GET single destination
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
-    const destination = await Destination.findById(params.id).select('-__v');
-    
+
+    const { id } = await context.params;
+
+    const destination = await Destination.findById(id).select('-__v');
+
     if (!destination) {
       return NextResponse.json(
         { success: false, error: 'Destination not found' },
@@ -36,15 +37,15 @@ export async function GET(
 // UPDATE destination
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
+
+    const { id } = await context.params;
     const data = await request.json();
-    
-    // Check if destination exists
-    const existingDestination = await Destination.findById(params.id);
+
+    const existingDestination = await Destination.findById(id);
     if (!existingDestination) {
       return NextResponse.json(
         { success: false, error: 'Destination not found' },
@@ -52,12 +53,12 @@ export async function PUT(
       );
     }
 
-    // Check if slug is being changed and if new slug exists
     if (data.slug && data.slug !== existingDestination.slug) {
-      const slugExists = await Destination.findOne({ 
+      const slugExists = await Destination.findOne({
         slug: data.slug,
-        _id: { $ne: params.id }
+        _id: { $ne: id },
       });
+
       if (slugExists) {
         return NextResponse.json(
           { success: false, error: 'Destination with this slug already exists' },
@@ -66,9 +67,8 @@ export async function PUT(
       }
     }
 
-    // Update destination
     const destination = await Destination.findByIdAndUpdate(
-      params.id,
+      id,
       { ...data, updatedAt: new Date() },
       { new: true, runValidators: true }
     ).select('-__v');
@@ -90,29 +90,21 @@ export async function PUT(
 // DELETE destination
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
-    const destination = await Destination.findById(params.id);
-    
+
+    const { id } = await context.params;
+
+    const destination = await Destination.findById(id);
+
     if (!destination) {
       return NextResponse.json(
         { success: false, error: 'Destination not found' },
         { status: 404 }
       );
     }
-
-    // Check if destination has associated tours
-    // You might want to add this check based on your schema
-    // const tourCount = await Tour.countDocuments({ destinationId: params.id });
-    // if (tourCount > 0) {
-    //   return NextResponse.json(
-    //     { success: false, error: 'Cannot delete destination with associated tours' },
-    //     { status: 400 }
-    //   );
-    // }
 
     await destination.deleteOne();
 

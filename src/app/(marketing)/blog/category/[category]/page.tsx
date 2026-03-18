@@ -3,9 +3,8 @@ import { Metadata } from 'next';
 import BlogList from '@/components/blog/BlogList';
 import { notFound } from 'next/navigation';
 import connectDB  from '@/lib/mongodb';
-import { BlogPost } from '@/lib/models/BlogPost';
+import BlogPost from '@/lib/models/BlogPost';
 import { BookOpen, Hash, Coffee, Mountain, Church, Camera } from 'lucide-react';
-
 interface CategoryPageProps {
   params: {
     category: string;

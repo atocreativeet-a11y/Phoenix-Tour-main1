@@ -15,11 +15,13 @@ declare module 'next-auth' {
   }
 
   interface User {
-    id: string;
-    role: string;
-    permissions: string[];
-    isAdmin: boolean; // Add this line
-  }
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  permissions?: string[];
+  isAdmin?: boolean;
+}
 }
 
 declare module 'next-auth/jwt' {

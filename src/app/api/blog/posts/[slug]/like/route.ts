@@ -1,7 +1,7 @@
 // src/app/api/blog/posts/[slug]/like/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import { BlogPost } from '@/lib/models/BlogPost';
+import BlogPost from '@/lib/models/BlogPost';
 import mongoose from 'mongoose';
 
 export async function POST(
