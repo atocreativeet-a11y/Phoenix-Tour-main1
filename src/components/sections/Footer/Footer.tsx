@@ -33,7 +33,7 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="break-words">
-            <h3 className="text-xl font-bold mb-2">Phoenix Ethiopia Tour</h3>
+            <h3 className="text-xl font-bold mb-2">Phoenix Ethiopia Tours</h3>
             <p className="text-gray-400 text-sm mb-3">Authentic Ethiopian Adventures Since 2021</p>
             <p className="text-gray-300 text-sm leading-relaxed">
               We create transformative travel experiences that connect you
