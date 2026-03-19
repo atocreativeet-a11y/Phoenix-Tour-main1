@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  Menu, X, Phone, ChevronDown, Search, BookOpen, Mountain, Globe, Map, Building, Trees, Flag
+  Menu, X, Phone, ChevronDown, BookOpen, Mountain, Globe, Map, Building, Trees, Flag
 } from 'lucide-react';
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 import Logo from '@/components/ui/logo';
@@ -20,8 +20,6 @@ export default function Header() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const navItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -34,29 +32,19 @@ export default function Header() {
     if (isApplyModalOpen) setIsMobileMenuOpen(false);
   }, [isApplyModalOpen]);
 
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const clickedOutside =
-        Object.values(dropdownRefs.current).every(
-          ref => !ref || !ref.contains(e.target as Node)
-        ) &&
-        Object.values(navItemRefs.current).every(
-          ref => !ref || !ref.contains(e.target as Node)
-        );
-
-      if (clickedOutside) setActiveDropdown(null);
+    const handleClickOutside = () => {
+      setActiveDropdown(null);
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // ✅ FIXED CLEANUP (NO NULL RETURN)
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
 
@@ -90,61 +78,19 @@ export default function Header() {
     { label: 'Blog', href: '/blog' }
   ];
 
-  const openDropdown = useCallback((label: string) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setActiveDropdown(label);
-  }, []);
-
-  const closeDropdown = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
-  }, []);
-
-  const handleDropdownRef = useCallback(
-    (label: string) => (el: HTMLDivElement | null) => {
-      dropdownRefs.current[label] = el;
-    },
-    []
-  );
-
-  const handleNavItemRef = useCallback(
-    (label: string) => (el: HTMLDivElement | null) => {
-      navItemRefs.current[label] = el;
-    },
-    []
-  );
-
-  const handleMobileDropdownToggle = useCallback(
-    (label: string) => {
-      if (window.innerWidth < 1024) {
-        setActiveDropdown(activeDropdown === label ? null : label);
-      }
-    },
-    [activeDropdown]
-  );
+  const handleMobileDropdownToggle = (label: string) => {
+    setActiveDropdown(activeDropdown === label ? null : label);
+  };
 
   return (
     <>
       {/* Announcement Bar */}
       <div className="bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2 px-4">
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+        <div className="container mx-auto flex justify-between items-center">
           <div />
-          <div className="flex items-center gap-4">
-            <select className="bg-transparent outline-none text-white">
-              <option value="en">EN</option>
-              <option value="es">ES</option>
-              <option value="fr">FR</option>
-              <option value="am">አማርኛ</option>
-            </select>
-
-            <div className="hidden md:flex items-center gap-2">
-              <Phone className="w-4 h-4" />
-              <span>+251 911 - 92 04 11</span>
-            </div>
+          <div className="hidden md:flex items-center gap-2">
+            <Phone className="w-4 h-4" />
+            <span>+251 911 - 92 04 11</span>
           </div>
         </div>
       </div>
@@ -156,31 +102,19 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
 
-            <Link href="/">
-              <Logo />
-            </Link>
+            <Link href="/"><Logo /></Link>
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-10">
               {navItems.map(item => (
-                <div
-                  key={item.label}
-                  className="relative"
-                  ref={handleNavItemRef(item.label)}
-                  onMouseEnter={() => openDropdown(item.label)}
-                  onMouseLeave={closeDropdown}
-                >
+                <div key={item.label} className="relative group">
                   <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
-                    {item.label === 'Blog' && <BookOpen className="w-4 h-4 mr-1" />}
                     {item.label}
                     {item.dropdown && <ChevronDown className="w-4 h-4" />}
                   </Link>
 
-                  {item.dropdown && activeDropdown === item.label && (
-                    <div
-                      ref={handleDropdownRef(item.label)}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2"
-                    >
+                  {item.dropdown && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
                       {item.dropdown.map(sub => (
                         <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
                           {sub.icon}
@@ -194,7 +128,10 @@ export default function Header() {
             </nav>
 
             {/* Mobile Button */}
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden z-[10000]"
+            >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
 
@@ -202,6 +139,60 @@ export default function Header() {
         </div>
       </header>
 
+      {/* ✅ MOBILE MENU (FIXED) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[9999] bg-black/40">
+          <div className="absolute top-0 right-0 w-4/5 max-w-sm h-full bg-white shadow-2xl p-6 overflow-y-auto">
+
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="mb-6"
+            >
+              <X />
+            </button>
+
+            {navItems.map(item => (
+              <div key={item.label} className="border-b">
+
+                <div
+                  className="flex justify-between items-center py-4 font-medium"
+                  onClick={() =>
+                    item.dropdown
+                      ? handleMobileDropdownToggle(item.label)
+                      : setIsMobileMenuOpen(false)
+                  }
+                >
+                  <Link href={item.href}>
+                    {item.label}
+                  </Link>
+
+                  {item.dropdown && <ChevronDown className="w-4 h-4" />}
+                </div>
+
+                {item.dropdown && activeDropdown === item.label && (
+                  <div className="pl-4 pb-3 flex flex-col gap-2">
+                    {item.dropdown.map(sub => (
+                      <Link
+                        key={sub.label}
+                        href={sub.href}
+                        className="flex items-center gap-2 text-sm text-gray-600 py-2"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {sub.icon}
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+              </div>
+            ))}
+
+          </div>
+        </div>
+      )}
+
+      {/* Modal */}
       <ApplyTourModal
         isOpen={isApplyModalOpen}
         onClose={() => setIsApplyModalOpen(false)}

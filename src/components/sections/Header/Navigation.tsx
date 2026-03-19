@@ -16,6 +16,7 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Close menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
@@ -32,22 +33,23 @@ export default function Navigation() {
       <Link
         key={item.label}
         href={item.href}
+        onClick={() => setMobileOpen(false)}
         aria-current={isActive ? 'page' : undefined}
-        className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 group ${
+        className={`flex items-center gap-3 px-4 py-4 rounded-xl transition-all duration-300 ${
           isActive
-            ? 'bg-gradient-to-r from-primary-500 to-orange-500 text-white shadow-lg'
-            : 'text-gray-700 hover:text-primary-500 hover:bg-primary-50'
+            ? 'bg-gradient-to-r from-primary-500 to-orange-500 text-white shadow-md'
+            : 'text-gray-700 hover:text-primary-500 hover:bg-gray-100'
         }`}
       >
-        <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
-        <span className="font-medium">{item.label}</span>
+        <Icon className="w-5 h-5" />
+        <span className="text-base font-medium">{item.label}</span>
       </Link>
     );
   };
 
   return (
-    <div className="relative">
-      {/* Desktop */}
+    <div className="relative z-50">
+      {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center gap-2">
         {navItems.map((item) => renderNavItem(item))}
       </nav>
@@ -56,7 +58,8 @@ export default function Navigation() {
       <div className="md:hidden flex justify-end">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+          className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 active:scale-95 transition"
+          aria-label="Toggle menu"
         >
           {mobileOpen ? (
             <X className="w-6 h-6" />
@@ -69,17 +72,19 @@ export default function Navigation() {
       {/* Overlay */}
       <div
         onClick={() => setMobileOpen(false)}
-        className={`fixed inset-0 bg-black/30 z-40 transition ${
-          mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
+          mobileOpen
+            ? 'opacity-100'
+            : 'opacity-0 pointer-events-none'
         }`}
       />
 
-      {/* ✅ FIXED MOBILE MENU */}
+      {/* Mobile Menu */}
       <nav
-        className={`fixed top-20 left-4 right-4 bg-white shadow-xl p-4 rounded-xl z-50 flex flex-col gap-2 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 mt-16 mx-4 bg-white shadow-2xl p-4 rounded-2xl z-[9999] flex flex-col gap-2 transition-all duration-300 ${
           mobileOpen
             ? 'opacity-100 translate-y-0'
-            : 'opacity-0 -translate-y-2 pointer-events-none'
+            : 'opacity-0 -translate-y-4 pointer-events-none'
         }`}
       >
         {navItems.map((item) => renderNavItem(item))}
