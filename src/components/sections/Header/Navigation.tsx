@@ -16,7 +16,6 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // auto close on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
@@ -36,7 +35,7 @@ export default function Navigation() {
         aria-current={isActive ? 'page' : undefined}
         className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 group ${
           isActive
-            ? 'bg-gradient-to-r from-primary-500 to-orange-500 text-white shadow-lg shadow-primary-500/30'
+            ? 'bg-gradient-to-r from-primary-500 to-orange-500 text-white shadow-lg'
             : 'text-gray-700 hover:text-primary-500 hover:bg-primary-50'
         }`}
       >
@@ -47,7 +46,7 @@ export default function Navigation() {
   };
 
   return (
-    <div>
+    <div className="relative">
       {/* Desktop */}
       <nav className="hidden md:flex items-center gap-2">
         {navItems.map((item) => renderNavItem(item))}
@@ -77,7 +76,7 @@ export default function Navigation() {
 
       {/* ✅ FIXED MOBILE MENU */}
       <nav
-        className={`fixed top-16 left-4 right-4 bg-white shadow-xl p-4 rounded-xl z-50 flex flex-col gap-2 transition-all duration-300 ${
+        className={`fixed top-20 left-4 right-4 bg-white shadow-xl p-4 rounded-xl z-50 flex flex-col gap-2 transition-all duration-300 ${
           mobileOpen
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 -translate-y-2 pointer-events-none'
