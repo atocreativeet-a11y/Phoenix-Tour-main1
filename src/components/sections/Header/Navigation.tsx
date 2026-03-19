@@ -16,12 +16,11 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Close menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
-  const renderNavItem = (item: typeof navItems[0]) => {
+  const renderNavItem = (item: (typeof navItems)[0]) => {
     const Icon = item.icon;
 
     const isActive =
@@ -69,26 +68,34 @@ export default function Navigation() {
         </button>
       </div>
 
-      {/* Overlay */}
+      {/* Mobile Bottom Sheet */}
       <div
-        onClick={() => setMobileOpen(false)}
-        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
-          mobileOpen
-            ? 'opacity-100'
-            : 'opacity-0 pointer-events-none'
-        }`}
-      />
-
-      {/* Mobile Menu */}
-      <nav
-        className={`fixed top-0 left-0 right-0 mt-16 mx-4 bg-white shadow-2xl p-4 rounded-2xl z-[9999] flex flex-col gap-2 transition-all duration-300 ${
-          mobileOpen
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 -translate-y-4 pointer-events-none'
+        className={`fixed inset-0 z-50 flex items-end justify-center ${
+          mobileOpen ? '' : 'pointer-events-none'
         }`}
       >
-        {navItems.map((item) => renderNavItem(item))}
-      </nav>
+        {/* Overlay */}
+        <div
+          onClick={() => setMobileOpen(false)}
+          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
+            mobileOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        {/* Sheet */}
+        <nav
+          className={`relative w-full max-w-md mx-auto mb-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-4 flex flex-col gap-2 transition-all duration-300 ${
+            mobileOpen
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-10 opacity-0'
+          }`}
+        >
+          {/* Drag Handle */}
+          <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3" />
+
+          {navItems.map((item) => renderNavItem(item))}
+        </nav>
+      </div>
     </div>
   );
 }
