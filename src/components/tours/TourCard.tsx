@@ -1,4 +1,4 @@
-import { Clock, MapPin, Star, Flag, ArrowRight, Eye } from 'lucide-react';
+import { Clock, MapPin, Star, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { getIconComponent, difficultyColors } from '@/lib/utils/tour-icons';
 
@@ -35,7 +35,7 @@ export default function TourCard({ tour, onExploreClick }: TourCardProps) {
       <div className="relative h-44 overflow-hidden">
         <Link href={`/tours/${tour.slug}`} className="absolute inset-0">
           <div
-            className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full bg-cover bg-center animate-zoom-loop will-change-transform"
             style={{ backgroundImage: `url(${tour.image})` }}
           />
         </Link>
@@ -79,6 +79,7 @@ export default function TourCard({ tour, onExploreClick }: TourCardProps) {
               />
             ))}
           </div>
+
           <span className="text-xs text-gray-500">{tour.rating}</span>
 
           <span className={`text-xs px-2 py-0.5 rounded-full ${difficultyColors[tour.difficulty]}`}>

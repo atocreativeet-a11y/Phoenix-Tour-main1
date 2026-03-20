@@ -1,4 +1,7 @@
 // tailwind.config.js
+
+import scrollbarHide from 'tailwind-scrollbar-hide';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -20,7 +23,7 @@ export default {
           700: '#BF3800',
           800: '#A62700',
           900: '#8C1600',
-        }
+        },
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)'],
@@ -28,10 +31,11 @@ export default {
         heading: ['Montserrat', 'sans-serif'],
       },
       animation: {
-        'slideIn': 'slideIn 0.2s ease-out',
-        'slideDown': 'slideDown 0.3s ease-out',
+        slideIn: 'slideIn 0.2s ease-out',
+        slideDown: 'slideDown 0.3s ease-out',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'bounce-slow': 'bounce 2s infinite',
+        'zoom-loop': 'zoomLoop 6s ease-in-out infinite',
       },
       keyframes: {
         slideIn: {
@@ -42,7 +46,12 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(-20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-      }
+        zoomLoop: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.08)' },
+        },
+      },
     },
   },
-}
+  plugins: [scrollbarHide],
+};
