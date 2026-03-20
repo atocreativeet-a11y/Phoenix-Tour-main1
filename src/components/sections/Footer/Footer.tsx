@@ -27,7 +27,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-6 py-16">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
 
           {/* Brand */}
           <div>
@@ -61,24 +61,6 @@ export default function Footer() {
                 <span>contact@phoenixethiopiantours.com</span>
               </div>
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold mb-5">Quick Links</h4>
-            <ul className="space-y-3 text-sm">
-              {["Tours", "Blog", "About Us", "Contact"].map((item) => (
-                <li key={item}>
-                  <Link
-                    href={`/${item.toLowerCase().replace(" ", "-")}`}
-                    className="flex items-center gap-2 text-gray-300 hover:text-primary-500 transition"
-                  >
-                    <ChevronRight className="w-4 h-4 text-gray-500" />
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Social */}
