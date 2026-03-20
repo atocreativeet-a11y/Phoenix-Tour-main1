@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
-  Menu, X, Phone, ChevronDown, BookOpen, Mountain, Globe, Map, Building, Trees, Flag
+  Menu, X, Phone, ChevronDown, Mountain, Globe, Map, Building, Trees, Flag
 } from 'lucide-react';
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 import Logo from '@/components/ui/logo';
@@ -20,32 +20,47 @@ export default function Header() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [activeLang, setActiveLang] = useState('EN');
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
+  const navRef = useRef<HTMLDivElement | null>(null);
+  const langRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock scroll
   useEffect(() => {
-    if (isApplyModalOpen) setIsMobileMenuOpen(false);
-  }, [isApplyModalOpen]);
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'auto';
+  }, [isMobileMenuOpen]);
 
-  // Close dropdown when clicking outside
+  // Persist language
   useEffect(() => {
-    const handleClickOutside = () => {
-      setActiveDropdown(null);
+    const saved = localStorage.getItem('lang');
+    if (saved) setActiveLang(saved);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('lang', activeLang);
+  }, [activeLang]);
+
+  // Click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
   }, []);
 
   const navItems: NavItem[] = [
@@ -87,19 +102,51 @@ export default function Header() {
       {/* Announcement Bar */}
       <div className="bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2 px-4">
         <div className="container mx-auto flex justify-between items-center">
-          <div />
-          <div className="hidden md:flex items-center gap-2">
+
+          {/* Language */}
+          <div className="relative flex items-center gap-1" ref={langRef}>
+            <Globe className="w-4 h-4" />
+
+            <button
+              onClick={() => setIsLangOpen(!isLangOpen)}
+              className="flex items-center gap-1 font-medium"
+            >
+              {activeLang}
+              <ChevronDown className="w-3 h-3" />
+            </button>
+
+            {isLangOpen && (
+              <div className="absolute top-full mt-2 w-20 bg-white text-black rounded-md shadow-lg border z-[10001]">
+                {['EN', 'FR', 'SP', 'PR', 'GE'].map(lang => (
+                  <button
+                    key={lang}
+                    onClick={() => {
+                      setActiveLang(lang);
+                      setIsLangOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
+                  >
+                    {lang}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Phone */}
+          <div className="flex items-center gap-2">
             <Phone className="w-4 h-4" />
             <span>+251 911 - 92 04 11</span>
           </div>
+
         </div>
       </div>
 
       {/* Navbar */}
       <header className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-primary-100' : 'bg-white'
+        isScrolled ? 'bg-white shadow-lg border-b' : 'bg-transparent'
       }`}>
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4" ref={navRef}>
           <div className="flex items-center justify-between h-20">
 
             <Link href="/"><Logo /></Link>
@@ -107,14 +154,19 @@ export default function Header() {
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-10">
               {navItems.map(item => (
-                <div key={item.label} className="relative group">
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => setActiveDropdown(item.label)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
                   <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
                     {item.label}
                     {item.dropdown && <ChevronDown className="w-4 h-4" />}
                   </Link>
 
-                  {item.dropdown && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+                  {item.dropdown && activeDropdown === item.label && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 z-[1000]">
                       {item.dropdown.map(sub => (
                         <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
                           {sub.icon}
@@ -139,54 +191,80 @@ export default function Header() {
         </div>
       </header>
 
-      {/* ✅ MOBILE MENU (FIXED) */}
+      {/* Modern Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[9999] bg-black/40">
-          <div className="absolute top-0 right-0 w-4/5 max-w-sm h-full bg-white shadow-2xl p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md">
 
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="mb-6"
-            >
-              <X />
-            </button>
+          <div className="h-full w-full bg-white/95 backdrop-blur-xl flex flex-col">
 
-            {navItems.map(item => (
-              <div key={item.label} className="border-b">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b">
+              <Logo />
+              <button onClick={() => setIsMobileMenuOpen(false)}>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-                <div
-                  className="flex justify-between items-center py-4 font-medium"
-                  onClick={() =>
-                    item.dropdown
-                      ? handleMobileDropdownToggle(item.label)
-                      : setIsMobileMenuOpen(false)
-                  }
-                >
-                  <Link href={item.href}>
-                    {item.label}
-                  </Link>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
 
-                  {item.dropdown && <ChevronDown className="w-4 h-4" />}
-                </div>
+              {navItems.map(item => (
+                <div key={item.label}>
 
-                {item.dropdown && activeDropdown === item.label && (
-                  <div className="pl-4 pb-3 flex flex-col gap-2">
-                    {item.dropdown.map(sub => (
-                      <Link
-                        key={sub.label}
-                        href={sub.href}
-                        className="flex items-center gap-2 text-sm text-gray-600 py-2"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {sub.icon}
-                        {sub.label}
-                      </Link>
-                    ))}
+                  <div
+                    className="flex justify-between items-center py-3 text-lg font-semibold text-gray-800"
+                    onClick={() =>
+                      item.dropdown
+                        ? handleMobileDropdownToggle(item.label)
+                        : setIsMobileMenuOpen(false)
+                    }
+                  >
+                    <Link href={item.href}>{item.label}</Link>
+
+                    {item.dropdown && (
+                      <ChevronDown className={`w-5 h-5 transition-transform ${
+                        activeDropdown === item.label ? 'rotate-180' : ''
+                      }`} />
+                    )}
                   </div>
-                )}
 
+                  {item.dropdown && activeDropdown === item.label && (
+                    <div className="mt-2 ml-2 border-l border-gray-200 pl-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                      {item.dropdown.map(sub => (
+                        <Link
+                          key={sub.label}
+                          href={sub.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 py-2 text-gray-600 hover:text-primary-600 transition"
+                        >
+                          {sub.icon}
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                </div>
+              ))}
+
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-5 border-t space-y-3">
+
+              <div className="flex items-center gap-3 text-gray-700">
+                <Phone className="w-4 h-4" />
+                <span className="text-sm">+251 911 - 92 04 11</span>
               </div>
-            ))}
+
+              <button
+                onClick={() => setIsApplyModalOpen(true)}
+                className="w-full bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition"
+              >
+                Book a Tour
+              </button>
+
+            </div>
 
           </div>
         </div>
