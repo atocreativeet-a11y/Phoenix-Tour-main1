@@ -66,7 +66,7 @@ export default function SimpleWhatsAppButton() {
             } transition-opacity duration-200 pointer-events-none`}
           >
             <div className="bg-gray-900 text-white text-sm font-semibold px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
-              Chat on WhatsApp
+              Hi 👋 How can I help you about Ethiopian tours?
             </div>
           </div>
         </div>
