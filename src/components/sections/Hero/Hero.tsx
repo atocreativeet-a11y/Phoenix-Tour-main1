@@ -10,14 +10,15 @@ export default function Hero() {
   const [showModal, setShowModal] = useState(false);
 
   const heroImages = [
-    'https://images.unsplash.com/photo-1573404353091-bd68e3010d73?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1573403092240-26095e118918?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1200&q=80'
   ];
 
   const stats = [
-    { label: 'Destinations', value: '15+', icon: MapPin },
-    { label: 'Tours Completed', value: '150+', icon: Calendar },
-    { label: 'Happy Travelers', value: '1,500+', icon: Users }
+    { label: 'Destinations', value: '50+', icon: MapPin },
+    { label: 'Tours Completed', value: '2,500+', icon: Calendar },
+    { label: 'Happy Travelers', value: '10,000+', icon: Users }
   ];
 
   const trustSignals = [
@@ -48,7 +49,7 @@ export default function Hero() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8 animate-slide-in">
             <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
-            <span className="text-white text-sm font-medium">Authentic Ethiopian Experiences Since 2021</span>
+            <span className="text-white text-sm font-medium">Authentic Ethiopian Experiences Since 2010</span>
           </div>
 
           {/* Main Heading */}
