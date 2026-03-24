@@ -36,7 +36,7 @@ export default function Logo() {
       
       {/* Slogan - Reduced negative margin */}
       <div className="mt-[-0.4rem]">
-        <p className="text-[10px] md:text-[12px] text-blue-950 italic text-center leading-tight">
+        <p className="text-[6px] md:text-[12px] text-blue-950 italic text-center leading-tight">
           <span className='text-yellow-500'>Take Memories,</span> Leave Footprints
         </p>
       </div>

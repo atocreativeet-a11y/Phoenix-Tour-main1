@@ -467,7 +467,7 @@ export default function ContactPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">
             <span className="text-gray-900">Contact </span>
-            <span className="text-primary-500">Phoenix Tour</span>
+            <span className="text-primary-500">Phoenix Tours</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Ready to explore Ethiopia? Our Ethiopian team is here to help plan your perfect adventure.
@@ -500,7 +500,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Phone (Ethiopia)</div>
-                    <div className="font-semibold text-gray-900">+251 11 123 4567</div>
+                    <div className="font-semibold text-gray-900">+251 911 92 04 11</div>
                   </div>
                 </div>
 
@@ -520,7 +520,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">WhatsApp</div>
-                    <div className="font-semibold text-gray-900">+251 91 234 5678</div>
+                    <div className="font-semibold text-gray-900">+251 911 92 04 11</div>
                   </div>
                 </div>
 
@@ -564,7 +564,7 @@ export default function ContactPage() {
             <div className="bg-gradient-to-r from-primary-500 to-orange-500 rounded-2xl p-8 text-white">
               <h3 className="text-xl font-bold mb-4">24/7 Tour Emergency</h3>
               <p className="mb-6 text-white/90">For urgent assistance during tours anywhere in Ethiopia</p>
-              <div className="text-2xl font-bold mb-2">+251 90 111 2233</div>
+              <div className="text-2xl font-bold mb-2">+251 911 92 04 11</div>
               <p className="text-sm opacity-90">Available anytime, anywhere in Ethiopia</p>
             </div>
           </div>
