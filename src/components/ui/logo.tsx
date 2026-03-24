@@ -35,11 +35,12 @@ export default function Logo() {
       </div>
       
       {/* Slogan - Reduced negative margin */}
-      <div className="mt-[-0.4rem]">
-        <p className="text-[6px] md:text-[12px] text-blue-950 italic text-center leading-tight">
-          <span className='text-yellow-500'>Take Memories,</span> Leave Footprints
-        </p>
-      </div>
+      <div className="mt-0.8">
+  <p className="text-[12px] md:text-[10px] text-blue-950 italic text-center leading-tight">
+    <span className='text-yellow-500'>Take Memories,</span>{' '}
+    Leave Footprints
+  </p>
+</div>
     </div>
   );
 }
