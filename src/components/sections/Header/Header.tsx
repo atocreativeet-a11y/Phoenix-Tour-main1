@@ -140,47 +140,41 @@ export default function Header() {
       }`}>
         <div className="container mx-auto px-4" ref={navRef}>
           <div className="flex items-center justify-between h-20">
+            <Link href="/"><Logo /></Link>
 
-            {/* LEFT GROUP (FIX) */}
-            <div className="flex items-center gap-10">
-              <Link href="/"><Logo /></Link>
+            <nav className="hidden lg:flex items-center gap-10">
+              {navItems.map(item => (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => setActiveDropdown(item.label)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
+                    {item.label}
+                    {item.dropdown && <ChevronDown className="w-4 h-4" />}
+                  </Link>
 
-              <nav className="hidden lg:flex items-center gap-10">
-                {navItems.map(item => (
-                  <div
-                    key={item.label}
-                    className="relative"
-                    onMouseEnter={() => setActiveDropdown(item.label)}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                  >
-                    <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
-                      {item.label}
-                      {item.dropdown && <ChevronDown className="w-4 h-4" />}
-                    </Link>
+                  {item.dropdown && activeDropdown === item.label && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 z-[1000]">
+                      {item.dropdown.map(sub => (
+                        <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
+                          {sub.icon}
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
 
-                    {item.dropdown && activeDropdown === item.label && (
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 z-[1000]">
-                        {item.dropdown.map(sub => (
-                          <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
-                            {sub.icon}
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </nav>
-            </div>
-
-            {/* MOBILE BUTTON (kept) */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden"
+              className="lg:hidden z-[10000]"
             >
               <Menu />
             </button>
-
           </div>
         </div>
       </header>
@@ -188,27 +182,47 @@ export default function Header() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[9999]">
-          <div className="absolute inset-0" />
+          
+          <div className="absolute inset-0 bg-black/60" />
 
           <div className="relative h-full w-full bg-white flex flex-col">
+
+            {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b">
               <Logo />
-              <button onClick={() => setIsMobileMenuOpen(false)}>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2"
+                aria-label="Close menu"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
+            {/* Content */}
             <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
               {navItems.map(item => (
                 <div key={item.label}>
-                  <div className="flex items-center justify-between py-3 text-lg font-semibold">
-                    <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
+                  <div className="flex items-center justify-between py-3 text-lg font-semibold text-gray-800">
+                    
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex-1"
+                    >
                       {item.label}
                     </Link>
 
                     {item.dropdown && (
-                      <button onClick={() => handleMobileDropdownToggle(item.label)}>
-                        <ChevronDown className={`w-5 h-5 ${
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMobileDropdownToggle(item.label);
+                        }}
+                        className="p-2"
+                        aria-label="Toggle dropdown"
+                      >
+                        <ChevronDown className={`w-5 h-5 transition-transform ${
                           activeDropdown === item.label ? 'rotate-180' : ''
                         }`} />
                       </button>
@@ -216,9 +230,15 @@ export default function Header() {
                   </div>
 
                   {item.dropdown && activeDropdown === item.label && (
-                    <div className="ml-4 space-y-2">
+                    <div className="mt-2 ml-2 border-l border-gray-200 pl-4 space-y-2">
                       {item.dropdown.map(sub => (
-                        <Link key={sub.label} href={sub.href}>
+                        <Link
+                          key={sub.label}
+                          href={sub.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 py-2 text-gray-600 hover:text-primary-600"
+                        >
+                          {sub.icon}
                           {sub.label}
                         </Link>
                       ))}
@@ -227,6 +247,17 @@ export default function Header() {
                 </div>
               ))}
             </div>
+
+            {/* Footer */}
+            <div className="px-6 py-5 border-t space-y-3">
+              <div className="flex items-center gap-3 text-gray-700">
+                <Phone className="w-4 h-4" />
+                <span className="text-sm">+251 911 - 92 04 11</span>
+              </div>
+
+        
+            </div>
+
           </div>
         </div>
       )}

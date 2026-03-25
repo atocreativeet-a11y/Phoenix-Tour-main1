@@ -516,36 +516,37 @@ export default function FeaturedTours({ id }: { id?: string }) {
               Experience Ethiopia through expertly crafted tours that showcase our rich history, 
               diverse cultures, and breathtaking natural wonders.
             </p>
+            
+
           </div>
 
-          {/* Category Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
-              <button
-                key={category.name}
-                onClick={() => handleCategoryClick(category.name)}
-                disabled={category.count === 0 && category.name !== 'All Tours'}
-                className={`px-5 py-2.5 rounded-full font-medium transition-all duration-300 border flex items-center gap-2 ${
-                  category.active 
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
-                    : category.count === 0 && category.name !== 'All Tours'
-                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                    : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
-                }`}
-              >
-                {category.name}
-                <span className={`text-xs px-2 py-0.5 rounded-full ${
-                  category.active 
-                    ? 'bg-primary-600/30 text-white' 
-                    : category.count === 0
-                    ? 'bg-gray-200 text-gray-500'
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {category.count}
-                </span>
-              </button>
-            ))}
-          </div>
+<div className="flex sm:flex-wrap sm:overflow-visible justify-start sm:justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 px-2">
+  {categories.map((category) => (
+    <button
+      key={category.name}
+      onClick={() => handleCategoryClick(category.name)}
+      disabled={category.count === 0 && category.name !== 'All Tours'}
+      className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base rounded-full font-medium transition-all duration-300 border flex items-center gap-1.5 sm:gap-2 ${
+        category.active 
+          ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
+          : category.count === 0 && category.name !== 'All Tours'
+          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+          : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
+      }`}
+    >
+      {category.name}
+      <span className={`text-xs px-2 py-0.5 rounded-full ${
+        category.active 
+          ? 'bg-primary-600/30 text-white' 
+          : category.count === 0
+          ? 'bg-gray-200 text-gray-500'
+          : 'bg-gray-100 text-gray-600'
+      }`}>
+        {category.count}
+      </span>
+    </button>
+  ))}
+</div>
 
           {/* Carousel Container */}
           <div 
@@ -643,19 +644,6 @@ export default function FeaturedTours({ id }: { id?: string }) {
               </div>
             )}
           </div>
-
-          {/* Auto-play toggle */}
-          {featuredTours.length > visibleCards && (
-            <div className="flex justify-center items-center gap-2 mb-8">
-              <button
-                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className="text-sm text-gray-600 hover:text-primary-600 transition-colors flex items-center gap-2"
-              >
-                <div className={`w-3 h-3 rounded-full border ${isAutoPlaying ? 'bg-primary-500 border-primary-500' : 'bg-white border-gray-400'}`} />
-                {isAutoPlaying ? 'Auto-sliding' : 'Paused'}
-              </button>
-            </div>
-          )}
         </div>
       </section>
 

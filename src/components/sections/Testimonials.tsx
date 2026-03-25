@@ -97,87 +97,86 @@ export default function Testimonials() {
           </p>
 
           {/* Testimonial Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {['all', 'cultural', 'adventure', 'photography'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-5 py-2.5 rounded-full font-medium transition-all duration-300 border ${
-                  activeTab === tab 
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
-                    : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
-                }`}
-              >
-                {tab === 'all' && 'All Experiences'}
-                {tab === 'cultural' && 'Cultural Tours'}
-                {tab === 'adventure' && 'Adventure Expeditions'}
-                {tab === 'photography' && 'Photography Tours'}
-              </button>
-            ))}
-          </div>
+         <div className="flex flex-nowrap overflow-x-auto gap-3 mb-12 scrollbar-hide">
+  {['all', 'cultural', 'adventure', 'photography'].map((tab) => (
+    <button
+      key={tab}
+      onClick={() => setActiveTab(tab)}
+      className={`flex-shrink-0 px-5 py-2.5 rounded-full font-medium transition-all duration-300 border ${
+        activeTab === tab 
+          ? 'bg-primary-500 text-white border-primary-500' 
+          : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
+      }`}
+    >
+      {tab === 'all' && 'All Experiences'}
+      {tab === 'cultural' && 'Cultural Tours'}
+      {tab === 'adventure' && 'Adventure Expeditions'}
+      {tab === 'photography' && 'Photography Tours'}
+    </button>
+  ))}
+</div>
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTestimonials.slice(0, 3).map((testimonial) => (
-            <div 
-              key={testimonial.id}
-              className="relative bg-white rounded-2xl p-8 border border-gray-200 hover:border-primary-500 transition-all duration-300 hover:shadow-2xl group"
-            >
-              {/* Quote Icon */}
-              <Quote className="absolute top-8 left-8 w-10 h-10 text-primary-500/10 group-hover:text-primary-500/20 transition-colors" />
-              
-              {/* Stars */}
-              <div className="flex gap-1 mb-6">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-primary-500 text-primary-500" />
-                ))}
-              </div>
-              
-              {/* Content */}
-              <p className="text-gray-700 text-lg mb-8 italic leading-relaxed">
-                "{testimonial.content}"
-              </p>
-              
-              {/* Tour Badge */}
-              <div className="mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-medium">
-                  <MapPin className="w-3 h-3" />
-                  {testimonial.tour}
-                </div>
-              </div>
-              
-              {/* Author */}
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-yellow-600 p-0.5 group-hover:scale-110 transition-transform duration-300">
-                    <div className="w-full h-full rounded-full bg-white p-0.5">
-                      <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <span className="text-lg font-semibold text-gray-700">
-                          {testimonial.name.split(' ').map(n => n[0]).join('')}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white border-2 border-white flex items-center justify-center">
-                    <Globe className="w-3 h-3 text-gray-600" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-gray-600 text-sm">{testimonial.role}</div>
-                  <div className="flex items-center gap-2 text-gray-500 text-xs mt-1">
-                    <MapPin className="w-3 h-3" />
-                    {testimonial.origin}
-                    <span className="text-gray-400">•</span>
-                    {testimonial.date}
-                  </div>
-                </div>
+        <div className="flex flex-nowrap overflow-x-auto gap-8 scrollbar-hide">
+  {filteredTestimonials.slice(0, 3).map((testimonial) => (
+    <div 
+      key={testimonial.id}
+      className="relative flex-shrink-0 w-full md:w-1/2 lg:w-1/3 bg-white rounded-2xl p-8 border border-gray-200 hover:border-primary-500 transition-all duration-300 hover:shadow-2xl group"
+    >
+      {/* Quote Icon */}
+      <Quote className="absolute top-8 left-8 w-10 h-10 text-primary-500/10 group-hover:text-primary-500/20 transition-colors" />
+      
+      {/* Stars */}
+      <div className="flex gap-1 mb-6">
+        {[...Array(testimonial.rating)].map((_, i) => (
+          <Star key={i} className="w-5 h-5 fill-primary-500 text-primary-500" />
+        ))}
+      </div>
+      
+      {/* Content */}
+      <p className="text-gray-700 text-lg mb-8 italic leading-relaxed">
+        "{testimonial.content}"
+      </p>
+      
+      {/* Tour Badge */}
+      <div className="mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-medium">
+          <MapPin className="w-3 h-3" />
+          {testimonial.tour}
+        </div>
+      </div>
+      
+      {/* Author */}
+      <div className="flex items-center gap-4">
+        <div className="relative">
+          <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-yellow-600 p-0.5 group-hover:scale-110 transition-transform duration-300">
+            <div className="w-full h-full rounded-full bg-white p-0.5">
+              <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                <span className="text-lg font-semibold text-gray-700">
+                  {testimonial.name.split(' ').map(n => n[0]).join('')}
+                </span>
               </div>
             </div>
-          ))}
+          </div>
+          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white border-2 border-white flex items-center justify-center">
+            <Globe className="w-3 h-3 text-gray-600" />
+          </div>
         </div>
-
+        <div className="flex-1">
+          <div className="font-semibold text-gray-900">{testimonial.name}</div>
+          <div className="text-gray-600 text-sm">{testimonial.role}</div>
+          <div className="flex items-center gap-2 text-gray-500 text-xs mt-1">
+            <MapPin className="w-3 h-3" />
+            {testimonial.origin}
+            <span className="text-gray-400">•</span>
+            {testimonial.date}
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
         {/* View More Button */}
         <div className="text-center mt-12">
           <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-500 font-semibold rounded-xl border-2 border-primary-500 hover:bg-primary-50 transition-all duration-300 hover:scale-105">
