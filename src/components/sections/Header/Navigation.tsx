@@ -47,13 +47,11 @@ export default function Navigation() {
   };
 
   return (
-    <div className="relative z-50 w-full">
+    <div className="relative z-50">
       {/* Desktop Navigation */}
-      <div className="hidden md:flex w-full justify-center">
-        <nav className="flex items-center gap-2">
-          {navItems.map((item) => renderNavItem(item))}
-        </nav>
-      </div>
+      <nav className="hidden md:flex items-center gap-2">
+        {navItems.map((item) => renderNavItem(item))}
+      </nav>
 
       {/* Mobile Button */}
       <div className="md:hidden flex justify-end">

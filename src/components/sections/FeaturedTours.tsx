@@ -519,33 +519,36 @@ export default function FeaturedTours({ id }: { id?: string }) {
             
 
           </div>
+{/* Carousel filter */}
 
-<div className="flex sm:flex-wrap sm:overflow-visible justify-start sm:justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 px-2">
-  {categories.map((category) => (
-    <button
-      key={category.name}
-      onClick={() => handleCategoryClick(category.name)}
-      disabled={category.count === 0 && category.name !== 'All Tours'}
-      className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base rounded-full font-medium transition-all duration-300 border flex items-center gap-1.5 sm:gap-2 ${
-        category.active 
-          ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
-          : category.count === 0 && category.name !== 'All Tours'
-          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-          : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
-      }`}
-    >
-      {category.name}
-      <span className={`text-xs px-2 py-0.5 rounded-full ${
-        category.active 
-          ? 'bg-primary-600/30 text-white' 
-          : category.count === 0
-          ? 'bg-gray-200 text-gray-500'
-          : 'bg-gray-100 text-gray-600'
-      }`}>
-        {category.count}
-      </span>
-    </button>
-  ))}
+<div className="w-full max-w-full overflow-x-auto sm:overflow-visible scrollbar-hide mb-8 sm:mb-12 px-2">
+  <div className="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-2 sm:gap-3">
+    {categories.map((category) => (
+      <button
+        key={category.name}
+        onClick={() => handleCategoryClick(category.name)}
+        disabled={category.count === 0 && category.name !== 'All Tours'}
+        className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base rounded-full font-medium transition-all duration-300 border flex items-center gap-1.5 sm:gap-2 ${
+          category.active 
+            ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
+            : category.count === 0 && category.name !== 'All Tours'
+            ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+            : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
+        }`}
+      >
+        {category.name}
+        <span className={`text-xs px-2 py-0.5 rounded-full ${
+          category.active 
+            ? 'bg-primary-600/30 text-white' 
+            : category.count === 0
+            ? 'bg-gray-200 text-gray-500'
+            : 'bg-gray-100 text-gray-600'
+        }`}>
+          {category.count}
+        </span>
+      </button>
+    ))}
+  </div>
 </div>
 
           {/* Carousel Container */}
@@ -626,23 +629,27 @@ export default function FeaturedTours({ id }: { id?: string }) {
             </div>
 
             {/* Carousel Indicators */}
-            {totalSlides > visibleCards && (
-              <div className="flex justify-center gap-2 mt-8">
-                {Array.from({ length: totalSlides }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    disabled={isAnimating}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentIndex 
-                        ? 'bg-primary-500 w-8' 
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
-            )}
+           {totalSlides > visibleCards && (
+  <div className="flex justify-center gap-2 mt-8">
+    {Array.from({ length: totalSlides }).map((_, index) => {
+      const isActive = index === currentIndex;
+
+      return (
+        <button
+          key={index}
+          onClick={() => setCurrentIndex(index)}
+          disabled={isAnimating}
+          aria-label={`Go to slide ${index + 1}`}
+          className={`h-2 rounded-full transition-all duration-300 ${
+            isActive
+              ? 'bg-primary-500 w-8'
+              : 'bg-gray-300 w-2 hover:bg-gray-400'
+          } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
+        />
+      );
+    })}
+  </div>
+)}
           </div>
         </div>
       </section>
