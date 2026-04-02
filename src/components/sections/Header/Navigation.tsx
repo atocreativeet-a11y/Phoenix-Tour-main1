@@ -16,9 +16,27 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // CLOSE on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  // LOCK SCROLL when open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  // ESC to close
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
 
   const renderNavItem = (item: (typeof navItems)[0]) => {
     const Icon = item.icon;
@@ -49,9 +67,11 @@ export default function Navigation() {
   return (
     <div className="relative z-50">
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex items-center gap-2">
-        {navItems.map((item) => renderNavItem(item))}
-      </nav>
+<div className="hidden md:flex w-full justify-center items-center">
+  <nav className="flex items-center gap-2 w-fit">
+    {navItems.map((item) => renderNavItem(item))}
+  </nav>
+</div>
 
       {/* Mobile Button */}
       <div className="md:hidden flex justify-end">
@@ -84,11 +104,15 @@ export default function Navigation() {
 
         {/* Sheet */}
         <nav
-          className={`relative w-full max-w-md mx-auto mb-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-4 flex flex-col gap-2 transition-all duration-300 ${
-            mobileOpen
-              ? 'translate-y-0 opacity-100'
-              : 'translate-y-10 opacity-0'
-          }`}
+          className={`relative w-full max-w-md mx-auto mb-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-4 flex flex-col gap-2
+          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+          ${mobileOpen
+              ? 'translate-y-0 opacity-100 scale-100'
+              : 'translate-y-16 opacity-0 scale-95'
+            }`}
+          style={{
+            paddingBottom: 'calc(env(safe-area-inset-bottom) + 16px)',
+          }}
         >
           {/* Drag Handle */}
           <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3" />
