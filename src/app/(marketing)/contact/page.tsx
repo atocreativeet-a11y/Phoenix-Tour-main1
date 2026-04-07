@@ -2,7 +2,21 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Phone, Mail, MapPin, Clock, MessageCircle, Coffee, Navigation, Globe, ZoomIn, ZoomOut, Layers, Maximize2, Search } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Phone = (Icons as any).Phone;
+const Mail = (Icons as any).Mail;
+const MapPin = (Icons as any).MapPin;
+const Clock = (Icons as any).Clock;
+const MessageCircle = (Icons as any).MessageCircle;
+const Coffee = (Icons as any).Coffee;
+const Navigation = (Icons as any).Navigation;
+const Globe = (Icons as any).Globe;
+const ZoomIn = (Icons as any).ZoomIn;
+const ZoomOut = (Icons as any).ZoomOut;
+const Layers = (Icons as any).Layers;
+const Maximize2 = (Icons as any).Maximize2;
+const Search = (Icons as any).Search;
 
 // Real Google Maps Component with Autocomplete
 const RealGoogleMap = () => {

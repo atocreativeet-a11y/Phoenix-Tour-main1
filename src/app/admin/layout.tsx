@@ -4,7 +4,9 @@ import { useSession } from 'next-auth/react';
 import { redirect, usePathname } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
-import { Loader2 } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Loader = (Icons as any).Loader2 || (Icons as any).Loader || (() => null);
 
 export default function AdminLayout({
   children,
@@ -19,7 +21,7 @@ export default function AdminLayout({
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-green-500 mx-auto mb-4" />
+          <Loader className="w-8 h-8 animate-spin text-green-500 mx-auto mb-4" />
           <p className="text-gray-600">Loading admin portal...</p>
         </div>
       </div>

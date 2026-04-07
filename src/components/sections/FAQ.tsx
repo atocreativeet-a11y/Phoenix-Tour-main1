@@ -1,8 +1,20 @@
-// src/components/sections/FAQ.tsx
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Shield, FileText, Settings, MessageCircle, Phone, Mail, Globe, Users, Calendar, CheckCircle, Star } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const ChevronDown = (Icons as any).ChevronDown;
+const Shield = (Icons as any).Shield;
+const FileText = (Icons as any).FileText;
+const Settings = (Icons as any).Settings;
+const MessageCircle = (Icons as any).MessageCircle;
+const Phone = (Icons as any).Phone;
+const Mail = (Icons as any).Mail;
+const Globe = (Icons as any).Globe;
+const Users = (Icons as any).Users;
+const Calendar = (Icons as any).Calendar;
+const CheckCircle = (Icons as any).CheckCircle;
+const Star = (Icons as any).Star;
 
 const initialFAQs = [
   {

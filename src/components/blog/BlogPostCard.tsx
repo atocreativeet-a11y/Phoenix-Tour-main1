@@ -1,7 +1,13 @@
 // src/components/blog/BlogPostCard.tsx
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Eye, Heart, Clock, User } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Calendar = (Icons as any).Calendar;
+const Eye = (Icons as any).Eye;
+const Heart = (Icons as any).Heart;
+const Clock = (Icons as any).Clock;
+const User = (Icons as any).User;
 
 interface BlogPostCardProps {
   post: {

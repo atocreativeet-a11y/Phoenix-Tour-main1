@@ -1,16 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { 
-  Users, 
-  Calendar, 
-  DollarSign, 
-  TrendingUp, 
-  MapPin,
-  BarChart3,
-  Download,
-  RefreshCw
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Users = (Icons as any).Users;
+const Calendar = (Icons as any).Calendar;
+const DollarSign = (Icons as any).DollarSign;
+const TrendingUp = (Icons as any).TrendingUp;
+const MapPin = (Icons as any).MapPin;
+const BarChart3 = (Icons as any).BarChart3;
+const Download = (Icons as any).Download;
+const RefreshCw = (Icons as any).RefreshCw;
 
 import RecentBookings from '@/components/admin/RecentBookings';
 

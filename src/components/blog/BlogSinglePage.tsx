@@ -4,27 +4,28 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  Calendar, 
-  Eye, 
-  Heart, 
-  Clock, 
-  User, 
-  Share2, 
-  Bookmark, 
-  Tag,
-  ArrowLeft,
-  MessageCircle,
-  Twitter,
-  Facebook,
-  Linkedin,
-  Mail,
-  ChevronLeft,
-  ChevronRight,
-  Coffee,
-  MapPin,
-  Globe
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Calendar = (Icons as any).Calendar;
+const Eye = (Icons as any).Eye;
+const Heart = (Icons as any).Heart;
+const Clock = (Icons as any).Clock;
+const User = (Icons as any).User;
+const Share2 = (Icons as any).Share2;
+const Bookmark = (Icons as any).Bookmark;
+const Tag = (Icons as any).Tag;
+const ArrowLeft = (Icons as any).ArrowLeft;
+const MessageCircle = (Icons as any).MessageCircle;
+const Twitter = (Icons as any).Twitter;
+const Facebook = (Icons as any).Facebook;
+const Linkedin = (Icons as any).Linkedin;
+const Mail = (Icons as any).Mail;
+const ChevronLeft = (Icons as any).ChevronLeft;
+const ChevronRight = (Icons as any).ChevronRight;
+const Coffee = (Icons as any).Coffee;
+const MapPin = (Icons as any).MapPin;
+const Globe = (Icons as any).Globe;
+
 import BlogSidebar from './BlogSidebar';
 // import BblogC
 import ApplyTourModal from '@/components/modals/ApplyTourModal';

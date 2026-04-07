@@ -1,4 +1,11 @@
-import { Clock, MapPin, Star, Flag, ArrowRight, Eye } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Clock = (Icons as any).Clock;
+const MapPin = (Icons as any).MapPin;
+const Star = (Icons as any).Star;
+const Flag = (Icons as any).Flag;
+const ArrowRight = (Icons as any).ArrowRight;
+const Eye = (Icons as any).Eye;
 import Link from 'next/link';
 import { getIconComponent, difficultyColors } from '@/lib/utils/tour-icons';
 

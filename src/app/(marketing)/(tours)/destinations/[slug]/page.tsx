@@ -5,33 +5,33 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  MapPin, 
-  Building, 
-  Calendar, 
-  Users, 
-  Star, 
-  ArrowRight,
-  ArrowLeft,
-  Phone,
-  Mail,
-  Globe,
-  Camera,
-  Coffee,
-  Shield,
-  Loader,
-  Clock,
-  Mountain,
-  Sun,
-  Trees,
-  Compass,
-  Heart,
-  Share2,
-  Navigation,
-  BookOpen,
-  DollarSign,
-  CheckCircle
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const MapPin = (Icons as any).MapPin;
+const Building = (Icons as any).Building;
+const Calendar = (Icons as any).Calendar;
+const Users = (Icons as any).Users;
+const Star = (Icons as any).Star;
+const ArrowRight = (Icons as any).ArrowRight;
+const ArrowLeft = (Icons as any).ArrowLeft;
+const Phone = (Icons as any).Phone;
+const Mail = (Icons as any).Mail;
+const Globe = (Icons as any).Globe;
+const Camera = (Icons as any).Camera;
+const Coffee = (Icons as any).Coffee;
+const Shield = (Icons as any).Shield;
+const Loader = (Icons as any).Loader;
+const Clock = (Icons as any).Clock;
+const Mountain = (Icons as any).Mountain;
+const Sun = (Icons as any).Sun;
+const Trees = (Icons as any).Trees;
+const Compass = (Icons as any).Compass;
+const Heart = (Icons as any).Heart;
+const Share2 = (Icons as any).Share2;
+const Navigation = (Icons as any).Navigation;
+const BookOpen = (Icons as any).BookOpen;
+const DollarSign = (Icons as any).DollarSign;
+const CheckCircle = (Icons as any).CheckCircle;
 
 // Enhanced mock destinations data
 const mockDestinations = [

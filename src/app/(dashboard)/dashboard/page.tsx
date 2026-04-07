@@ -1,5 +1,9 @@
-// src/app/(dashboard)/dashboard/page.tsx
-import { TrendingUp, Users, MapPin, DollarSign } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const TrendingUp = (Icons as any).TrendingUp;
+const Users = (Icons as any).Users;
+const MapPin = (Icons as any).MapPin;
+const DollarSign = (Icons as any).DollarSign;
 
 export default function DashboardPage() {
   const stats = [

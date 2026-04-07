@@ -1,7 +1,17 @@
 // src/components/sections/Hero/Hero.tsx
 'use client';
 
-import { ArrowRight, MapPin, Calendar, Users, Shield, UserCheck, Zap, MessageCircle } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const ArrowRight = (Icons as any).ArrowRight;
+const MapPin = (Icons as any).MapPin;
+const Calendar = (Icons as any).Calendar;
+const Users = (Icons as any).Users;
+const Shield = (Icons as any).Shield;
+const UserCheck = (Icons as any).UserCheck;
+const Zap = (Icons as any).Zap;
+const MessageCircle = (Icons as any).MessageCircle;
+
 import { useState } from 'react';
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 

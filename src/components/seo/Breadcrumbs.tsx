@@ -2,8 +2,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
+import * as Icons from "lucide-react";
 
+const ChevronRight = (Icons as any).ChevronRight;
+const Home = (Icons as any).Home;
 interface BreadcrumbItem {
   label: string;
   href: string;

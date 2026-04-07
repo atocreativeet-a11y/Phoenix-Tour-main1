@@ -1,7 +1,12 @@
-// src/components/sections/Testimonials.tsx
 'use client';
 
-import { Star, Quote, MapPin, Globe, Award } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Star = (Icons as any).Star;
+const Quote = (Icons as any).Quote;
+const MapPin = (Icons as any).MapPin;
+const Globe = (Icons as any).Globe;
+const Award = (Icons as any).Award;
 import { useState } from 'react';
 
 const testimonials = [

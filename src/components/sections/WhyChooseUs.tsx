@@ -1,5 +1,11 @@
-// src/components/sections/WhyChooseUs.tsx
-import { Shield, Award, Users, Map, Clock, Heart } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Shield = (Icons as any).Shield;
+const Award = (Icons as any).Award;
+const Users = (Icons as any).Users;
+const Map = (Icons as any).Map;
+const Clock = (Icons as any).Clock;
+const Heart = (Icons as any).Heart;
 
 const features = [
   {

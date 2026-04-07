@@ -2,7 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Save, Trash2, Image as ImageIcon, Plus, X, ArrowLeft, Calendar, MapPin, Clock, Users, Star, Edit, Eye } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Save = (Icons as any).Save;
+const Trash2 = (Icons as any).Trash2;
+const ImageIcon = (Icons as any).Image;
+const Plus = (Icons as any).Plus;
+const X = (Icons as any).X;
+const ArrowLeft = (Icons as any).ArrowLeft;
+const Calendar = (Icons as any).Calendar;
+const MapPin = (Icons as any).MapPin;
+const Clock = (Icons as any).Clock;
+const Users = (Icons as any).Users;
+const Star = (Icons as any).Star;
+const Edit = (Icons as any).Edit;
+const Eye = (Icons as any).Eye;
 import Link from 'next/link';
 import axios from 'axios';
 

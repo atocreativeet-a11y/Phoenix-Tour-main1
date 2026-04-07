@@ -1,8 +1,22 @@
-import { 
-  Mountain, Castle, Sun, Compass, Trees, Church,
-  Camera, Utensils, Bed, Map, Flag, Users, Star,
-  Filter, MapPin, Calendar, TrendingUp
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Mountain = (Icons as any).Mountain;
+const Castle = (Icons as any).Castle;
+const Sun = (Icons as any).Sun;
+const Compass = (Icons as any).Compass;
+const Trees = (Icons as any).Trees;
+const Church = (Icons as any).Church;
+const Camera = (Icons as any).Camera;
+const Utensils = (Icons as any).Utensils;
+const Bed = (Icons as any).Bed;
+const Map = (Icons as any).Map;
+const Flag = (Icons as any).Flag;
+const Users = (Icons as any).Users;
+const Star = (Icons as any).Star;
+const Filter = (Icons as any).Filter;
+const MapPin = (Icons as any).MapPin;
+const Calendar = (Icons as any).Calendar;
+const TrendingUp = (Icons as any).TrendingUp;
 
 export const iconMap: Record<string, React.ComponentType<any>> = {
   Mountain,

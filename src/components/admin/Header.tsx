@@ -1,7 +1,13 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { Bell, Search, User, ChevronDown, Calendar } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Bell = (Icons as any).Bell;
+const Search = (Icons as any).Search;
+const User = (Icons as any).User;
+const ChevronDown = (Icons as any).ChevronDown;
+const Calendar = (Icons as any).Calendar;
 import { useState } from 'react';
 
 export default function Header() {

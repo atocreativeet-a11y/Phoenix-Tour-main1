@@ -3,7 +3,14 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, TrendingUp, Calendar, Tag, User, Clock } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Search = (Icons as any).Search;
+const TrendingUp = (Icons as any).TrendingUp;
+const Calendar = (Icons as any).Calendar;
+const Tag = (Icons as any).Tag;
+const User = (Icons as any).User;
+const Clock = (Icons as any).Clock;
 
 interface BlogSidebarProps {
   popularPosts?: Array<{

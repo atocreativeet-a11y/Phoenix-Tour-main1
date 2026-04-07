@@ -4,28 +4,28 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  MapPin, 
-  Building, 
-  Mountain, 
-  Compass, 
-  Sun, 
-  Trees, 
-  Users, 
-  Calendar, 
-  Star,
-  ArrowRight,
-  Search,
-  Filter,
-  Loader,
-  Sparkles,
-  Camera,
-  BookOpen,
-  DollarSign,
-  Clock,
-  Shield,
-  Heart
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const MapPin = (Icons as any).MapPin;
+const Building = (Icons as any).Building;
+const Mountain = (Icons as any).Mountain;
+const Compass = (Icons as any).Compass;
+const Sun = (Icons as any).Sun;
+const Trees = (Icons as any).Trees;
+const Users = (Icons as any).Users;
+const Calendar = (Icons as any).Calendar;
+const Star = (Icons as any).Star;
+const ArrowRight = (Icons as any).ArrowRight;
+const Search = (Icons as any).Search;
+const Filter = (Icons as any).Filter;
+const Loader = (Icons as any).Loader;
+const Sparkles = (Icons as any).Sparkles;
+const Camera = (Icons as any).Camera;
+const BookOpen = (Icons as any).BookOpen;
+const DollarSign = (Icons as any).DollarSign;
+const Clock = (Icons as any).Clock;
+const Shield = (Icons as any).Shield;
+const Heart = (Icons as any).Heart;
 
 // Enhanced mock destinations data matching navbar
 const fallbackDestinations = [

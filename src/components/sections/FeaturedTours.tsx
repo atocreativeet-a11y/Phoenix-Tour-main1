@@ -3,7 +3,13 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import TourCard from '@/components/tours/TourCard';
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
-import { ArrowRight, TrendingUp, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const ArrowRight = (Icons as any).ArrowRight;
+const TrendingUp = (Icons as any).TrendingUp;
+const Sparkles = (Icons as any).Sparkles;
+const ChevronLeft = (Icons as any).ChevronLeft;
+const ChevronRight = (Icons as any).ChevronRight;
 
 interface Tour {
   _id: string;

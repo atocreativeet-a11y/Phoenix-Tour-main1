@@ -5,7 +5,19 @@ import { useState } from 'react';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, Eye, Heart, MapPin, User, Coffee, Share2, Bookmark, Tag, ArrowLeft } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Calendar = (Icons as any).Calendar;
+const Clock = (Icons as any).Clock;
+const Eye = (Icons as any).Eye;
+const Heart = (Icons as any).Heart;
+const MapPin = (Icons as any).MapPin;
+const User = (Icons as any).User;
+const Coffee = (Icons as any).Coffee;
+const Share2 = (Icons as any).Share2;
+const Bookmark = (Icons as any).Bookmark;
+const Tag = (Icons as any).Tag;
+const ArrowLeft = (Icons as any).ArrowLeft;
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 
 // Note: Since we're using 'use client', we need to handle metadata differently

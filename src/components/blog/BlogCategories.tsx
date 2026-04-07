@@ -3,18 +3,68 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { 
-  Compass, 
-  Coffee, 
-  Camera, 
-  Mountain, 
-  BookOpen, 
-  MapPin, 
-  Users, 
-  Calendar,
-  TrendingUp,
-  ChevronRight
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const LayoutDashboard = (Icons as any).LayoutDashboard;
+const Calendar = (Icons as any).Calendar;
+const Users = (Icons as any).Users;
+const Map = (Icons as any).Map;
+const MapPin = (Icons as any).MapPin;
+const Settings = (Icons as any).Settings;
+const LogOut = (Icons as any).LogOut;
+const BarChart3 = (Icons as any).BarChart3;
+const FileText = (Icons as any).FileText;
+const ChevronLeft = (Icons as any).ChevronLeft;
+const ChevronRight = (Icons as any).ChevronRight;
+const Bell = (Icons as any).Bell;
+const HelpCircle = (Icons as any).HelpCircle;
+const Shield = (Icons as any).Shield;
+const PlusCircle = (Icons as any).PlusCircle;
+const List = (Icons as any).List;
+const Tag = (Icons as any).Tag;
+const ImageIcon = (Icons as any).Image;
+const DollarSign = (Icons as any).DollarSign;
+const Star = (Icons as any).Star;
+const Globe = (Icons as any).Globe;
+const Compass = (Icons as any).Compass;
+const Mountain = (Icons as any).Mountain;
+const Castle = (Icons as any).Castle;
+const Sun = (Icons as any).Sun;
+const Trees = (Icons as any).Trees;
+const Church = (Icons as any).Church;
+const Camera = (Icons as any).Camera;
+const Utensils = (Icons as any).Utensils;
+const Bed = (Icons as any).Bed;
+const Flag = (Icons as any).Flag;
+const Package = (Icons as any).Package;
+const Layers = (Icons as any).Layers;
+const CalendarDays = (Icons as any).CalendarDays;
+const UserCheck = (Icons as any).UserCheck;
+const MessageSquare = (Icons as any).MessageSquare;
+const CreditCard = (Icons as any).CreditCard;
+const TrendingUp = (Icons as any).TrendingUp;
+const RefreshCw = (Icons as any).RefreshCw;
+const Download = (Icons as any).Download;
+const Upload = (Icons as any).Upload;
+const Building = (Icons as any).Building;
+const Search = (Icons as any).Search;
+const BookOpen = (Icons as any).BookOpen;
+const Navigation = (Icons as any).Navigation;
+const ShieldCheck = (Icons as any).ShieldCheck;
+const Award = (Icons as any).Award;
+const Target = (Icons as any).Target;
+const PieChart = (Icons as any).PieChart;
+const FileBarChart = (Icons as any).FileBarChart;
+const Globe2 = (Icons as any).Globe2;
+const Mail = (Icons as any).Mail;
+const Users2 = (Icons as any).Users2;
+const CheckCircle = (Icons as any).CheckCircle;
+const AlertCircle = (Icons as any).AlertCircle;
+const Zap = (Icons as any).Zap;
+const Sparkles = (Icons as any).Sparkles;
+const Home = (Icons as any).Home;
+const Coffee = (Icons as any).Coffee;
+const Palette = (Icons as any).Palette;
 
 const categories = [
   { name: 'Ethiopian Culture', slug: 'ethiopian-culture', icon: <Users />, count: 24, color: 'bg-purple-500' },

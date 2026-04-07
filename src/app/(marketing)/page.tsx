@@ -10,8 +10,6 @@ import FAQSchema from '@/components/seo/FAQSchema';
 import SimpleWhatsAppButton from '@/components/ui/SimpleWhatsAppButton';
 import Image from 'next/image';
 
-// Assuming you have an OG image in your public folder
-// Place your OG image at: public/images/logos/logo4.png
 
 export const metadata = {
   title: 'Ethiopia Cultural & Adventure Tours | Phoenix Tours Ethiopia',

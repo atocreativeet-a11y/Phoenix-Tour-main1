@@ -1,4 +1,12 @@
-import { Calendar, User, MapPin, DollarSign, CheckCircle, Clock, XCircle } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Calendar = (Icons as any).Calendar;
+const User = (Icons as any).User;
+const MapPin = (Icons as any).MapPin;
+const DollarSign = (Icons as any).DollarSign;
+const CheckCircle = (Icons as any).CheckCircle;
+const Clock = (Icons as any).Clock;
+const XCircle = (Icons as any).XCircle;
 import Link from 'next/link';
 
 interface RecentBookingsProps {

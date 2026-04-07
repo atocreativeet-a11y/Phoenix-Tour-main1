@@ -1,10 +1,27 @@
-// src/app/(marketing)/(tours)/tours/page.tsx
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import TourCard from '@/components/tours/TourCard';
-import { Filter, MapPin, Calendar, TrendingUp, Search, X, Sparkles, BookOpen, Camera, DollarSign, Users, Mountain, Castle, Compass, Zap, Clock, Star } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Filter = (Icons as any).Filter;
+const MapPin = (Icons as any).MapPin;
+const Calendar = (Icons as any).Calendar;
+const TrendingUp = (Icons as any).TrendingUp;
+const Search = (Icons as any).Search;
+const X = (Icons as any).X;
+const Sparkles = (Icons as any).Sparkles;
+const BookOpen = (Icons as any).BookOpen;
+const Camera = (Icons as any).Camera;
+const DollarSign = (Icons as any).DollarSign;
+const Users = (Icons as any).Users;
+const Mountain = (Icons as any).Mountain;
+const Castle = (Icons as any).Castle;
+const Compass = (Icons as any).Compass;
+const Zap = (Icons as any).Zap;
+const Clock = (Icons as any).Clock;
+const Star = (Icons as any).Star;
 import { categories, regions, difficulties } from '@/lib/utils/tour-icons';
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 

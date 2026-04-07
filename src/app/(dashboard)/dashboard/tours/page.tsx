@@ -2,14 +2,30 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { 
-  Edit, Trash2, Eye, Filter, Search, 
-  ChevronLeft, ChevronRight, MoreVertical,
-  CheckCircle, XCircle, Star, Users,
-  Clock, Plus, Settings, Download,
-  ArrowUpDown,
-  ImageIcon
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Edit = (Icons as any).Edit;
+const Trash2 = (Icons as any).Trash2;
+const Eye = (Icons as any).Eye;
+const Filter = (Icons as any).Filter;
+const Search = (Icons as any).Search;
+
+const ChevronLeft = (Icons as any).ChevronLeft;
+const ChevronRight = (Icons as any).ChevronRight;
+const MoreVertical = (Icons as any).MoreVertical;
+
+const CheckCircle = (Icons as any).CheckCircle;
+const XCircle = (Icons as any).XCircle;
+const Star = (Icons as any).Star;
+const Users = (Icons as any).Users;
+
+const Clock = (Icons as any).Clock;
+const Plus = (Icons as any).Plus;
+const Settings = (Icons as any).Settings;
+const Download = (Icons as any).Download;
+
+const ArrowUpDown = (Icons as any).ArrowUpDown;
+const ImageIcon = (Icons as any).Image;
 
 interface Tour {
   _id: string;

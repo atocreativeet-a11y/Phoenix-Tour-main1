@@ -2,9 +2,19 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import {
-  Menu, X, Phone, ChevronDown, Mountain, Globe, Map, Building, Trees, Flag
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Menu = (Icons as any).Menu;
+const X = (Icons as any).X;
+const Phone = (Icons as any).Phone;
+const ChevronDown = (Icons as any).ChevronDown;
+const Mountain = (Icons as any).Mountain;
+const Globe = (Icons as any).Globe;
+const Map = (Icons as any).Map;
+const Building = (Icons as any).Building;
+const Trees = (Icons as any).Trees;
+const Flag = (Icons as any).Flag;
+
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 import Logo from '@/components/ui/logo';
 

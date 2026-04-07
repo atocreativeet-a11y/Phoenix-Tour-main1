@@ -1,6 +1,10 @@
 'use client';
 
-import { MapPin, Users, DollarSign } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const MapPin = (Icons as any).MapPin;
+const Users = (Icons as any).Users;
+const DollarSign = (Icons as any).DollarSign;
 
 interface PopularToursProps {
   data: Array<{

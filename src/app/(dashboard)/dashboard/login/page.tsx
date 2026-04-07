@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import * as Icons from "lucide-react";
+const Lock = (Icons as any).Lock || (() => null);
+const Mail = (Icons as any).Mail || (() => null);
+const AlertCircle = (Icons as any).AlertCircle || (() => null);
+const  Eye = (Icons as any).Eye || (() => null);
+const EyeOff = (Icons as any).EyeOff || (() => null);
 import Link from 'next/link';
 
 export default function AdminLoginPage() {

@@ -3,7 +3,11 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const AlertTriangle = (Icons as any).AlertTriangle;
+const Home = (Icons as any).Home;
+const RefreshCw = (Icons as any).RefreshCw;
 
 export default function Error({
   error,

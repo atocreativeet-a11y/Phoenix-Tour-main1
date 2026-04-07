@@ -3,22 +3,22 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { 
-  Search, 
-  Filter, 
-  X, 
-  MapPin, 
-  Users, 
-  Calendar,
-  Heart,
-  Share2,
-  Download,
-  Maximize2,
-  ChevronLeft,
-  ChevronRight,
-  Play,
-  Star
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Search = (Icons as any).Search;
+const Filter = (Icons as any).Filter;
+const X = (Icons as any).X;
+const MapPin = (Icons as any).MapPin;
+const Users = (Icons as any).Users;
+const Calendar = (Icons as any).Calendar;
+const Heart = (Icons as any).Heart;
+const Share2 = (Icons as any).Share2;
+const Download = (Icons as any).Download;
+const Maximize2 = (Icons as any).Maximize2;
+const ChevronLeft = (Icons as any).ChevronLeft;
+const ChevronRight = (Icons as any).ChevronRight;
+const Play = (Icons as any).Play;
+const Star = (Icons as any).Star;
 
 interface GalleryItem {
   id: string;

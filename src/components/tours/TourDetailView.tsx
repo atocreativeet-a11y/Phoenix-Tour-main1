@@ -5,33 +5,34 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  MapPin,
-  Calendar,
-  Users,
-  Star,
-  Clock,
-  DollarSign,
-  ChevronLeft,
-  Heart,
-  Share2,
-  CheckCircle,
-  Camera,
-  BookOpen,
-  Shield,
-  Navigation,
-  Phone,
-  Mail,
-  Instagram,
-  Facebook,
-  Twitter,
-  ArrowRight,
-  TrendingUp,
-  Mountain,
-  Castle,
-  Compass,
-  Zap
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const MapPin = (Icons as any).MapPin;
+const Calendar = (Icons as any).Calendar;
+const Users = (Icons as any).Users;
+const Star = (Icons as any).Star;
+const Clock = (Icons as any).Clock;
+const DollarSign = (Icons as any).DollarSign;
+const ChevronLeft = (Icons as any).ChevronLeft;
+const Heart = (Icons as any).Heart;
+const Share2 = (Icons as any).Share2;
+const CheckCircle = (Icons as any).CheckCircle;
+const Camera = (Icons as any).Camera;
+const BookOpen = (Icons as any).BookOpen;
+const Shield = (Icons as any).Shield;
+const Navigation = (Icons as any).Navigation;
+const Phone = (Icons as any).Phone;
+const Mail = (Icons as any).Mail;
+const Instagram = (Icons as any).Instagram;
+const Facebook = (Icons as any).Facebook;
+const Twitter = (Icons as any).Twitter;
+const ArrowRight = (Icons as any).ArrowRight;
+const TrendingUp = (Icons as any).TrendingUp;
+const Mountain = (Icons as any).Mountain;
+const Castle = (Icons as any).Castle;
+const Compass = (Icons as any).Compass;
+const Zap = (Icons as any).Zap;
+
 import ApplyTourModal from '@/components/modals/ApplyTourModal';
 
 interface Tour {

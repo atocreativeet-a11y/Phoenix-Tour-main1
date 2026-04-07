@@ -1,6 +1,10 @@
 // src/app/not-found.tsx
 import Link from 'next/link';
-import { Home, Compass, Phone } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Home = (Icons as any).Home;
+const Compass = (Icons as any).Compass;
+const Phone = (Icons as any).Phone;
 
 export default function NotFound() {
   return (

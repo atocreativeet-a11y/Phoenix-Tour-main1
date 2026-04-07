@@ -2,11 +2,24 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Save, Upload, X, Plus, Trash2, Calendar, 
-  Users, Tag, MapPin, DollarSign, Clock, 
-  TrendingUp, Image, List, Globe, Star
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Save = (Icons as any).Save;
+const Upload = (Icons as any).Upload;
+const X = (Icons as any).X;
+const Plus = (Icons as any).Plus;
+const Trash2 = (Icons as any).Trash2;
+const Calendar = (Icons as any).Calendar;
+const Users = (Icons as any).Users;
+const Tag = (Icons as any).Tag;
+const MapPin = (Icons as any).MapPin;
+const DollarSign = (Icons as any).DollarSign;
+const Clock = (Icons as any).Clock;
+const TrendingUp = (Icons as any).TrendingUp;
+const Image = (Icons as any).Image;
+const List = (Icons as any).List;
+const Globe = (Icons as any).Globe;
+const Star = (Icons as any).Star;
 import { categories, regions, difficulties, iconMap } from '@/lib/utils/tour-icons';
 
 interface ItineraryDay {

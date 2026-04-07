@@ -3,7 +3,15 @@
 
 import { useState } from 'react';
 import MultiPurposeBookingForm from '@/components/booking/MultiPurposeBookingForm';
-import { Calendar, ShieldCheck, Coffee, Users, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Calendar = (Icons as any).Calendar;
+const ShieldCheck = (Icons as any).ShieldCheck;
+const Coffee = (Icons as any).Coffee;
+const Users = (Icons as any).Users;
+const MapPin = (Icons as any).MapPin;
+const CheckCircle = (Icons as any).CheckCircle;
+const AlertCircle = (Icons as any).AlertCircle;
 
 export default function BookingPage() {
   const [bookingResult, setBookingResult] = useState<{

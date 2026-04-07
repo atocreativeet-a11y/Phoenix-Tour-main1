@@ -2,7 +2,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Upload, Image as ImageIcon, Plus, Trash2 } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const X = (Icons as any).X;
+const Upload = (Icons as any).Upload;
+const ImageIcon = (Icons as any).Image;
+const Plus = (Icons as any).Plus;
+const Trash2 = (Icons as any).Trash2;
+
 import { api } from '@/lib/utils/api';
 
 interface DestinationFormProps {

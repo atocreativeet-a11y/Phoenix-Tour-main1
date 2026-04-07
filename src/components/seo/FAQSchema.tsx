@@ -1,4 +1,3 @@
-// src/components/seo/FAQSchema.tsx
 interface FAQSchemaProps {
   questions: Array<{
     question: string;

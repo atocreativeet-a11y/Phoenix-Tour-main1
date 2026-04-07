@@ -1,5 +1,12 @@
-// src/components/sections/CallToAction.tsx
-import { Phone, Mail, MessageCircle, Calendar, ShieldCheck, Coffee, Flag } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Phone = (Icons as any).Phone;
+const Mail = (Icons as any).Mail;
+const MessageCircle = (Icons as any).MessageCircle;
+const Calendar = (Icons as any).Calendar;
+const ShieldCheck = (Icons as any).ShieldCheck;
+const Coffee = (Icons as any).Coffee;
+const Flag = (Icons as any).Flag;
 import Link from 'next/link';
 
 export default function CallToAction() {

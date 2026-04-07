@@ -2,20 +2,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  MessageCircle, 
-  Send, 
-  User, 
-  Calendar, 
-  Heart, 
-  MoreVertical,
-  Edit,
-  Trash2,
-  Reply,
-  CheckCircle,
-  AlertCircle,
-  Loader
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const MessageCircle = (Icons as any).MessageCircle;
+const Send = (Icons as any).Send;
+const User = (Icons as any).User;
+const Calendar = (Icons as any).Calendar;
+const Heart = (Icons as any).Heart;
+const MoreVertical = (Icons as any).MoreVertical;
+const Edit = (Icons as any).Edit;
+const Trash2 = (Icons as any).Trash2;
+const Reply = (Icons as any).Reply;
+const CheckCircle = (Icons as any).CheckCircle;
+const AlertCircle = (Icons as any).AlertCircle;
+const Loader = (Icons as any).Loader;
 
 interface Comment {
   _id: string;

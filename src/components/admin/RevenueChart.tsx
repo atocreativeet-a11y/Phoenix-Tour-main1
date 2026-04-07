@@ -1,6 +1,7 @@
 'use client';
+import * as Icons from "lucide-react";
 
-import { TrendingUp } from 'lucide-react';
+const TrendingUp = (Icons as any).TrendingUp;
 import { useState } from 'react';
 
 interface RevenueChartProps {

@@ -3,8 +3,9 @@
 
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { Loader } from 'lucide-react';
+import * as Icons from "lucide-react";
 
+const Loader = (Icons as any).Loader2 || (Icons as any).Loader || (() => null);
 export default function TourRedirectPage() {
   const router = useRouter();
   const params = useParams();

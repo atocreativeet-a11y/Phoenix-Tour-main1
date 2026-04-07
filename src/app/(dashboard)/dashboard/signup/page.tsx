@@ -4,7 +4,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Eye = (Icons as any).Eye;
+const EyeOff = (Icons as any).EyeOff;
+const Loader2 = (Icons as any).Loader2;
 
 export default function SignupPage() {
   const router = useRouter();

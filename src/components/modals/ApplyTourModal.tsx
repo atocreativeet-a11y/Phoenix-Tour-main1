@@ -2,18 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { 
-  X, 
-  Send, 
-  CheckCircle, 
-  AlertCircle, 
-  Loader2, 
-  User, 
-  Mail, 
-  Phone,
-  Calendar,
-  MapPin
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const X = (Icons as any).X;
+const Send = (Icons as any).Send;
+const CheckCircle = (Icons as any).CheckCircle;
+const AlertCircle = (Icons as any).AlertCircle;
+const Loader2 = (Icons as any).Loader2;
+const User = (Icons as any).User;
+const Mail = (Icons as any).Mail;
+const Phone = (Icons as any).Phone;
+const Calendar = (Icons as any).Calendar;
+const MapPin = (Icons as any).MapPin;
+
 import axios from 'axios';
 
 interface ApplyTourModalProps {

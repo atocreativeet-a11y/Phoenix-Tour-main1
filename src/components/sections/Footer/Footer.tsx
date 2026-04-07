@@ -1,15 +1,15 @@
-// src/components/sections/Footer.tsx
 import Link from "next/link";
-import {
-  MapPin,
-  Mail,
-  Facebook,
-  Instagram,
-  Youtube,
-  MessageCircle,
-  ChevronRight,
-  X
-} from "lucide-react";
+import * as Icons from "lucide-react";
+
+const MapPin = (Icons as any).MapPin;
+const Mail = (Icons as any).Mail;
+const Facebook = (Icons as any).Facebook;
+const Instagram = (Icons as any).Instagram;
+const Youtube = (Icons as any).Youtube;
+const MessageCircle = (Icons as any).MessageCircle;
+const ChevronRight = (Icons as any).ChevronRight;
+const X = (Icons as any).X;
+
 import { FaTiktok } from "react-icons/fa";
 
 export default function Footer() {

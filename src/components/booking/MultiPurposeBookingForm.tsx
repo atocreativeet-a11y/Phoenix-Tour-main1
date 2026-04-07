@@ -2,7 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Calendar, Users, Globe, CreditCard, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Calendar = (Icons as any).Calendar;
+const Users = (Icons as any).Users;
+const Globe = (Icons as any).Globe;
+const CreditCard = (Icons as any).CreditCard;
+const AlertCircle = (Icons as any).AlertCircle;
+const CheckCircle2 = (Icons as any).CheckCircle2;
+const Loader2 = (Icons as any).Loader2;
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from 'react-hot-toast';

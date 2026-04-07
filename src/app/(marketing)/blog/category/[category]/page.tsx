@@ -4,7 +4,14 @@ import BlogList from '@/components/blog/BlogList';
 import { notFound } from 'next/navigation';
 import connectDB  from '@/lib/mongodb';
 import BlogPost from '@/lib/models/BlogPost';
-import { BookOpen, Hash, Coffee, Mountain, Church, Camera } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const BookOpen = (Icons as any).BookOpen;
+const Hash = (Icons as any).Hash;
+const Coffee = (Icons as any).Coffee;
+const Mountain = (Icons as any).Mountain;
+const Church = (Icons as any).Church;
+const Camera = (Icons as any).Camera;
 interface CategoryPageProps {
   params: {
     category: string;

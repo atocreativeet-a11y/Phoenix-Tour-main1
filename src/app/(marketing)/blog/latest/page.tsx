@@ -1,7 +1,12 @@
 // src/app/blog/latest/page.tsx - Latest Posts Page
 import { Metadata } from 'next';
 import BlogList from '@/components/blog/BlogList';
-import { BookOpen, TrendingUp, Clock, Flame } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const BookOpen = (Icons as any).BookOpen;
+const TrendingUp = (Icons as any).TrendingUp;
+const Clock = (Icons as any).Clock;
+const Flame = (Icons as any).Flame;
 
 export const metadata: Metadata = {
   title: 'Latest Travel Articles | Phoenix Ethiopia Tour Blog',

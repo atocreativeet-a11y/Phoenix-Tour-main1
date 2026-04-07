@@ -1,7 +1,8 @@
-// components/ui/logo.tsx
 'use client';
 
-import { Footprints } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Footprints = (Icons as any).Footprints || (() => null);
 import Image from 'next/image';
 
 export default function Logo() {

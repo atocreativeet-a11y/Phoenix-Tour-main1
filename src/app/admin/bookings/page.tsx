@@ -1,21 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Eye, 
-  Edit, 
-  Trash2,
-  CheckCircle,
-  XCircle,
-  RefreshCw,
-  Calendar,
-  User,
-  DollarSign,
-  Clock
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Search = (Icons as any).Search;
+const Filter = (Icons as any).Filter;
+const Download = (Icons as any).Download;
+const Eye = (Icons as any).Eye;
+const Edit = (Icons as any).Edit;
+const Trash2 = (Icons as any).Trash2;
+
+const CheckCircle = (Icons as any).CheckCircle;
+const XCircle = (Icons as any).XCircle;
+const RefreshCw = (Icons as any).RefreshCw;
+
+const Calendar = (Icons as any).Calendar;
+const User = (Icons as any).User;
+const DollarSign = (Icons as any).DollarSign;
+const Clock = (Icons as any).Clock;
 
 interface Booking {
   _id: string;

@@ -5,7 +5,14 @@ import { useState, useEffect } from 'react';
 import BlogPostCard from './BlogPostCard';
 import BlogCategories from './BlogCategories';
 import BlogSidebar from './BlogSidebar';
-import { Search, Filter, Grid, List, ChevronLeft, ChevronRight } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Search = (Icons as any).Search;
+const Filter = (Icons as any).Filter;
+const Grid = (Icons as any).Grid;
+const List = (Icons as any).List;
+const ChevronLeft = (Icons as any).ChevronLeft;
+const ChevronRight = (Icons as any).ChevronRight;
 
 interface BlogPost {
   _id: string;

@@ -3,7 +3,9 @@
 
 import { useEffect, useState } from 'react';
 import BlogCard from './BlogPostCard';
-import { Loader2 } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const Loader = (Icons as any).Loader2 || (Icons as any).Loader || (() => null);
 
 interface BlogPost {
   _id: string;
@@ -66,7 +68,7 @@ export default function BlogList() {
   if (loading && posts.length === 0) {
     return (
       <div className="flex justify-center items-center py-12">
-        <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
+        <Loader className="w-8 h-8 text-primary-500 animate-spin" />
       </div>
     );
   }
@@ -96,7 +98,7 @@ export default function BlogList() {
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader className="w-5 h-5 animate-spin" />
                     Loading...
                   </>
                 ) : (
