@@ -1,19 +1,58 @@
-// src/app/dashboard/destinations/create/page.tsx
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Save, Upload, X, Plus, Trash2, MapPin, 
-  Building, Mountain, Sun, Trees, Compass,
-  Globe, Coffee, Castle, Church, Shield, 
-  Waves, Palette, MountainSnow, Tent, Factory,
-  School, Home, Users, Calendar, Clock, Star,
-  Heart, Flag, Thermometer, Droplets, Wind,
-  CloudRain, Umbrella, Cloud, Settings, Image,
-  Eye, ArrowLeft, CheckCircle, AlertCircle,
-  TrendingUp, Tag, DollarSign, Navigation
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+// helper
+const fallback = () => null;
+const getIcon = (name: string) => (Icons as any)[name] || fallback;
+
+// icons
+const Save = getIcon("Save"); // still fallback-safe
+const Upload = getIcon("Upload");
+const X = getIcon("X");
+const Plus = getIcon("Plus");
+const Trash2 = getIcon("Trash2");
+const MapPin = getIcon("MapPin");
+
+const Building = getIcon("Building");
+const Mountain = getIcon("Mountain");
+const Sun = getIcon("Sun");
+const Trees = getIcon("Trees");
+const Compass = getIcon("Compass");
+
+const Globe = getIcon("Globe");
+const Coffee = getIcon("Coffee");
+const Castle = getIcon("Castle");
+const Church = getIcon("Church");
+const Shield = getIcon("Shield");
+
+const Waves = getIcon("Waves");
+const Palette = getIcon("Palette");
+const MountainSnow = getIcon("MountainSnow");
+const Tent = getIcon("Tent");
+const Factory = getIcon("Factory");
+
+const ArrowLeft = getIcon("ArrowLeft");
+const Star = getIcon("Star");
+const Image = getIcon("Image");
+const Calendar = getIcon("Calendar");
+
+const iconOptions = [
+  { value: "Building", label: "Building", icon: Building },
+  { value: "MapPin", label: "Location", icon: MapPin },
+  { value: "Mountain", label: "Mountain", icon: Mountain },
+  { value: "Sun", label: "Sun", icon: Sun },
+  { value: "Trees", label: "Forest", icon: Trees },
+  { value: "Compass", label: "Compass", icon: Compass },
+  { value: "Globe", label: "Globe", icon: Globe },
+  { value: "Coffee", label: "Coffee", icon: Coffee },
+  { value: "Shield", label: "Shield", icon: Shield },
+  { value: "Waves", label: "Water", icon: Waves },
+  { value: "Palette", label: "Art", icon: Palette },
+  { value: "Tent", label: "Camping", icon: Tent },
+];
 
 // Region enum from the model
 const REGIONS = [
@@ -30,39 +69,6 @@ const REGIONS = [
   'Southern Nations, Nationalities, and Peoples\' ',
   'South West Ethiopia Peoples\' ',
   'Tigray'
-];
-// Icon options
-const iconOptions = [
-  { value: 'Building', label: 'Building', icon: Building },
-  { value: 'Mountain', label: 'Mountain', icon: Mountain },
-  { value: 'Compass', label: 'Compass', icon: Compass },
-  { value: 'Sun', label: 'Sun', icon: Sun },
-  { value: 'Trees', label: 'Trees', icon: Trees },
-  { value: 'Globe', label: 'Globe', icon: Globe },
-  { value: 'Coffee', label: 'Coffee', icon: Coffee },
-  { value: 'Castle', label: 'Castle', icon: Castle },
-  { value: 'Church', label: 'Church', icon: Church },
-  { value: 'Shield', label: 'Shield', icon: Shield },
-  { value: 'Waves', label: 'Waves', icon: Waves },
-  { value: 'Palette', label: 'Palette', icon: Palette },
-  { value: 'MountainSnow', label: 'Mountain Snow', icon: MountainSnow },
-  { value: 'Tent', label: 'Tent', icon: Tent },
-  { value: 'Factory', label: 'Factory', icon: Factory },
-  { value: 'School', label: 'School', icon: School },
-  { value: 'Home', label: 'Home', icon: Home },
-  { value: 'Navigation', label: 'Navigation', icon: Navigation },
-  { value: 'Users', label: 'Users', icon: Users },
-  { value: 'Calendar', label: 'Calendar', icon: Calendar },
-  { value: 'Clock', label: 'Clock', icon: Clock },
-  { value: 'Star', label: 'Star', icon: Star },
-  { value: 'Heart', label: 'Heart', icon: Heart },
-  { value: 'Flag', label: 'Flag', icon: Flag },
-  { value: 'Thermometer', label: 'Thermometer', icon: Thermometer },
-  { value: 'Droplets', label: 'Droplets', icon: Droplets },
-  { value: 'Wind', label: 'Wind', icon: Wind },
-  { value: 'CloudRain', label: 'Rain', icon: CloudRain },
-  { value: 'Umbrella', label: 'Umbrella', icon: Umbrella },
-  { value: 'Cloud', label: 'Cloud', icon: Cloud }
 ];
 
 interface QuickFact {

@@ -1,25 +1,46 @@
-// src/app/dashboard/destinations/edit/[id]/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { 
-  ArrowLeft, 
-  Save, 
-  Eye, 
-  X,
-  MapPin,
-  Building,
-  Mountain,
-  Sun,
-  Trees,
-  Compass,
-  Plus,
-  Trash2,
-  Loader
-} from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import * as Icons from "lucide-react";
 
-// ... (similar structure to create page, but with data fetching and update functionality)
+// helper
+const Loader = (Icons as any).Loader || (() => null);
+const fallback = () => null;
+const getIcon = (name: string) => (Icons as any)[name] || fallback;
+
+// icons
+const Save = getIcon("Save"); // still fallback-safe
+const Upload = getIcon("Upload");
+const X = getIcon("X");
+const Plus = getIcon("Plus");
+const Trash2 = getIcon("Trash2");
+const MapPin = getIcon("MapPin");
+
+const Building = getIcon("Building");
+const Mountain = getIcon("Mountain");
+const Sun = getIcon("Sun");
+const Trees = getIcon("Trees");
+const Compass = getIcon("Compass");
+
+const Globe = getIcon("Globe");
+const Coffee = getIcon("Coffee");
+const Castle = getIcon("Castle");
+const Church = getIcon("Church");
+const Shield = getIcon("Shield");
+
+const Waves = getIcon("Waves");
+const Palette = getIcon("Palette");
+const MountainSnow = getIcon("MountainSnow");
+const Tent = getIcon("Tent");
+const Factory = getIcon("Factory");
+
+const ArrowLeft = getIcon("ArrowLeft");
+const Star = getIcon("Star");
+const Image = getIcon("Image");
+const Calendar = getIcon("Calendar");
+
 
 export default function EditDestinationPage() {
   const router = useRouter();

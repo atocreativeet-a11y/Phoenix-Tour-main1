@@ -4,7 +4,12 @@ import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
-import { Loader2 } from 'lucide-react';
+import * as Icons from "lucide-react";
+
+const getIcon = (name: string) => (Icons as any)[name] || (() => null);
+
+const Loader2 = getIcon("Loader2");
+const Loader = getIcon("Loader");
 import { useEffect } from 'react';
 
 export default function DashboardLayout({

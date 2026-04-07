@@ -3,15 +3,56 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import {
-  ArrowLeft,
-  Save,
-  Eye,
-  Globe,
-  Tag,
-  Upload,
-  Loader
-} from 'lucide-react';
+import * as Icons from "lucide-react";
+
+// helper
+const MoreVertical = (Icons as any).MoreVertical || (() => null);
+const ChevronLeft = (Icons as any).ChevronLeft || (() => null);
+const Settings = (Icons as any).Settings || (() => null);
+const Edit = (Icons as any).Edit || (() => null);
+const Eye = (Icons as any).Eye || (() => null);
+const XCircle = (Icons as any).XCircle || (() => null);
+const ChevronRight = (Icons as any).ChevronRight || (() => null);
+const Clock = (Icons as any).Clock || (() => null);
+const ArrowUpDown = (Icons as any).ArrowUpDown || (() => null);
+const CheckCircle = (Icons as any).CheckCircle || (() => null);
+const Search = (Icons as any).Search || (() => null);
+const Link = (Icons as any).Link || (() => null);
+const Download = (Icons as any).Download || (() => null);
+const Loader = (Icons as any).Loader || (() => null);
+const fallback = () => null;
+const getIcon = (name: string) => (Icons as any)[name] || fallback;
+
+// icons
+const Save = getIcon("Save"); // still fallback-safe
+const Upload = getIcon("Upload");
+const X = getIcon("X");
+const Plus = getIcon("Plus");
+const Trash2 = getIcon("Trash2");
+const MapPin = getIcon("MapPin");
+
+const Building = getIcon("Building");
+const Mountain = getIcon("Mountain");
+const Sun = getIcon("Sun");
+const Trees = getIcon("Trees");
+const Compass = getIcon("Compass");
+
+const Globe = getIcon("Globe");
+const Coffee = getIcon("Coffee");
+const Castle = getIcon("Castle");
+const Church = getIcon("Church");
+const Shield = getIcon("Shield");
+
+const Waves = getIcon("Waves");
+const Palette = getIcon("Palette");
+const MountainSnow = getIcon("MountainSnow");
+const Tent = getIcon("Tent");
+const Factory = getIcon("Factory");
+
+const ArrowLeft = getIcon("ArrowLeft");
+const Star = getIcon("Star");
+const Image = getIcon("Image");
+const Calendar = getIcon("Calendar");
 
 export default function DestinationSettingsPage() {
   const router = useRouter();

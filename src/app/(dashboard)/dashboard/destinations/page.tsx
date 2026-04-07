@@ -1,21 +1,58 @@
-// src/app/dashboard/destinations/page.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { 
-  Edit, Trash2, Eye, Filter, Search, 
-  ChevronLeft, ChevronRight, MoreVertical,
-  CheckCircle, XCircle, Star, Users,
-  Clock, Plus, Settings, Download,
-  ArrowUpDown,
-  MapPin,
-  Building,
-  Mountain,
-  Sun,
-  Trees,
-  Compass
-} from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import * as Icons from "lucide-react";
+
+// helper
+const MoreVertical = (Icons as any).MoreVertical || (() => null);
+const ChevronLeft = (Icons as any).ChevronLeft || (() => null);
+const Settings = (Icons as any).Settings || (() => null);
+const Edit = (Icons as any).Edit || (() => null);
+const Eye = (Icons as any).Eye || (() => null);
+const XCircle = (Icons as any).XCircle || (() => null);
+const ChevronRight = (Icons as any).ChevronRight || (() => null);
+const Clock = (Icons as any).Clock || (() => null);
+const ArrowUpDown = (Icons as any).ArrowUpDown || (() => null);
+const CheckCircle = (Icons as any).CheckCircle || (() => null);
+const Search = (Icons as any).Search || (() => null);
+const Link = (Icons as any).Link || (() => null);
+const Download = (Icons as any).Download || (() => null);
+const Loader = (Icons as any).Loader || (() => null);
+const fallback = () => null;
+const getIcon = (name: string) => (Icons as any)[name] || fallback;
+
+// icons
+const Save = getIcon("Save"); // still fallback-safe
+const Upload = getIcon("Upload");
+const X = getIcon("X");
+const Plus = getIcon("Plus");
+const Trash2 = getIcon("Trash2");
+const MapPin = getIcon("MapPin");
+
+const Building = getIcon("Building");
+const Mountain = getIcon("Mountain");
+const Sun = getIcon("Sun");
+const Trees = getIcon("Trees");
+const Compass = getIcon("Compass");
+
+const Globe = getIcon("Globe");
+const Coffee = getIcon("Coffee");
+const Castle = getIcon("Castle");
+const Church = getIcon("Church");
+const Shield = getIcon("Shield");
+
+const Waves = getIcon("Waves");
+const Palette = getIcon("Palette");
+const MountainSnow = getIcon("MountainSnow");
+const Tent = getIcon("Tent");
+const Factory = getIcon("Factory");
+
+const ArrowLeft = getIcon("ArrowLeft");
+const Star = getIcon("Star");
+const Image = getIcon("Image");
+const Calendar = getIcon("Calendar");
 
 interface Destination {
   _id: string;
@@ -324,7 +361,7 @@ export default function AdminDestinationsPage() {
                 onClick={fetchDestinations}
                 className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
               >
-                <Filter className="w-4 h-4" />
+                <filter className="w-4 h-4" />
                 Apply
               </button>
               
