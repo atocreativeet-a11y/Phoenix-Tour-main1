@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+"build": "NEXT_PRIVATE_TURBOPACK=0 next build",
+    "start": "next start -p $PORT",
     "vercel-build": "next build"
   },
   "engines": {
