@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cross-env NEXT_PRIVATE_TURBOPACK=0 next build",
+    "build": "NEXT_DISABLE_TURBOPACK=1 next build",
     "start": "next start -p $PORT",
     "vercel-build": "next build"
   },
