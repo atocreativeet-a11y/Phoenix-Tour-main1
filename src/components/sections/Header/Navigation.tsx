@@ -67,8 +67,8 @@ export default function Navigation() {
   return (
     <div className="relative z-50">
       {/* Desktop Navigation */}
-<div className="hidden md:flex w-full justify-center items-center">
-  <nav className="flex items-center gap-2 w-fit">
+<div className="hidden md:flex w-full">
+  <nav className="flex justify-center items-center gap-2 w-full mx-auto">
     {navItems.map((item) => renderNavItem(item))}
   </nav>
 </div>
