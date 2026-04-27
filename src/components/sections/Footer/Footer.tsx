@@ -90,7 +90,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-gray-400 text-sm">
 
           <div className="text-center md:text-left">
-            © {currentYear} Phoenix Ethiopia Tour. All rights reserved.
+            © {currentYear} Phoenix Ethiopia Tours. All rights reserved.
           </div>
 
           <div className="flex flex-wrap gap-5 justify-center md:justify-start">
