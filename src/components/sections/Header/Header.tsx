@@ -148,9 +148,13 @@ export default function Header() {
       </div>
 
       {/* Navbar */}
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg border-b' : 'bg-transparent'
-      }`}>
+      <header
+  className={`sticky top-0 z-50 transition-all duration-300 
+  ${isScrolled 
+    ? 'bg-white shadow-lg border-b' 
+    : 'bg-white/80 backdrop-blur-md lg:bg-transparent'
+  }`}
+>
         <div className="container mx-auto px-4" ref={navRef}>
           <div className="flex items-center justify-between h-20 relative">
 
