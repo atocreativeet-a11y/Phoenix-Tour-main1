@@ -160,7 +160,10 @@ export default function Header() {
             onMouseEnter={() => setActiveDropdown(item.label)}
             onMouseLeave={() => setActiveDropdown(null)}
           >
-            <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
+            <Link
+              href={item.href}
+              className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500 whitespace-nowrap"
+            >
               {item.label}
               {item.dropdown && <ChevronDown className="w-4 h-4" />}
             </Link>
