@@ -37,25 +37,16 @@ export default function TourCard({ tour, onExploreClick }: TourCardProps) {
   
   return (
     <>
-      {/* Animation Styles */}
       <style jsx>{`
-        @keyframes seamlessFloat {
-          0% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-6px);
-          }
-          100% {
-            transform: translateY(0px);
-          }
-        }
+  @keyframes continuousMove {
+    0% { transform: translateY(0%); }
+    100% { transform: translateY(-100%); }
+  }
 
-        .animate-seamless-float {
-          animation: seamlessFloat 6s ease-in-out infinite;
-          will-change: transform;
-        }
-      `}</style>
+  .animate-continuous {
+    animation: continuousMove 10s linear infinite;
+  }
+`}</style>
 
       <div className="group relative animate-seamless-float bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-primary-500 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/20">
         {/* Ethiopian Flag Badge */}
