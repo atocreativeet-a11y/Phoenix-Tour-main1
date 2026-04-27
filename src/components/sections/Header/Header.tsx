@@ -146,48 +146,48 @@ export default function Header() {
 
       {/* Navbar */}
       <header className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg border-b' : 'bg-transparent'
-      }`}>
-        <div className="container mx-auto px-4" ref={navRef}>
-          <div className="flex items-center justify-between h-20">
-            <Link href="/"><Logo /></Link>
+  isScrolled ? 'bg-white shadow-lg border-b' : 'bg-transparent'
+}`}>
+  <div className="container mx-auto px-4" ref={navRef}>
+    <div className="flex items-center justify-between h-20 relative">
+      <Link href="/"><Logo /></Link>
 
-            <nav className="hidden lg:flex items-center gap-10">
-              {navItems.map(item => (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setActiveDropdown(item.label)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
-                    {item.label}
-                    {item.dropdown && <ChevronDown className="w-4 h-4" />}
+      <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+        {navItems.map(item => (
+          <div
+            key={item.label}
+            className="relative"
+            onMouseEnter={() => setActiveDropdown(item.label)}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            <Link href={item.href} className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500">
+              {item.label}
+              {item.dropdown && <ChevronDown className="w-4 h-4" />}
+            </Link>
+
+            {item.dropdown && activeDropdown === item.label && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 z-[1000]">
+                {item.dropdown.map(sub => (
+                  <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
+                    {sub.icon}
+                    {sub.label}
                   </Link>
-
-                  {item.dropdown && activeDropdown === item.label && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 z-[1000]">
-                      {item.dropdown.map(sub => (
-                        <Link key={sub.label} href={sub.href} className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50">
-                          {sub.icon}
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </nav>
-
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden z-[10000]"
-            >
-              <Menu />
-            </button>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      </header>
+        ))}
+      </nav>
+
+      <button
+        onClick={() => setIsMobileMenuOpen(true)}
+        className="lg:hidden z-[10000]"
+      >
+        <Menu />
+      </button>
+    </div>
+  </div>
+</header>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
