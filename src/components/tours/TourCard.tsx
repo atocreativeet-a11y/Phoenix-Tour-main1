@@ -1,5 +1,6 @@
-import * as Icons from "lucide-react";
+"use client"; // Add this for Next.js client component
 
+import * as Icons from "lucide-react";
 const Clock = (Icons as any).Clock;
 const MapPin = (Icons as any).MapPin;
 const Star = (Icons as any).Star;
@@ -38,17 +39,19 @@ export default function TourCard({ tour, onExploreClick }: TourCardProps) {
   return (
     <>
       <style jsx>{`
-  @keyframes continuousMove {
-    0% { transform: translateY(0%); }
-    100% { transform: translateY(-100%); }
-  }
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+          animation: marquee 25s linear infinite;
+        }
+        .pause-marquee:hover .marquee-track {
+          animation-play-state: paused;
+        }
+      `}</style>
 
-  .animate-continuous {
-    animation: continuousMove 10s linear infinite;
-  }
-`}</style>
-
-      <div className="group relative animate-seamless-float bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-primary-500 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/20">
+      <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-primary-500 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/20 pause-marquee">
         {/* Ethiopian Flag Badge */}
         <div className="absolute top-4 left-4 z-10">
           <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5">

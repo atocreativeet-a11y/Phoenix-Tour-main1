@@ -1,15 +1,12 @@
-'use client';
+"use client";
 
-import { SessionProvider } from 'next-auth/react';
-import { ReactNode } from 'react';
+import { I18nProvider } from "./providers/I18nProvider";
+import { ReactNode } from "react";
 
-export default function Providers({ children }: { children: ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
   return (
-    <SessionProvider
-      // Remove refetchInterval for now to debug
-      refetchOnWindowFocus={false}
-    >
+    <I18nProvider>
       {children}
-    </SessionProvider>
+    </I18nProvider>
   );
 }

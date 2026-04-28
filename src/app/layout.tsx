@@ -1,9 +1,9 @@
-// src/app/layout.tsx (updated for your marketing layout structure)
+"use client"
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
-import Providers from './providers';
+import { Providers } from "./providers";
 import "./globals.css";
-import "@/i18n";
+import "@/lib/i18n";
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://www.phoenixtourethiopia.et'), // Replace with your actual domain
+  metadataBase: new URL('https://www.phoenixethiopiatours.com'),
   alternates: {
     canonical: '/',
   },
