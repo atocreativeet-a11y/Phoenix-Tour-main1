@@ -44,6 +44,7 @@ interface DashboardData {
   recentBookings: Array<any>;
 }
 
+export const dynamic = "force-dynamic"
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);

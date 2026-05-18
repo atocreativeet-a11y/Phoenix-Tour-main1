@@ -6,6 +6,8 @@ import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
 import * as Icons from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 const getIcon = (name: string) => (Icons as any)[name] || (() => null);
 
 const Loader2 = getIcon("Loader2");

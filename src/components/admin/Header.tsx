@@ -10,6 +10,8 @@ const ChevronDown = (Icons as any).ChevronDown;
 const Calendar = (Icons as any).Calendar;
 import { useState } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export default function Header() {
   const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState('');

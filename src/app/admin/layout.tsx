@@ -8,6 +8,7 @@ import * as Icons from "lucide-react";
 
 const Loader = (Icons as any).Loader2 || (Icons as any).Loader || (() => null);
 
+export const dynamic = 'force-dynamic';
 export default function AdminLayout({
   children,
 }: {

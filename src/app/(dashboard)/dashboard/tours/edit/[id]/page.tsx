@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import * as Icons from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 const Save = (Icons as any).Save;
 const Upload = (Icons as any).Upload;
 const X = (Icons as any).X;
