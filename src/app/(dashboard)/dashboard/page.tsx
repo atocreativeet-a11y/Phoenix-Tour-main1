@@ -33,7 +33,7 @@ export default function DashboardPage() {
           <div key={stat.label} className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between mb-4">
               <div className={`${stat.color} w-12 h-12 rounded-lg flex items-center justify-center`}>
-                const Icon = stat.icon; <Icon className="w-6 h-6 text-white" />
+                const Icon = stat.icon; <Icons className="w-6 h-6 text-white" />
               </div>
               <span className="text-green-600 text-sm font-medium">{stat.change}</span>
             </div>

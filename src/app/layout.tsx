@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
+import Script from 'next/script'; // Import Next.js Script optimizer
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -176,10 +177,29 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       <body className={`${inter.className} antialiased`}>
-     <Providers>
+        <Providers>
+          {/* 👈 Reverted to clean setup so individual page layouts control constraints */}
           {children}
         </Providers>
         
+        {/* --- Google Translate Auto-Translation Scripts --- */}
+        <Script
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
+        <Script id="google-translate-config" strategy="afterInteractive">
+          {`
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,fr,es,pt,de',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+              }, 'google_translate_element');
+            }
+          `}
+        </Script>
+
         {/* Google Analytics Script */}
         <script
           async

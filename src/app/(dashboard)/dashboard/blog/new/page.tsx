@@ -15,4 +15,5 @@ export default function NewBlogPage() {
       <h1>Create New Blog</h1>
     </div>
   );
+  
 }

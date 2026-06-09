@@ -16,20 +16,24 @@ export default function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // CLOSE on route change
+  // Close on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
-  // LOCK SCROLL when open
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
     return () => {
       document.body.style.overflow = '';
     };
   }, [mobileOpen]);
 
-  // ESC to close
+  // Close on ESC keypress
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMobileOpen(false);
@@ -38,95 +42,108 @@ export default function Navigation() {
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  const renderNavItem = (item: (typeof navItems)[0]) => {
-    const Icon = item.icon;
-
-    const isActive =
-      item.href === '/'
-        ? pathname === '/'
-        : pathname?.startsWith(item.href);
-
-    return (
-      <Link
-        key={item.label}
-        href={item.href}
-        onClick={() => setMobileOpen(false)}
-        aria-current={isActive ? 'page' : undefined}
-        className={`flex items-center gap-3 px-4 py-4 rounded-xl transition-all duration-300 ${
-          isActive
-            ? 'bg-gradient-to-r from-primary-500 to-orange-500 text-white shadow-md'
-            : 'text-gray-700 hover:text-primary-500 hover:bg-gray-100'
-        }`}
-      >
-        <Icon className="w-5 h-5" />
-        <span className="text-base font-medium">{item.label}</span>
-      </Link>
-    );
-  };
-
   return (
-    <div className="relative z-50">
-      {/* Desktop Navigation */}
-<div className="hidden md:flex w-full">
-  <nav className="flex justify-center items-center gap-2 w-full mx-auto">
-    {navItems.map((item) => renderNavItem(item))}
-  </nav>
-</div>
+    <>
+      {/* Header Container - Keeps content centered and fixes the scrolling glitch with an elegant orange border */}
+      <header className="w-full bg-white/80 backdrop-blur-md border-b border-orange-500/30 sticky top-0 z-50 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          
+          {/* Brand/Logo */}
+          <Link href="/" className="font-bold text-xl bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent tracking-tight">
+            Explore
+          </Link>
 
-      {/* Mobile Button */}
-<div className="md:hidden flex justify-end">
-  <button
-    onClick={() => setMobileOpen(!mobileOpen)}
-    className="p-2 rounded-xl text-gray-700 hover:bg-gray-100 active:scale-95 transition"
-    aria-label="Toggle menu"
-  >
-    {mobileOpen ? (
-      <X className="w-6 h-6" />
-    ) : (
-      <Menu className="w-6 h-6" />
-    )}
-  </button>
-</div>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = item.href === '/' ? pathname === '/' : pathname?.startsWith(item.href);
 
-{/* Mobile Bottom Sheet */}
-<div
-  className={`fixed inset-0 z-50 flex items-end justify-center ${
-    mobileOpen ? '' : 'pointer-events-none'
-  }`}
->
-  {/* Overlay */}
-  <div
-    onClick={() => setMobileOpen(false)}
-    className={`absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-300 ${
-      mobileOpen ? 'opacity-100' : 'opacity-0'
-    }`}
-  />
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 relative ${
+                    isActive
+                      ? 'text-orange-600 bg-orange-50/60 font-semibold'
+                      : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50/20'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
 
-  {/* Sheet */}
-  <nav
-    className={`relative w-full max-w-md mx-auto bg-white rounded-t-3xl shadow-2xl
-    transition-all duration-300 ease-out
-    ${mobileOpen
-        ? 'translate-y-0 opacity-100'
-        : 'translate-y-full opacity-0'
-      }`}
-    style={{
-      paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)',
-    }}
-  >
-    {/* Handle */}
-    <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-4" />
-
-    {/* Content */}
-    <div className="px-5 pb-2 max-h-[70vh] overflow-y-auto flex flex-col gap-1">
-      {navItems.map((item) => (
-        <div key={item.label}>
-          {renderNavItem(item)}
+          {/* Mobile Toggle Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2.5 rounded-xl text-gray-700 hover:bg-orange-50 hover:text-orange-600 active:scale-95 transition-all duration-200 z-50 relative"
+              aria-label="Toggle menu"
+            >
+              <div className="relative w-6 h-6 flex items-center justify-center">
+                <Menu className={`w-6 h-6 absolute transition-all duration-300 transform ${mobileOpen ? 'rotate-90 opacity-0 scale-70' : 'rotate-0 opacity-100 scale-100'}`} />
+                <X className={`w-6 h-6 absolute transition-all duration-300 transform ${mobileOpen ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-70'}`} />
+              </div>
+            </button>
+          </div>
         </div>
-      ))}
-    </div>
-  </nav>
-</div>
-    </div>
+      </header>
+
+      {/* Mobile Bottom Sheet Menu - Extracted outside the header to fix clipping/dropdown bugs */}
+      <div className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${mobileOpen ? 'visible' : 'invisible pointer-events-none'}`}>
+        
+        {/* Backdrop Tint */}
+        <div
+          onClick={() => setMobileOpen(false)}
+          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
+            mobileOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        {/* Bottom Sheet Drawer */}
+        <nav
+          className={`absolute bottom-0 left-0 right-0 w-full bg-white rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(249,115,22,0.15)]
+            transition-transform duration-500 ease-[cubic-bezier(0.32,0.94,0.6,1)] transform will-change-transform
+            ${mobileOpen ? 'translate-y-0' : 'translate-y-full'}`}
+          style={{
+            paddingBottom: 'calc(env(safe-area-inset-bottom) + 24px)',
+          }}
+        >
+          {/* 🔴 FIXED FOR RESPONSIVENESS AND TABLETS: Wrapper container inside the drawer sheet */}
+          <div className="max-w-md mx-auto w-full">
+            {/* Aesthetic Drag Handle Indicator */}
+            <div className="w-12 h-1.5 bg-orange-100 rounded-full mx-auto mt-4 mb-6" />
+
+            {/* Nav Items Wrapper */}
+            <div className="px-6 flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = item.href === '/' ? pathname === '/' : pathname?.startsWith(item.href);
+
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 ${
+                      isActive
+                        ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white shadow-lg shadow-orange-500/15'
+                        : 'text-gray-700 hover:bg-orange-50/40 active:bg-orange-100/40'
+                    }`}
+                  >
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                    <span className="text-base font-semibold tracking-wide">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </nav>
+      </div>
+    </>
   );
 }

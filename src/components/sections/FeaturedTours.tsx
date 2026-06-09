@@ -39,7 +39,6 @@ interface Category {
   icon?: string;
 }
 
-// Fallback static tours data with comprehensive categories
 const fallbackTours = [
   {
     _id: 'fallback-1',
@@ -205,7 +204,6 @@ const fallbackTours = [
   }
 ];
 
-// Updated categories based on your new structure
 const newCategories = [
   'Mountain Trekking',
   'Cultural Heritage',
@@ -231,7 +229,6 @@ export default function FeaturedTours({ id }: { id?: string }) {
     }))
   ]);
 
-  // Carousel state
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCards, setVisibleCards] = useState(3);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -239,7 +236,6 @@ export default function FeaturedTours({ id }: { id?: string }) {
   const autoPlayRef = useRef<NodeJS.Timeout>();
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Modal state
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState<{
     id?: string;
@@ -249,18 +245,15 @@ export default function FeaturedTours({ id }: { id?: string }) {
     difficulty?: string;
   } | null>(null);
 
-  // Update category counts from tours
   const updateCategoryCounts = useCallback((tours: Tour[], activeCat: string) => {
     const categoryCounts: Record<string, number> = {
       'All Tours': tours.length
     };
 
-    // Initialize all new categories with 0
     newCategories.forEach(category => {
       categoryCounts[category] = 0;
     });
 
-    // Count tours for each category
     tours.forEach(tour => {
       const category = tour.category;
       if (categoryCounts.hasOwnProperty(category)) {
@@ -268,7 +261,6 @@ export default function FeaturedTours({ id }: { id?: string }) {
       }
     });
 
-    // Update categories state
     setCategories(prev => prev.map(cat => ({
       ...cat,
       count: categoryCounts[cat.name] || 0,
@@ -276,7 +268,6 @@ export default function FeaturedTours({ id }: { id?: string }) {
     })));
   }, []);
 
-  // Calculate visible cards based on screen size
   useEffect(() => {
     const updateVisibleCards = () => {
       if (window.innerWidth < 768) {
@@ -293,7 +284,6 @@ export default function FeaturedTours({ id }: { id?: string }) {
     return () => window.removeEventListener('resize', updateVisibleCards);
   }, []);
 
-  // Auto-play carousel
   useEffect(() => {
     if (isAutoPlaying && featuredTours.length > visibleCards) {
       autoPlayRef.current = setInterval(() => {
@@ -311,41 +301,33 @@ export default function FeaturedTours({ id }: { id?: string }) {
     }
   }, [isAutoPlaying, featuredTours.length, visibleCards]);
 
-  // Handle category click
   const handleCategoryClick = async (categoryName: string) => {
     setActiveCategory(categoryName);
-    setCurrentIndex(0); // Reset carousel to start
+    setCurrentIndex(0); 
     
-    // Update category active state immediately
     setCategories(prev => prev.map(cat => ({
       ...cat,
       active: cat.name === categoryName
     })));
 
-    // If using fallback, filter immediately
     if (useFallback) {
       const filteredTours = filterFallbackTours(categoryName);
       setFeaturedTours(filteredTours);
       updateCategoryCounts(filteredTours, categoryName);
     } else {
-      // Otherwise fetch from backend
       await fetchFeaturedTours(categoryName);
     }
   };
 
-  // Filter fallback tours by category
   const filterFallbackTours = (categoryName: string): Tour[] => {
     if (categoryName === 'All Tours') {
       return fallbackTours;
     }
-    
     return fallbackTours.filter(tour => tour.category === categoryName);
   };
 
-  // Fetch featured tours
   const fetchFeaturedTours = async (category?: string) => {
     setLoading(true);
-    
     try {
       const params = new URLSearchParams();
       params.append('limit', '12');
@@ -356,27 +338,21 @@ export default function FeaturedTours({ id }: { id?: string }) {
       }
 
       const response = await fetch(`/api/tours?${params}`);
-      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
-      
       if (data.success && data.tours && data.tours.length > 0) {
         const tours = data.tours;
         setFeaturedTours(tours);
         setUseFallback(false);
-        
-        // Update category counts based on fetched tours
         updateCategoryCounts(tours, category || 'All Tours');
       } else {
         throw new Error('No tours found in API');
       }
     } catch (error) {
       console.error('Failed to fetch featured tours:', error);
-      
-      // Fallback to static data
       setUseFallback(true);
       const filteredFallback = filterFallbackTours(category || 'All Tours');
       setFeaturedTours(filteredFallback);
@@ -386,24 +362,10 @@ export default function FeaturedTours({ id }: { id?: string }) {
     }
   };
 
-  // Initial data fetch
   useEffect(() => {
-    const loadInitialData = async () => {
-      setLoading(true);
-      try {
-        await fetchFeaturedTours('All Tours');
-      } catch (error) {
-        console.error('Failed to load initial data:', error);
-        // Already handled in fetchFeaturedTours
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadInitialData();
+    fetchFeaturedTours('All Tours');
   }, []);
 
-  // Handle explore tour click
   const handleExploreTour = (tour: Tour) => {
     setSelectedTour({
       id: tour._id,
@@ -415,16 +377,13 @@ export default function FeaturedTours({ id }: { id?: string }) {
     setIsApplyModalOpen(true);
   };
 
-  // Close modal
   const handleCloseModal = () => {
     setIsApplyModalOpen(false);
     setSelectedTour(null);
   };
 
-  // Carousel navigation
   const nextSlide = () => {
     if (isAnimating || featuredTours.length === 0) return;
-    
     setIsAnimating(true);
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
@@ -436,18 +395,15 @@ export default function FeaturedTours({ id }: { id?: string }) {
       return nextIndex >= featuredTours.length ? 0 : nextIndex;
     });
 
-    // Allow animation to complete
     setTimeout(() => {
       setIsAnimating(false);
     }, 500);
 
-    // Restart auto-play after manual navigation
     setTimeout(() => setIsAutoPlaying(true), 3000);
   };
 
   const prevSlide = () => {
     if (isAnimating || featuredTours.length === 0) return;
-    
     setIsAnimating(true);
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
@@ -459,34 +415,25 @@ export default function FeaturedTours({ id }: { id?: string }) {
       return prevIndex < 0 ? featuredTours.length - 1 : prevIndex;
     });
 
-    // Allow animation to complete
     setTimeout(() => {
       setIsAnimating(false);
     }, 500);
 
-    // Restart auto-play after manual navigation
     setTimeout(() => setIsAutoPlaying(true), 3000);
   };
 
-  // Get visible tours based on current index
   const getVisibleTours = () => {
     if (featuredTours.length === 0) return [];
-    
     const tours = [];
-    
-    // Get the tours to display (current index and next ones)
     for (let i = 0; i < Math.min(visibleCards, featuredTours.length); i++) {
       const tourIndex = (currentIndex + i) % featuredTours.length;
       tours.push(featuredTours[tourIndex]);
     }
-    
     return tours;
   };
 
-  // Calculate total slides for indicators
   const totalSlides = featuredTours.length;
 
-  // Pause auto-play on hover
   const handleMouseEnter = () => {
     setIsAutoPlaying(false);
     if (autoPlayRef.current) {
@@ -500,8 +447,12 @@ export default function FeaturedTours({ id }: { id?: string }) {
 
   return (
     <>
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50" id={id}>
-        <div className="container mx-auto px-4">
+      {/* 🔴 Added overflow-hidden here to clip arrow overlays or layouts cleanly inside your page track */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id={id}>
+        
+        {/* 🔴 Locked grid alignment constraints safely to your standard margins */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+          
           {/* Section Header */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 text-primary-500 font-semibold mb-4">
@@ -522,44 +473,43 @@ export default function FeaturedTours({ id }: { id?: string }) {
               Experience Ethiopia through expertly crafted tours that showcase our rich history, 
               diverse cultures, and breathtaking natural wonders.
             </p>
-            
-
           </div>
-{/* Carousel filter */}
 
-<div className="w-full max-w-full overflow-x-auto sm:overflow-visible scrollbar-hide mb-8 sm:mb-12 px-2">
-  <div className="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-2 sm:gap-3">
-    {categories.map((category) => (
-      <button
-        key={category.name}
-        onClick={() => handleCategoryClick(category.name)}
-        disabled={category.count === 0 && category.name !== 'All Tours'}
-        className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base rounded-full font-medium transition-all duration-300 border flex items-center gap-1.5 sm:gap-2 ${
-          category.active 
-            ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
-            : category.count === 0 && category.name !== 'All Tours'
-            ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-            : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
-        }`}
-      >
-        {category.name}
-        <span className={`text-xs px-2 py-0.5 rounded-full ${
-          category.active 
-            ? 'bg-primary-600/30 text-white' 
-            : category.count === 0
-            ? 'bg-gray-200 text-gray-500'
-            : 'bg-gray-100 text-gray-600'
-        }`}>
-          {category.count}
-        </span>
-      </button>
-    ))}
-  </div>
-</div>
+          {/* Carousel filter */}
+          <div className="w-full overflow-x-auto scrollbar-hide mb-8 sm:mb-12">
+            <div className="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-2 sm:gap-3 pb-2">
+              {categories.map((category) => (
+                <button
+                  key={category.name}
+                  onClick={() => handleCategoryClick(category.name)}
+                  disabled={category.count === 0 && category.name !== 'All Tours'}
+                  className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base rounded-full font-medium transition-all duration-300 border flex items-center gap-1.5 sm:gap-2 ${
+                    category.active 
+                      ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 border-primary-500' 
+                      : category.count === 0 && category.name !== 'All Tours'
+                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                      : 'bg-white text-gray-700 hover:bg-primary-50 border-gray-300 hover:border-primary-300'
+                  }`}
+                >
+                  {category.name}
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    category.active 
+                      ? 'bg-primary-600/30 text-white' 
+                      : category.count === 0
+                      ? 'bg-gray-200 text-gray-500'
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {category.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Carousel Container */}
+          {/* 🔴 Removed positive offset translations (translate-x-4) and set items clean to stay strictly within inside padding clipping */}
           <div 
-            className="relative mb-8"
+            className="relative mb-8 px-2"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -569,14 +519,14 @@ export default function FeaturedTours({ id }: { id?: string }) {
                 <button
                   onClick={prevSlide}
                   disabled={isAnimating}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft className="w-5 h-5 text-gray-700" />
                 </button>
                 <button
                   onClick={nextSlide}
                   disabled={isAnimating}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronRight className="w-5 h-5 text-gray-700" />
                 </button>
@@ -607,8 +557,8 @@ export default function FeaturedTours({ id }: { id?: string }) {
                     <div 
                       key={`${tour._id}-${index}`}
                       className={`flex-shrink-0 transition-all duration-500 ease-out ${
-                        visibleCards === 3 ? 'w-1/3' : 
-                        visibleCards === 2 ? 'w-1/2' : 
+                        visibleCards === 3 ? 'w-[calc(33.333%-1.34rem)]' : 
+                        visibleCards === 2 ? 'w-[calc(50%-1rem)]' : 
                         'w-full'
                       }`}
                     >
@@ -635,27 +585,27 @@ export default function FeaturedTours({ id }: { id?: string }) {
             </div>
 
             {/* Carousel Indicators */}
-           {totalSlides > visibleCards && (
-  <div className="flex justify-center gap-2 mt-8">
-    {Array.from({ length: totalSlides }).map((_, index) => {
-      const isActive = index === currentIndex;
+            {totalSlides > visibleCards && (
+              <div className="flex justify-center gap-2 mt-8">
+                {Array.from({ length: totalSlides }).map((_, index) => {
+                  const isActive = index === currentIndex;
 
-      return (
-        <button
-          key={index}
-          onClick={() => setCurrentIndex(index)}
-          disabled={isAnimating}
-          aria-label={`Go to slide ${index + 1}`}
-          className={`h-2 rounded-full transition-all duration-300 ${
-            isActive
-              ? 'bg-primary-500 w-8'
-              : 'bg-gray-300 w-2 hover:bg-gray-400'
-          } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
-        />
-      );
-    })}
-  </div>
-)}
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentIndex(index)}
+                      disabled={isAnimating}
+                      aria-label={`Go to slide ${index + 1}`}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        isActive
+                          ? 'bg-primary-500 w-8'
+                          : 'bg-gray-300 w-2 hover:bg-gray-400'
+                      } ${isAnimating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </section>

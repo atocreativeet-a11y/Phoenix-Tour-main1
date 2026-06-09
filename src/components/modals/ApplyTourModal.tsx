@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Icons from "lucide-react";
+import axios from 'axios';
 
 const X = (Icons as any).X;
 const Send = (Icons as any).Send;
@@ -14,8 +15,6 @@ const Mail = (Icons as any).Mail;
 const Phone = (Icons as any).Phone;
 const Calendar = (Icons as any).Calendar;
 const MapPin = (Icons as any).MapPin;
-
-import axios from 'axios';
 
 interface ApplyTourModalProps {
   isOpen: boolean;
@@ -67,34 +66,42 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
       setReferenceId('');
     }
   }, [isOpen, reset]);
-const onSubmit = async (data: FormData) => {
-  setIsSubmitting(true);
-  setSubmitStatus('idle');
 
-  try {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/send-email`,
-      {
-        ...data,
-        tourName: tour?.name || 'Selected Tour',
-        tourId: tour?.id,
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const response = await axios.post('https://api.web3forms.com/submit', {
+        access_key: "26f34f6c-4e54-4fab-a10a-e887ff467271", 
+        
+        // Form Fields
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        
+        subject: `New Tour Booking Request: ${tour?.name || 'Selected Tour'}`,
+        
+        "Tour Name": tour?.name || 'Selected Tour',
+        "Tour ID": tour?.id || 'N/A',
+        "Tour Duration": tour?.duration || 'N/A',
+        "Tour Price": tour?.price ? `$${tour.price}` : 'N/A',
+      });
+
+      if (response.data.success) {
+        setSubmitStatus('success');
+        setReferenceId(response.data.id || 'TX-' + Math.floor(Math.random() * 90000 + 10000));
+        reset();
+      } else {
+        setSubmitStatus('error');
       }
-    );
-
-    if (response.data.success) {
-      setSubmitStatus('success');
-      setReferenceId(response.data.referenceId);
-      reset();
-    } else {
+    } catch (error) {
+      console.error('Submission error:', error);
       setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error('Submission error:', error);
-    setSubmitStatus('error');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   if (!isOpen) return null;
 
@@ -158,7 +165,7 @@ const onSubmit = async (data: FormData) => {
             )}
           </div>
 
-          {/* Form */}
+          {/* Form Content / Multi-state Wrapper */}
           <div className="px-6 py-8">
             {submitStatus === 'success' ? (
               <div className="text-center py-8">
@@ -167,7 +174,7 @@ const onSubmit = async (data: FormData) => {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Application Sent!</h3>
                 <p className="text-gray-600 mb-4">
-                  Thank you for applying. We'll contact you shortly.
+                  Thank you for applying. We will review your request and contact you directly.
                 </p>
                 {referenceId && (
                   <div className="bg-gray-50 rounded-xl p-4 mb-6">
@@ -181,7 +188,7 @@ const onSubmit = async (data: FormData) => {
                   onClick={onClose}
                   className="px-6 py-3 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors font-medium"
                 >
-                  Close
+                  Close Window
                 </button>
               </div>
             ) : submitStatus === 'error' ? (
@@ -191,7 +198,7 @@ const onSubmit = async (data: FormData) => {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Submission Failed</h3>
                 <p className="text-gray-600 mb-4">
-                  Please try again or contact us directly.
+                  Something went wrong. Please check your network or try again.
                 </p>
                 <button
                   onClick={() => setSubmitStatus('idle')}
@@ -207,125 +214,124 @@ const onSubmit = async (data: FormData) => {
                 </button>
               </div>
             ) : (
-               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-    {/* Name Field - Updated */}
-    <div>
-      <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-        <User className="w-4 h-4" />
-        Full Name *
-      </label>
-      <input
-        type="text"
-        {...register('name', { 
-          required: 'Name is required',
-          minLength: {
-            value: 2,
-            message: 'Name must be at least 2 characters'
-          }
-        })}
-        placeholder="Name..."
-        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 bg-white"
-      />
-      {errors.name && (
-        <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-          <AlertCircle className="w-4 h-4" />
-          {errors.name.message}
-        </p>
-      )}
-    </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {/* Name Field */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <User className="w-4 h-4" />
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    {...register('name', { 
+                      required: 'Name is required',
+                      minLength: {
+                        value: 2,
+                        message: 'Name must be at least 2 characters'
+                      }
+                    })}
+                    placeholder="Name..."
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 bg-white"
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
 
-    {/* Email Field - Updated */}
-    <div>
-      <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-        <Mail className="w-4 h-4" />
-        Email Address *
-      </label>
-      <input
-        type="email"
-        {...register('email', { 
-          required: 'Email is required',
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: 'Invalid email address'
-          }
-        })}
-        placeholder="you@phoenix.com"
-        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 bg-white"
-      />
-      {errors.email && (
-        <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-          <AlertCircle className="w-4 h-4" />
-          {errors.email.message}
-        </p>
-      )}
-    </div>
+                {/* Email Field */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <Mail className="w-4 h-4" />
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    {...register('email', { 
+                      required: 'Email is required',
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: 'Invalid email address'
+                      }
+                    })}
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 bg-white"
+                  />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
 
-    {/* Phone Field - Updated */}
-    <div>
-      <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-        <Phone className="w-4 h-4" />
-        Phone Number *
-      </label>
-      <input
-        type="tel"
-        {...register('phone', { 
-          required: 'Phone number is required',
-          pattern: {
-            value: /^[+]?[\d\s\-\(\)]+$/,
-            message: 'Invalid phone number'
-          }
-        })}
-        placeholder="+251 912 345 678"
-        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 bg-white"
-      />
-      {errors.phone && (
-        <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-          <AlertCircle className="w-4 h-4" />
-          {errors.phone.message}
-        </p>
-      )}
-    </div>
+                {/* Phone Field */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <Phone className="w-4 h-4" />
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    {...register('phone', { 
+                      required: 'Phone number is required',
+                      pattern: {
+                        value: /^[+]?[\d\s\-\(\)]+$/,
+                        message: 'Invalid phone number'
+                      }
+                    })}
+                    placeholder="+251 912 345 678"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 bg-white"
+                  />
+                  {errors.phone && (
+                    <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
 
-    {/* Privacy Notice - Updated text color for better visibility */}
-    <div className="bg-blue-50 rounded-xl p-4">
-      <p className="text-sm text-blue-800">
-        By submitting this form, you agree to our Terms of Service and Privacy Policy. 
-        We'll contact you within 24 hours to discuss your tour details.
-      </p>
-    </div>
+                {/* Privacy Notice */}
+                <div className="bg-blue-50 rounded-xl p-4">
+                  <p className="text-sm text-blue-800">
+                    By submitting this form, we will instantly process your application in the background and contact you within 24 hours.
+                  </p>
+                </div>
 
-    {/* Submit Button - unchanged */}
-    <button
-      type="submit"
-      disabled={isSubmitting}
-      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-primary-500 to-orange-500 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30"
-    >
-      {isSubmitting ? (
-        <>
-          <Loader2 className="w-5 h-5 animate-spin" />
-          Processing...
-        </>
-      ) : (
-        <>
-          <Send className="w-5 h-5" />
-          Apply for This Tour
-        </>
-      )}
-    </button>
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-primary-500 to-orange-500 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/30"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Apply for This Tour
+                    </>
+                  )}
+                </button>
 
-    {/* Alternative Contact - unchanged */}
-    <div className="text-center">
-      <p className="text-sm text-gray-500">
-        Prefer to call?{' '}
-        <a 
-          href="tel:+251912345678" 
-          className="text-primary-500 font-medium hover:text-primary-600"
-        >
-          +251 (912) 345-6789
-        </a>
-      </p>
-    </div>
-  </form>
+                {/* Alternative Contact */}
+                <div className="text-center">
+                  <p className="text-sm text-gray-500">
+                    Prefer to call?{' '}
+                    <a 
+                      href="tel:+251911920411" 
+                      className="text-primary-500 font-medium hover:text-primary-600"
+                    >
+                      +251911920411
+                    </a>
+                  </p>
+                </div>
+              </form>
             )}
           </div>
         </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import * as Icons from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 const Menu = (Icons as any).Menu;
 const X = (Icons as any).X;
@@ -26,13 +25,15 @@ interface NavItem {
 }
 
 export default function Header() {
-  const { i18n } = useTranslation();
-
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('en');
+  
+  // Added collapsible state for mobile dropdown menus
+  const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
 
   const navRef = useRef<HTMLDivElement | null>(null);
   const langRef = useRef<HTMLDivElement | null>(null);
@@ -45,7 +46,29 @@ export default function Header() {
     de: "GE",
   };
 
-  const activeLang = langMap[i18n.language] || "EN";
+  // Read Google Translate Cookie on Load to set active flag UI
+  useEffect(() => {
+    const getLanguageFromCookie = () => {
+      const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+      if (match && match[1]) {
+        setCurrentLang(match[1]);
+      }
+    };
+    getLanguageFromCookie();
+  }, []);
+
+  // Programmatically changes the language via Google Translate
+  const changeGlobalLanguage = (langCode: string) => {
+    setCurrentLang(langCode);
+    setIsLangOpen(false);
+
+    // Update the cookie Google Translate expects
+    document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname}`;
+    document.cookie = `googtrans=/en/${langCode}; path=/;`;
+    
+    // Reload page to force Google Translate to evaluate all text nodes immediately
+    window.location.reload();
+  };
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -66,7 +89,6 @@ export default function Header() {
         setIsLangOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -103,33 +125,33 @@ export default function Header() {
 
   return (
     <>
-      {/* Top Bar */}
-      <div className="bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2 px-4">
-        <div className="container mx-auto flex justify-between items-center">
+      {/* Hidden container needed for Google Translate SDK initialization */}
+      <div id="google_translate_element" style={{ display: 'none' }}></div>
 
-          {/* Language */}
+      {/* Top Bar - Full Bleed Width */}
+      <div className="w-full bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2">
+        {/* 🔴 FIXED INNER WRAPPER: Increased responsive side padding for wider margins */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex justify-between items-center">
+
+          {/* Language Selector */}
           <div className="relative flex items-center gap-1" ref={langRef}>
             <Globe className="w-4 h-4" />
 
             <button
               onClick={() => setIsLangOpen(!isLangOpen)}
-              className="flex items-center gap-1 font-medium"
+              className="flex items-center gap-1 font-medium uppercase"
             >
-              {activeLang}
+              {langMap[currentLang] || "EN"}
               <ChevronDown className="w-3 h-3" />
             </button>
 
             {isLangOpen && (
-              <div className="absolute top-full mt-2 w-20 bg-white text-black rounded-md shadow-lg border z-[10001]">
+              <div className="absolute top-full mt-2 w-20 bg-white text-black rounded-md shadow-lg border border-orange-500/20 z-[10001]">
                 {['en', 'fr', 'es', 'pt', 'de'].map(lang => (
                   <button
                     key={lang}
-                    onClick={() => {
-                      i18n.changeLanguage(lang);
-                      localStorage.setItem('lang', lang);
-                      setIsLangOpen(false);
-                    }}
-                    className="block w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
+                    onClick={() => changeGlobalLanguage(lang)}
+                    className="block w-full text-left px-3 py-2 hover:bg-orange-50 text-sm"
                   >
                     {langMap[lang]}
                   </button>
@@ -147,42 +169,44 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Navbar */}
+      {/* Navbar with Dynamic Orange Border on Scroll - Full Bleed Width */}
       <header
-  className={`sticky top-0 z-50 transition-all duration-300 
-  ${isScrolled 
-    ? 'bg-white shadow-lg'
-    : 'bg-white/80 backdrop-blur-md lg:bg-transparent'
-  }`}
->
-        <div className="container mx-auto px-4" ref={navRef}>
+        className={`w-full sticky top-0 z-50 transition-all duration-300 border-b 
+        ${isScrolled 
+          ? 'bg-white border-orange-500 shadow-lg'
+          : 'bg-white/80 backdrop-blur-md lg:bg-transparent border-orange-500/30'
+        }`}
+      >
+        {/* 🔴 FIXED INNER WRAPPER: Matches top-bar padding configuration for crisp grid vertical alignment */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16" ref={navRef}>
           <div className="flex items-center justify-between h-20 relative">
 
             <Link href="/"><Logo /></Link>
 
-            <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+            {/* Desktop Navigation Link Cluster */}
+            <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2 h-full">
               {navItems.map(item => (
                 <div
                   key={item.label}
-                  className="relative"
+                  className="relative flex items-center h-full"
                   onMouseEnter={() => setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1 font-medium text-gray-700 hover:text-primary-500"
+                    className="flex items-center gap-1 font-medium text-gray-700 hover:text-orange-500 whitespace-nowrap"
                   >
                     {item.label}
                     {item.dropdown && <ChevronDown className="w-4 h-4" />}
                   </Link>
 
                   {item.dropdown && activeDropdown === item.label && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-56 bg-white rounded-xl shadow-2xl border py-2 z-[1000]">
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-2xl border border-orange-500/20 py-2 z-[1000] min-w-[14rem]">
                       {item.dropdown.map(sub => (
                         <Link
                           key={sub.label}
                           href={sub.href}
-                          className="flex items-center gap-2 px-5 py-3 hover:bg-gray-50"
+                          className="flex items-center gap-2 px-5 py-3 hover:bg-orange-50 text-gray-700 hover:text-orange-600 whitespace-nowrap"
                         >
                           {sub.icon}
                           {sub.label}
@@ -194,9 +218,10 @@ export default function Header() {
               ))}
             </nav>
 
+            {/* Mobile Hamburger Icon */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden"
+              className="lg:hidden p-2 hover:bg-orange-50 rounded-lg text-gray-700"
             >
               <Menu />
             </button>
@@ -205,34 +230,71 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu with Accordion Collapsible Dropdowns */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[9999]">
           <div className="absolute inset-0 bg-black/60" />
 
           <div className="relative h-full w-full bg-white flex flex-col">
 
-            <div className="flex items-center justify-between px-6 py-5 border-b">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-orange-500/30">
               <Logo />
-              <button onClick={() => setIsMobileMenuOpen(false)}>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-orange-50 rounded-lg">
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-              {navItems.map(item => (
-                <div key={item.label}>
-                  <div className="flex items-center justify-between py-3 text-lg font-semibold">
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex-1"
-                    >
-                      {item.label}
-                    </Link>
+            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+              {navItems.map(item => {
+                const hasDropdown = !!item.dropdown;
+                const isAccordionOpen = mobileAccordion === item.label;
+
+                return (
+                  <div key={item.label} className="border-b border-orange-100/40 last:border-none pb-2">
+                    {hasDropdown ? (
+                      <div>
+                        {/* Collapsible Accordion Header */}
+                        <button
+                          onClick={() => setMobileAccordion(isAccordionOpen ? null : item.label)}
+                          className="w-full flex items-center justify-between py-3 text-lg font-semibold text-gray-800 text-left"
+                        >
+                          <span className="whitespace-nowrap">{item.label}</span>
+                          <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAccordionOpen ? 'rotate-180 text-orange-500' : 'text-gray-400'}`} />
+                        </button>
+                        
+                        {/* Collapsible Submenu Container */}
+                        <div className={`grid transition-all duration-300 ease-in-out pl-4 overflow-hidden ${
+                          isAccordionOpen ? 'grid-rows-[1fr] opacity-100 my-1' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                        }`}>
+                          <div className="overflow-hidden space-y-2">
+                            {item.dropdown?.map(sub => (
+                              <Link
+                                key={sub.label}
+                                href={sub.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center gap-3 py-2.5 px-3 text-base text-gray-600 hover:text-orange-500 hover:bg-orange-50/50 rounded-lg transition-all whitespace-nowrap"
+                              >
+                                {sub.icon}
+                                <span>{sub.label}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between py-3 text-lg font-semibold">
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex-1 text-gray-800 hover:text-orange-500 whitespace-nowrap"
+                        >
+                          {item.label}
+                        </Link>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
           </div>

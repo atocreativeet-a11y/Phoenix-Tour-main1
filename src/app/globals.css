@@ -1,4 +1,3 @@
-/* src/app/globals.css - FOR TAILWIND v4 */
 @import 'tailwindcss';
 
 @theme {
@@ -31,6 +30,8 @@
 }
 
 body {
+  margin: 0;
+  padding: 150;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
@@ -62,4 +63,68 @@ body::-webkit-scrollbar-thumb:hover {
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+
+/* ==========================================================================
+   Google Translate UI Clean-up
+   ========================================================================== */
+
+/* 1. Hide the thick top banner/toolbar that pushes layouts down */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame {
+  display: none !important;
+}
+
+/* Force layout to stay at the top */
+body {
+  top: 0px !important;
+}
+
+/* 2. Hide the floating "Original Text" tooltip popup on text hover */
+#goog-gt-tt, 
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+/* Strip text highlighting color modifications applied by Google */
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 3. Hide the branding elements inside standard Google widgets */
+.goog-logo-link {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important; /* Blurs out native text string */
+}
+
+/* Ensure selector values remain legible */
+.goog-te-gadget select {
+  color: #000000 !important; 
+}
+
+/* Wipes out the main native wrapper container injected by the SDK */
+.skiptranslate, 
+.goog-te-spinner-pos,
+.goog-te-menu-value {
+  display: none !important;
+}
+
+iframe[id*="google_translate"], 
+div[id*="google_translate"] {
+  display: none !important;
+}
+
+html, body {
+  top: 0px !important;
+  margin-top: 0px !important;
+  position: relative !important;
 }

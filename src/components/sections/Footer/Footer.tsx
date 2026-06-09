@@ -16,17 +16,19 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socials = [
-    { icon: Facebook, label: "Facebook", url: "www.fb.com/phoenixettours", color: "hover:text-blue-500" },
-    { icon: Instagram, label: "Instagram", url: "www.igcom/phoenixettours", color: "hover:text-pink-500" },
-    { icon: X, label: "X", url: "#www.x.com/phoenixettours", color: "hover:text-gray-300" },
-    { icon: FaTiktok, label: "TikTok", url: "www.tiktok.com/phoenixettours", color: "hover:text-white" },
-    { icon: Youtube, label: "YouTube", url: "www.yt.com/phoenixettours", color: "hover:text-red-500" }
+    { icon: Facebook, label: "Facebook", url: "https://www.fb.com/phoenixettours", color: "hover:text-blue-500" },
+    { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/phoenixettours", color: "hover:text-pink-500" },
+    { icon: X, label: "X", url: "https://www.x.com/phoenixettours", color: "hover:text-gray-300" },
+    { icon: FaTiktok, label: "TikTok", url: "https://www.tiktok.com/@phoenixettours", color: "hover:text-white" },
+    { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/phoenixettours", color: "hover:text-red-500" }
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-6 py-16">
+    <footer className="w-full bg-gray-900 text-white">
+      {/* 🔴 FIXED CONTAINER: Standardized max-width and responsive horizontal padding */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
+        {/* Responsive Grid Structure: 1 col on mobile, 2 cols on tablets, 3 cols on desktops */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
 
           {/* Brand */}
@@ -71,6 +73,8 @@ export default function Footer() {
                 <a
                   key={social.label}
                   href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={social.label}
                   className={`text-gray-400 transition transform hover:scale-110 ${social.color}`}
                 >
@@ -87,8 +91,9 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 my-12"></div>
 
+        {/* Bottom Bar: Automatically switches stacked order layout on mobile vs desktop rows */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-gray-400 text-sm">
-
+          
           <div className="text-center md:text-left">
             © {currentYear} Phoenix Ethiopia Tours. All rights reserved.
           </div>
@@ -109,6 +114,20 @@ export default function Footer() {
           </div>
 
         </div>
+
+        {/* Centered Creator Credit */}
+        <div className="text-center text-xs text-gray-500 mt-8">
+          Powered by{" "}
+          <a 
+            href="https://atocreative.et/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-primary-500 underline decoration-gray-700 transition-colors"
+          >
+            ato creative solutions
+          </a>
+        </div>
+
       </div>
     </footer>
   );

@@ -1,12 +1,15 @@
-"use client";
+'use client';
 
+import { SessionProvider } from 'next-auth/react'; // 1. Import this
 import { I18nProvider } from "./providers/I18nProvider";
 import { ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <I18nProvider>
-      {children}
-    </I18nProvider>
+    <SessionProvider> {/* 2. Wrap everything in the session provider */}
+      <I18nProvider>
+        {children}
+      </I18nProvider>
+    </SessionProvider>
   );
 }
