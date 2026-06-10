@@ -32,7 +32,7 @@ export default function Header() {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
   
-  // Anti-flash state: prevents menus from showing text shifts on load/interaction
+  // High-performance hydration barrier to ensure layout stability during translation parses
   const [isReady, setIsReady] = useState(false);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
 
@@ -47,21 +47,21 @@ export default function Header() {
     de: "GE",
   };
 
-  // Safe cookie check & Anti-Flash Engine
+  // Monitored translation engine state sync
   useEffect(() => {
-    const checkLangState = () => {
+    const syncLanguage = () => {
       const match = document.cookie.match(/googtrans=\/(?:en|auto)\/([^;]+)/);
       if (match && match[1]) {
         setCurrentLang(match[1]);
+      } else {
+        setCurrentLang('en');
       }
-      
-      // Delay mounting visual elements just slightly if translation engine needs to catch up
-      setTimeout(() => {
-        setIsReady(true);
-      }, 150);
+      setIsReady(true);
     };
 
-    checkLangState();
+    syncLanguage();
+    const interval = setInterval(syncLanguage, 250);
+    return () => clearInterval(interval);
   }, []);
 
   const changeGlobalLanguage = (langCode: string) => {
@@ -71,7 +71,7 @@ export default function Header() {
     const hostname = window.location.hostname;
     const dotHostname = hostname.includes('.') ? `.${hostname}` : hostname;
 
-    // 1. Wipe out Google Translate cookies thoroughly
+    // 1. Total absolute purge of legacy variations across all possible paths
     const cookiePaths = ['/', '', '/en', '/en/'];
     const cookieDomains = [hostname, dotHostname, `www.${hostname}`, ''];
 
@@ -84,7 +84,7 @@ export default function Header() {
       });
     });
 
-    // 2. Clear Google's variable cache tracking tools
+    // 2. Wipe browser runtime caches completely
     try {
       window.sessionStorage.removeItem('googtrans');
       window.localStorage.removeItem('googtrans');
@@ -92,13 +92,13 @@ export default function Header() {
       Object.keys(localStorage).forEach(k => k.includes('googtrans') && localStorage.removeItem(k));
     } catch (e) {}
 
-    // 3. Write absolute, clean cookies using Google's universal '/auto/' directive
+    // 3. Write absolute, clean universal directive hooks
     if (langCode !== 'en') {
       document.cookie = `googtrans=/auto/${langCode}; path=/; domain=${hostname}`;
       document.cookie = `googtrans=/auto/${langCode}; path=/;`;
-      document.cookie = `googtrans=/en/${langCode}; path=/;`;
     } else {
-      // If choosing default English, remove tracking completely so it gracefully sets back to default native layout
+      // Wiping completely forces Google Translate to release the engine state natively to English
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${hostname}`;
       document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
     }
 
@@ -162,8 +162,7 @@ export default function Header() {
     <>
       <div id="google_translate_element" style={{ display: 'none' }}></div>
 
-      {/* Wrapping layout content in an opacity shield during translation hydration prevents text popping */}
-      <div className={`transition-opacity duration-200 ${isReady ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`transition-opacity duration-150 ${isReady ? 'opacity-100' : 'opacity-0'}`}>
         
         <div className="w-full bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2">
           <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex justify-between items-center">
@@ -228,8 +227,16 @@ export default function Header() {
                       {item.dropdown && <ChevronDown className="w-4 h-4 pointer-events-none" />}
                     </Link>
 
-                    {item.dropdown && activeDropdown === item.label && (
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-2xl border border-orange-500/20 py-2 z-[1000] min-w-[14rem]">
+                    {/* DESKTOP ANTI-FLASH ENGINE: The submenus always exist in the HTML DOM structure. 
+                        Google Translate translates them immediately on boot. Visibility is controlled cleanly via CSS classes. */}
+                    {item.dropdown && (
+                      <div 
+                        className={`absolute top-full left-1/2 -translate-x-1/2 bg-white rounded-xl shadow-2xl border border-orange-500/20 py-2 z-[1000] min-w-[14rem] transition-all duration-200
+                        ${activeDropdown === item.label 
+                          ? 'opacity-100 translate-y-0 pointer-events-auto visibility-visible' 
+                          : 'opacity-0 -translate-y-2 pointer-events-none visibility-hidden'
+                        }`}
+                      >
                         {item.dropdown.map(sub => (
                           <Link
                             key={sub.label}
@@ -258,83 +265,89 @@ export default function Header() {
           </div>
         </header>
 
-        {/* Mobile Menu with Accordion Collapsible Dropdowns */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-[9999]">
-            <div className="absolute inset-0 bg-black/60" />
+        {/* MOBILE ANTI-FLASH ENGINE: The mobile framework node stays fully intact in the background. 
+            Google Translate fully parses it long before the user opens it up. CSS layout shifts it smoothly into view. */}
+        <div 
+          className={`fixed inset-0 z-[9999] transition-all duration-300 ease-in-out
+          ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        >
+          {/* Overlay Background dim block */}
+          <div className="absolute inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
 
-            <div className="relative h-full w-full bg-white flex flex-col">
+          <div 
+            className={`relative h-full w-full max-w-md ml-auto bg-white flex flex-col transition-transform duration-300 ease-in-out shadow-2xl
+            ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          >
+            <div className="flex items-center justify-between px-6 py-5 border-b border-orange-500/30">
+              <Logo />
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-orange-50 rounded-lg">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-              <div className="flex items-center justify-between px-6 py-5 border-b border-orange-500/30">
-                <Logo />
-                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-orange-50 rounded-lg">
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
+            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+              {navItems.map(item => {
+                const hasDropdown = !!item.dropdown;
+                const isAccordionOpen = mobileAccordion === item.label;
 
-              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
-                {navItems.map(item => {
-                  const hasDropdown = !!item.dropdown;
-                  const isAccordionOpen = mobileAccordion === item.label;
-
-                  return (
-                    <div key={item.label} className="border-b border-orange-100/40 last:border-none pb-2">
-                      {hasDropdown ? (
-                        <div>
-                          <div className="w-full flex items-center justify-between py-3 text-lg font-semibold text-gray-800">
-                            <Link
-                              href={item.href}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="flex-1 hover:text-orange-500 whitespace-nowrap"
-                            >
-                              {item.label}
-                            </Link>
-                            <button
-                              onClick={() => setMobileAccordion(isAccordionOpen ? null : item.label)}
-                              className="p-2 -mr-2 hover:bg-orange-50 rounded-lg transition-colors"
-                              aria-label={`Toggle ${item.label} dropdown`}
-                            >
-                              <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAccordionOpen ? 'rotate-180 text-orange-500' : 'text-gray-400'}`} />
-                            </button>
-                          </div>
-                          
-                          <div className={`grid transition-all duration-300 ease-in-out pl-4 overflow-hidden ${
-                            isAccordionOpen ? 'grid-rows-[1fr] opacity-100 my-1' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
-                          }`}>
-                            <div className="overflow-hidden space-y-2">
-                              {item.dropdown?.map(sub => (
-                                <Link
-                                  key={sub.label}
-                                  href={sub.href}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="flex items-center gap-3 py-2.5 px-3 text-base text-gray-600 hover:text-orange-500 hover:bg-orange-50/50 rounded-lg transition-all whitespace-nowrap"
-                                >
-                                  {sub.icon}
-                                  <span>{sub.label}</span>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-between py-3 text-lg font-semibold">
+                return (
+                  <div key={item.label} className="border-b border-orange-100/40 last:border-none pb-2">
+                    {hasDropdown ? (
+                      <div>
+                        {/* Split Target Row Layout: Forward URL targets separate from control chevron buttons */}
+                        <div className="w-full flex items-center justify-between py-3 text-lg font-semibold text-gray-800">
                           <Link
                             href={item.href}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex-1 text-gray-800 hover:text-orange-500 whitespace-nowrap"
+                            className="flex-1 hover:text-orange-500 whitespace-nowrap"
                           >
                             {item.label}
                           </Link>
+                          <button
+                            onClick={() => setMobileAccordion(isAccordionOpen ? null : item.label)}
+                            className="p-2 -mr-2 hover:bg-orange-50 rounded-lg transition-colors"
+                            aria-label={`Toggle ${item.label} dropdown`}
+                          >
+                            <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAccordionOpen ? 'rotate-180 text-orange-500' : 'text-gray-400'}`} />
+                          </button>
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
+                        
+                        <div className={`grid transition-all duration-300 ease-in-out pl-4 overflow-hidden ${
+                          isAccordionOpen ? 'grid-rows-[1fr] opacity-100 my-1' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                        }`}>
+                          <div className="overflow-hidden space-y-2">
+                            {item.dropdown?.map(sub => (
+                              <Link
+                                key={sub.label}
+                                href={sub.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center gap-3 py-2.5 px-3 text-base text-gray-600 hover:text-orange-500 hover:bg-orange-50/50 rounded-lg transition-all whitespace-nowrap"
+                              >
+                                {sub.icon}
+                                <span>{sub.label}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between py-3 text-lg font-semibold">
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex-1 text-gray-800 hover:text-orange-500 whitespace-nowrap"
+                        >
+                          {item.label}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
+
           </div>
-        )}
+        </div>
       </div>
 
       <ApplyTourModal
