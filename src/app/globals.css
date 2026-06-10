@@ -65,24 +65,16 @@ body::-webkit-scrollbar-thumb:hover {
   scrollbar-width: none;
 }
 
-
-/* ==========================================================================
-   Google Translate UI Clean-up
-   ========================================================================== */
-
-/* 1. Hide the thick top banner/toolbar that pushes layouts down */
 .goog-te-banner-frame,
 .goog-te-banner-frame.skiptranslate,
 iframe.goog-te-banner-frame {
   display: none !important;
 }
 
-/* Force layout to stay at the top */
 body {
   top: 0px !important;
 }
 
-/* 2. Hide the floating "Original Text" tooltip popup on text hover */
 #goog-gt-tt, 
 .goog-te-balloon-frame,
 .goog-tooltip,
@@ -90,14 +82,12 @@ body {
   display: none !important;
 }
 
-/* Strip text highlighting color modifications applied by Google */
 .goog-text-highlight {
   background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-/* 3. Hide the branding elements inside standard Google widgets */
 .goog-logo-link {
   display: none !important;
 }
@@ -106,12 +96,10 @@ body {
   color: transparent !important; /* Blurs out native text string */
 }
 
-/* Ensure selector values remain legible */
 .goog-te-gadget select {
   color: #000000 !important; 
 }
 
-/* Wipes out the main native wrapper container injected by the SDK */
 .skiptranslate, 
 .goog-te-spinner-pos,
 .goog-te-menu-value {
@@ -127,4 +115,31 @@ html, body {
   top: 0px !important;
   margin-top: 0px !important;
   position: relative !important;
+}
+/* Core Google UI Element Purge */
+#goog-gt-tt, 
+#goog-gt-tt * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Target hidden layout banners and dynamic widget bubbles */
+.goog-te-spinner-pos,
+.goog-te-spinner,
+.goog-te-balloon-frame,
+.goog-te-gadget-simple,
+.goog-te-gadget-icon,
+.goog-te-menu-value,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Force global text selection rules to strip out Google's hover highlights */
+font[style*="background-color"] {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
