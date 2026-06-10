@@ -63,9 +63,9 @@ export default function Header() {
     const hostname = window.location.hostname;
     const dotHostname = hostname.includes('.') ? `.${hostname}` : hostname;
 
-    // Clear out old variations of the cookie that Google Translate might have cached
-    const cookiePaths = ['/', ''];
-    const cookieDomains = [hostname, dotHostname, ''];
+    // 1. Aggressively clear out all structural variations of Google Translate cookies
+    const cookiePaths = ['/', '', '/en', '/en/'];
+    const cookieDomains = [hostname, dotHostname, `www.${hostname}`, ''];
 
     cookiePaths.forEach(path => {
       cookieDomains.forEach(domain => {
@@ -76,16 +76,31 @@ export default function Header() {
       });
     });
 
-    // Set the new language cookie parameters explicitly
+    // 2. Clear out browser storage snapshots that force-override the language choice
+    try {
+      window.sessionStorage.removeItem('googtrans');
+      window.localStorage.removeItem('googtrans');
+      
+      Object.keys(sessionStorage).forEach(key => {
+        if (key.includes('googtrans')) sessionStorage.removeItem(key);
+      });
+      Object.keys(localStorage).forEach(key => {
+        if (key.includes('googtrans')) localStorage.removeItem(key);
+      });
+    } catch (e) {
+      console.error("Storage clear failed", e);
+    }
+
+    // 3. Write clean, authoritative new cookies
     document.cookie = `googtrans=/en/${langCode}; path=/; domain=${hostname}`;
     document.cookie = `googtrans=/en/${langCode}; path=/;`;
     
-    // Explicit clean wipe if switching back to the default language (English)
+    // Total wipeout fallback if switching back to English
     if (langCode === 'en') {
       document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
     }
 
-    // Reload the page to force the Google Translate script to grab the new cookie state
+    // 4. Force reload so the translation widget mounts with a fresh initialization state
     window.location.reload();
   };
 
@@ -184,12 +199,10 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Clean, Simple Solid White Navigation Bar */}
       <header
-        className={`w-full sticky top-0 z-50 transition-all duration-300 border-b 
-        ${isScrolled 
-          ? 'bg-white border-orange-500 shadow-lg'
-          : 'bg-white/80 backdrop-blur-md lg:bg-transparent border-orange-500/30'
-        }`}
+        className={`w-full sticky top-0 z-50 bg-white transition-all duration-300 border-b 
+        ${isScrolled ? 'border-orange-500 shadow-lg' : 'border-orange-500/30'}`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16" ref={navRef}>
           <div className="flex items-center justify-between h-20 relative">
@@ -204,7 +217,6 @@ export default function Header() {
                   onMouseEnter={() => setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  {/* Clean standard link that forwards immediately on desktop click */}
                   <Link
                     href={item.href}
                     className="flex items-center gap-1 font-medium text-gray-700 hover:text-orange-500 whitespace-nowrap pointer-events-auto"
@@ -266,7 +278,7 @@ export default function Header() {
                   <div key={item.label} className="border-b border-orange-100/40 last:border-none pb-2">
                     {hasDropdown ? (
                       <div>
-                        {/* Split Row Layout: Text links to directory page, Chevron toggles visibility */}
+                        {/* Split Target Row: Text forwards to directory overview page, Chevron arrow toggles dropdown visibility */}
                         <div className="w-full flex items-center justify-between py-3 text-lg font-semibold text-gray-800">
                           <Link
                             href={item.href}
