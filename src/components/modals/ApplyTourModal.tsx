@@ -72,23 +72,35 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
     setSubmitStatus('idle');
 
     try {
-      const response = await axios.post('https://api.web3forms.com/submit', {
-        access_key: "26f34f6c-4e54-4fab-a10a-e887ff467271", 
-        
-        // Form Fields
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        
-        subject: `New Tour Booking Request: ${tour?.name || 'Selected Tour'}`,
-        
-        "Tour Name": tour?.name || 'Selected Tour',
-        "Tour ID": tour?.id || 'N/A',
-        "Tour Duration": tour?.duration || 'N/A',
-        "Tour Price": tour?.price ? `$${tour.price}` : 'N/A',
-      });
+      const response = await axios.post(
+        'https://api.web3forms.com/submit',
+        {
+          access_key: "26f34f6c-4e54-4fab-a10a-e887ff467271", 
+          
+          // User input fields
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          
+          // Web3Forms email setup
+          subject: `New Tour Booking Request: ${tour?.name || 'Selected Tour'}`,
+          from_name: "Tour Booking System",
+          
+          // Custom data payload (mapped with underscores for reliable API parsing)
+          tour_name: tour?.name || 'Selected Tour',
+          tour_id: tour?.id || 'N/A',
+          tour_duration: tour?.duration || 'N/A',
+          tour_price: tour?.price ? `$${tour.price}` : 'N/A',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
 
-      if (response.data.success) {
+      if (response.status === 200 || response.data.success) {
         setSubmitStatus('success');
         setReferenceId(response.data.id || 'TX-' + Math.floor(Math.random() * 90000 + 10000));
         reset();
