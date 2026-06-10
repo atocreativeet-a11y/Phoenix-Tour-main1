@@ -32,7 +32,7 @@ export default function Header() {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
   
-  // Added collapsible state for mobile dropdown menus
+  // Collapsible state for mobile dropdown menus
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
 
   const navRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +46,6 @@ export default function Header() {
     de: "GE",
   };
 
-  // Read Google Translate Cookie on Load to set active flag UI
   useEffect(() => {
     const getLanguageFromCookie = () => {
       const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
@@ -57,16 +56,36 @@ export default function Header() {
     getLanguageFromCookie();
   }, []);
 
-  // Programmatically changes the language via Google Translate
   const changeGlobalLanguage = (langCode: string) => {
     setCurrentLang(langCode);
     setIsLangOpen(false);
 
-    // Update the cookie Google Translate expects
-    document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname}`;
+    const hostname = window.location.hostname;
+    const dotHostname = hostname.includes('.') ? `.${hostname}` : hostname;
+
+    // Clear out old variations of the cookie that Google Translate might have cached
+    const cookiePaths = ['/', ''];
+    const cookieDomains = [hostname, dotHostname, ''];
+
+    cookiePaths.forEach(path => {
+      cookieDomains.forEach(domain => {
+        let cookieStr = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+        if (path) cookieStr += ` path=${path};`;
+        if (domain) cookieStr += ` domain=${domain};`;
+        document.cookie = cookieStr;
+      });
+    });
+
+    // Set the new language cookie parameters explicitly
+    document.cookie = `googtrans=/en/${langCode}; path=/; domain=${hostname}`;
     document.cookie = `googtrans=/en/${langCode}; path=/;`;
     
-    // Reload page to force Google Translate to evaluate all text nodes immediately
+    // Explicit clean wipe if switching back to the default language (English)
+    if (langCode === 'en') {
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+    }
+
+    // Reload the page to force the Google Translate script to grab the new cookie state
     window.location.reload();
   };
 
@@ -125,15 +144,11 @@ export default function Header() {
 
   return (
     <>
-      {/* Hidden container needed for Google Translate SDK initialization */}
       <div id="google_translate_element" style={{ display: 'none' }}></div>
 
-      {/* Top Bar - Full Bleed Width */}
       <div className="w-full bg-gradient-to-r from-primary-600 to-orange-600 text-white text-sm py-2">
-        {/* 🔴 FIXED INNER WRAPPER: Increased responsive side padding for wider margins */}
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 flex justify-between items-center">
 
-          {/* Language Selector */}
           <div className="relative flex items-center gap-1" ref={langRef}>
             <Globe className="w-4 h-4" />
 
@@ -169,7 +184,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Navbar with Dynamic Orange Border on Scroll - Full Bleed Width */}
       <header
         className={`w-full sticky top-0 z-50 transition-all duration-300 border-b 
         ${isScrolled 
@@ -177,27 +191,26 @@ export default function Header() {
           : 'bg-white/80 backdrop-blur-md lg:bg-transparent border-orange-500/30'
         }`}
       >
-        {/* 🔴 FIXED INNER WRAPPER: Matches top-bar padding configuration for crisp grid vertical alignment */}
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16" ref={navRef}>
           <div className="flex items-center justify-between h-20 relative">
 
             <Link href="/"><Logo /></Link>
 
-            {/* Desktop Navigation Link Cluster */}
             <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2 h-full">
               {navItems.map(item => (
                 <div
                   key={item.label}
-                  className="relative flex items-center h-full"
+                  className="relative flex items-center h-full z-10"
                   onMouseEnter={() => setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
+                  {/* Clean standard link that forwards immediately on desktop click */}
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1 font-medium text-gray-700 hover:text-orange-500 whitespace-nowrap"
+                    className="flex items-center gap-1 font-medium text-gray-700 hover:text-orange-500 whitespace-nowrap pointer-events-auto"
                   >
                     {item.label}
-                    {item.dropdown && <ChevronDown className="w-4 h-4" />}
+                    {item.dropdown && <ChevronDown className="w-4 h-4 pointer-events-none" />}
                   </Link>
 
                   {item.dropdown && activeDropdown === item.label && (
@@ -253,14 +266,23 @@ export default function Header() {
                   <div key={item.label} className="border-b border-orange-100/40 last:border-none pb-2">
                     {hasDropdown ? (
                       <div>
-                        {/* Collapsible Accordion Header */}
-                        <button
-                          onClick={() => setMobileAccordion(isAccordionOpen ? null : item.label)}
-                          className="w-full flex items-center justify-between py-3 text-lg font-semibold text-gray-800 text-left"
-                        >
-                          <span className="whitespace-nowrap">{item.label}</span>
-                          <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAccordionOpen ? 'rotate-180 text-orange-500' : 'text-gray-400'}`} />
-                        </button>
+                        {/* Split Row Layout: Text links to directory page, Chevron toggles visibility */}
+                        <div className="w-full flex items-center justify-between py-3 text-lg font-semibold text-gray-800">
+                          <Link
+                            href={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex-1 hover:text-orange-500 whitespace-nowrap"
+                          >
+                            {item.label}
+                          </Link>
+                          <button
+                            onClick={() => setMobileAccordion(isAccordionOpen ? null : item.label)}
+                            className="p-2 -mr-2 hover:bg-orange-50 rounded-lg transition-colors"
+                            aria-label={`Toggle ${item.label} dropdown`}
+                          >
+                            <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAccordionOpen ? 'rotate-180 text-orange-500' : 'text-gray-400'}`} />
+                          </button>
+                        </div>
                         
                         {/* Collapsible Submenu Container */}
                         <div className={`grid transition-all duration-300 ease-in-out pl-4 overflow-hidden ${
