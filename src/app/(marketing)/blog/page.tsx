@@ -21,8 +21,11 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    <div className="w-full min-h-screen overflow-x-hidden max-w-[100vw]">
-      <BlogListingPage />
-    </div>
+    // Added w-full, max-w-full, overflow-x-hidden, and responsive horizontal padding
+    <main className="w-full max-w-full min-h-screen overflow-x-hidden px-4 sm:px-6 md:px-8 bg-white">
+      <div className="mx-auto w-full max-w-7xl">
+        <BlogListingPage />
+      </div>
+    </main>
   );
 }

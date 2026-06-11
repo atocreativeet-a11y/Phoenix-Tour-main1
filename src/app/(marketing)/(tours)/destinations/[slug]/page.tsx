@@ -176,11 +176,9 @@ const mockDestinations = [
     region: 'Cultural Heartland',
     description: 'The Southern Circuit takes you to Ethiopia\'s cultural heartland - the Omo Valley, home to some of Africa\'s most fascinating indigenous tribes. This region is a living museum of ancient traditions, where tribes like the Mursi, Hamer, Karo, and others maintain their traditional ways of life. The area is also known for its stunning landscapes, national parks, and unique cultural practices.',
     shortDescription: 'Indigenous tribes and rich cultural traditions',
-    mainImage: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80',
+    mainImage:     'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80',
     images: [
       'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80'
     ],
     iconName: 'Compass',
     features: ['Omo Valley Tribes', 'Mago National Park', 'Turmi Market', 'Konso Cultural Landscape', 'Tribal Ceremonies', 'Konso Terraces', 'Dorze Villages', 'Arbore Tribe'],

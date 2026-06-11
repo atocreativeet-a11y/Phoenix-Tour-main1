@@ -1,34 +1,34 @@
 import Link from "next/link";
 import * as Icons from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
 const MapPin = (Icons as any).MapPin;
 const Mail = (Icons as any).Mail;
 const Facebook = (Icons as any).Facebook;
 const Instagram = (Icons as any).Instagram;
 const MessageCircle = (Icons as any).MessageCircle;
-const ChevronRight = (Icons as any).ChevronRight;
 const Linkedin = (Icons as any).Linkedin;
-
-import { FaTiktok } from "react-icons/fa";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socials = [
-    { icon: Linkedin, label: "Linkedin", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
+    { icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
     { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/phoenixethiopiatours", color: "hover:text-blue-500" },
     { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/phoenixethiopiatours", color: "hover:text-pink-500" },
-
-];
+    { icon: FaTiktok, label: "TikTok", url: "https://www.tiktok.com/@phoenixethiopiatours", color: "hover:text-teal-400" },
+  ];
 
   return (
     <footer className="w-full bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+        {/* 3 Equal columns on medium screens and up */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
-          <div>
-            <h3 className="text-xl font-bold mb-2">Phoenix Ethiopia Tours</h3>
+          {/* Column 1: About */}
+          <div className="flex flex-col">
+            <h3 className="text-xl font-bold mb-5">Phoenix Ethiopia Tours</h3>
             <p className="text-gray-400 text-sm mb-3">
               Authentic Ethiopian Adventures Since 2010
             </p>
@@ -39,8 +39,10 @@ export default function Footer() {
             </p>
           </div>
 
-          <div>
+          {/* Column 2: Contact */}
+          <div className="flex flex-col">
             <h4 className="text-lg font-semibold mb-5">Contact</h4>
+            <div className="space-y-4 text-gray-300 text-sm">
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-primary-500 flex-shrink-0" />
                 <span>contact@phoenixethiopiantours.com</span>
@@ -49,8 +51,6 @@ export default function Footer() {
                 <MessageCircle className="w-5 h-5 text-primary-500 flex-shrink-0" />
                 <span>+251 911 92 04 11 (WhatsApp)</span>
               </div>
-
-            <div className="space-y-4 text-gray-300 text-sm">
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary-500 flex-shrink-0" />
                 <span>Bole Road, Addis Ababa, Ethiopia</span>
@@ -58,10 +58,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Social */}
-          <div>
+          {/* Column 3: Social */}
+          <div className="flex flex-col">
             <h4 className="text-lg font-semibold mb-5">Connect With Us</h4>
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex gap-4 flex-wrap mb-4">
               {socials.map((social) => (
                 <a
                   key={social.label}
@@ -75,7 +75,7 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-            <p className="text-gray-400 text-sm mt-4">
+            <p className="text-gray-400 text-sm">
               Follow us for Ethiopia travel inspiration and tour updates.
             </p>
           </div>
@@ -84,7 +84,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 my-12"></div>
 
-        {/* Bottom Bar: Automatically switches stacked order layout on mobile vs desktop rows */}
+        {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-gray-400 text-sm">
           
           <div className="text-center md:text-left">
@@ -108,6 +108,7 @@ export default function Footer() {
 
         </div>
 
+        {/* Branding Credit */}
         <div className="text-center text-xs text-gray-500 mt-8">
           Powered by{" "}
           <a 

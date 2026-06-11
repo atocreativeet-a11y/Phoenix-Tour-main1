@@ -50,7 +50,6 @@ interface Filters {
   search: string;
 }
 
-// Updated fallback tours matching client's categories
 const fallbackTours = [
   {
     _id: 'mock-1',
@@ -71,7 +70,7 @@ const fallbackTours = [
   {
     _id: 'mock-2',
     title: 'Lalibela & Tigray Rock Churches',
-    slug: 'lalibela-tigray-rock-churches',
+    slug: 'allibela-tigray-rock-churches',
     description: 'Explore the incredible rock-hewn churches of Lalibela and the hidden cliff churches of Tigray region.',
     duration: '5 days',
     difficulty: 'Moderate',
@@ -246,7 +245,6 @@ const fallbackTours = [
   }
 ];
 
-// Client's main categories with icons
 const mainCategories = [
   { name: 'Ethiopia Highlights', icon: Star, description: 'Classic routes covering major attractions' },
   { name: 'Historical Tours', icon: Castle, description: 'Lalibela, Gondar, Axum - Ancient kingdoms' },
@@ -256,7 +254,6 @@ const mainCategories = [
   { name: 'Day Trips', icon: Clock, description: 'Addis, Debre Libanos, easy excursions' }
 ];
 
-// Enhanced mock tours
 const enhancedFallbackTours = [
   ...fallbackTours,
   {
@@ -365,8 +362,8 @@ export default function ToursPage() {
   const [filteredTours, setFilteredTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   
-  // Initialize filters with empty values first
   const [filters, setFilters] = useState<Filters>({
     category: '',
     region: '',
@@ -375,7 +372,6 @@ export default function ToursPage() {
     search: ''
   });
   
-  // Separate state to track if URL params have been read
   const [urlParamsRead, setUrlParamsRead] = useState(false);
   
   const [pagination, setPagination] = useState({
@@ -395,7 +391,6 @@ export default function ToursPage() {
     difficulty?: string;
   } | null>(null);
 
-  // Function to update URL with current filters
   const updateURL = useCallback((newFilters: Filters) => {
     const params = new URLSearchParams();
     
@@ -408,11 +403,9 @@ export default function ToursPage() {
     const queryString = params.toString();
     const newUrl = queryString ? `/tours?${queryString}` : '/tours';
     
-    // Update URL without refreshing the page
     router.push(newUrl, { scroll: false });
   }, [router]);
 
-  // Read URL parameters on component mount
   useEffect(() => {
     const category = searchParams.get('category') || '';
     const region = searchParams.get('region') || '';
@@ -420,9 +413,6 @@ export default function ToursPage() {
     const duration = searchParams.get('duration') || '';
     const search = searchParams.get('search') || '';
     
-    console.log('URL Parameters:', { category, region, difficulty, duration, search });
-    
-    // Only update filters if they're different from current
     setFilters(prev => {
       if (
         prev.category !== category ||
@@ -439,93 +429,57 @@ export default function ToursPage() {
     setUrlParamsRead(true);
   }, [searchParams]);
 
-  // Fetch ALL tours on component mount with fallback
- const fetchAllTours = useCallback(async () => {
-  setLoading(true);
-  setUseFallback(false);
-  
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const fetchAllTours = useCallback(async () => {
+    setLoading(true);
+    setUseFallback(false);
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  try {
-    console.log('Fetching ALL tours...');
-    
-    const response = await fetch('/api/tours?limit=100'
-    //   , {
-    //   signal: controller.signal
-    // }
-  
-  );
-    
-    clearTimeout(timeoutId); // Clear timeout on success
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    console.log("All tours received:", data.tours?.length);
-    
-    if (data.success && data.tours && data.tours.length > 0) {
-      setAllTours(data.tours);
-    } else {
+    try {
+      const response = await fetch('/api/tours?limit=100');
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      if (data.success && data.tours && data.tours.length > 0) {
+        setAllTours(data.tours);
+      } else {
+        setUseFallback(true);
+        setAllTours(enhancedFallbackTours);
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
       setUseFallback(true);
       setAllTours(enhancedFallbackTours);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    clearTimeout(timeoutId); // Clear timeout on error too
-    
-    // Check if the error is an abort error
-    if (error instanceof DOMException && error.name === 'AbortError') {
-      console.log('Request timed out, using fallback tours');
-    } else {
-      console.error('Failed to fetch tours:', error);
-    }
-    
-    setUseFallback(true);
-    setAllTours(enhancedFallbackTours);
-  } finally {
-    setLoading(false);
-  }
-}, []);
+  }, []);
 
   useEffect(() => {
     fetchAllTours();
   }, [fetchAllTours]);
 
-  // Function to filter tours locally
   const filterToursLocally = useCallback((currentFilters: Filters) => {
     const toursToFilter = useFallback ? enhancedFallbackTours : allTours;
     
     if (toursToFilter.length === 0) return [];
     
-    console.log('Filtering tours with:', currentFilters);
-    
     return toursToFilter.filter(tour => {
-      // Category filter
       if (currentFilters.category && currentFilters.category !== 'All Tours') {
-        if (tour.category !== currentFilters.category) {
-          return false;
-        }
+        if (tour.category !== currentFilters.category) return false;
       }
-      
-      // Region filter
       if (currentFilters.region) {
-        if (tour.region !== currentFilters.region) {
-          return false;
-        }
+        if (tour.region !== currentFilters.region) return false;
       }
-      
-      // Difficulty filter
       if (currentFilters.difficulty) {
-        if (tour.difficulty !== currentFilters.difficulty) {
-          return false;
-        }
+        if (tour.difficulty !== currentFilters.difficulty) return false;
       }
-      
-      // Duration filter
       if (currentFilters.duration) {
-        // Extract number of days from duration string (e.g., "3-7 days" -> get min days 3)
         const durationMatch = tour.duration.match(/\d+/);
         const tourDays = durationMatch ? parseInt(durationMatch[0]) : 0;
         
@@ -544,13 +498,9 @@ export default function ToursPage() {
             passesDurationFilter = tourDays >= 15;
             break;
         }
-        
-        if (!passesDurationFilter) {
-          return false;
-        }
+        if (!passesDurationFilter) return false;
       }
       
-      // Search filter
       if (currentFilters.search.trim()) {
         const searchLower = currentFilters.search.toLowerCase();
         const searchInTitle = tour.title.toLowerCase().includes(searchLower);
@@ -563,18 +513,13 @@ export default function ToursPage() {
           return false;
         }
       }
-      
       return true;
     });
   }, [allTours, useFallback]);
 
-  // Apply filters whenever filters change or when tours load
   useEffect(() => {
     if ((allTours.length > 0 || useFallback) && urlParamsRead) {
-      console.log('Applying filters with:', filters);
       const filtered = filterToursLocally(filters);
-      console.log(`Found ${filtered.length} tours after filtering`);
-      
       setFilteredTours(filtered);
       setPagination({
         page: 1,
@@ -586,21 +531,18 @@ export default function ToursPage() {
     }
   }, [filters, allTours, useFallback, urlParamsRead, filterToursLocally]);
 
-  // Update URL when filters change (but not on initial load)
   useEffect(() => {
     if (urlParamsRead) {
       updateURL(filters);
     }
   }, [filters, updateURL, urlParamsRead]);
 
-  // Get paginated tours for current page
   const paginatedTours = useMemo(() => {
     const startIndex = (pagination.page - 1) * 6;
     return filteredTours.slice(startIndex, startIndex + 6);
   }, [filteredTours, pagination.page]);
 
   const handleFilterChange = (key: keyof Filters, value: string) => {
-    console.log(`Filter changed: ${key} = ${value}`);
     setFilters(prev => ({
       ...prev,
       [key]: value
@@ -608,7 +550,6 @@ export default function ToursPage() {
   };
 
   const clearFilters = () => {
-    console.log('Clearing filters');
     setFilters({
       category: '',
       region: '',
@@ -623,12 +564,9 @@ export default function ToursPage() {
       ...prev,
       page: newPage
     }));
-    
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle explore tour click
   const handleExploreTour = (tour: Tour) => {
     setSelectedTour({
       id: tour._id,
@@ -640,7 +578,6 @@ export default function ToursPage() {
     setIsApplyModalOpen(true);
   };
 
-  // Close modal
   const handleCloseModal = () => {
     setIsApplyModalOpen(false);
     setSelectedTour(null);
@@ -655,7 +592,6 @@ export default function ToursPage() {
     setIsApplyModalOpen(true);
   };
 
-  // Helper function to display active filters
   const getActiveFilterCount = () => {
     let count = 0;
     if (filters.category && filters.category !== 'All Tours') count++;
@@ -666,259 +602,296 @@ export default function ToursPage() {
     return count;
   };
 
-  // Calculate category counts from current tours
   const calculatedCategoryCounts = useMemo(() => {
     const counts: {[key: string]: number} = {};
     const toursToCount = useFallback ? enhancedFallbackTours : allTours;
     
-    // Initialize all categories with 0
     ['All Tours', ...mainCategories.map(c => c.name)].forEach(category => {
       counts[category] = 0;
     });
     
-    // Count tours by category
     toursToCount.forEach(tour => {
       if (counts[tour.category] !== undefined) {
         counts[tour.category]++;
       }
-      counts['All Tours']++; // Always increment "All Tours"
+      counts['All Tours']++;
     });
     
     return counts;
   }, [allTours, useFallback]);
 
+  // Subcomponent for Filters content to prevent redundancy between Mobile drawer and Desktop sidebar
+  const FilterFormControls = () => (
+    <>
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <Filter className="w-5 h-5" />
+          Filter Tours
+          {getActiveFilterCount() > 0 && (
+            <span className="bg-primary-500 text-white text-xs px-2 py-1 rounded-full">
+              {getActiveFilterCount()} active
+            </span>
+          )}
+        </h3>
+        {getActiveFilterCount() > 0 && (
+          <button 
+            onClick={clearFilters}
+            className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1 min-h-[32px]"
+          >
+            <X className="w-4 h-4" />
+            Clear All
+          </button>
+        )}
+      </div>
+
+      {/* Categories */}
+      <div className="mb-6 md:mb-8">
+        <h4 className="font-semibold text-gray-900 mb-3 md:mb-4">Tour Categories</h4>
+        <div className="space-y-1 md:space-y-2">
+          {['All Tours', ...mainCategories.map(c => c.name)].map((category) => {
+            const isSelected = category === 'All Tours' 
+              ? !filters.category 
+              : filters.category === category;
+            
+            return (
+              <label 
+                key={category} 
+                className={`flex items-center justify-between cursor-pointer p-2.5 md:p-2 rounded-lg transition-colors min-h-[40px] ${
+                  isSelected ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <input
+                    type="radio"
+                    name="category"
+                    checked={isSelected}
+                    onChange={() => handleFilterChange('category', category === 'All Tours' ? '' : category)}
+                    className="w-4 h-4 text-primary-500 focus:ring-primary-500"
+                  />
+                  <span className={`text-sm md:text-base text-gray-700 ${isSelected ? 'font-medium' : ''}`}>
+                    {category}
+                  </span>
+                </div>
+                <span className="text-gray-500 text-xs md:text-sm bg-gray-100 px-2 py-0.5 md:py-1 rounded">
+                  {calculatedCategoryCounts[category] || 0}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Regions */}
+      <div className="mb-6 md:mb-8">
+        <h4 className="font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+          <MapPin className="w-4 h-4" />
+          Regions
+        </h4>
+        <div className="space-y-1 md:space-y-2">
+          {regions.map((region) => (
+            <label 
+              key={region} 
+              className={`flex items-center gap-3 cursor-pointer p-2.5 md:p-2 rounded-lg transition-colors min-h-[40px] ${
+                filters.region === region ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
+              }`}
+            >
+              <input
+                type="radio"
+                name="region"
+                checked={filters.region === region}
+                onChange={() => handleFilterChange('region', filters.region === region ? '' : region)}
+                className="w-4 h-4 text-primary-500 focus:ring-primary-500"
+              />
+              <span className={`text-sm md:text-base text-gray-700 ${filters.region === region ? 'font-medium' : ''}`}>
+                {region}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Duration */}
+      <div className="mb-6 md:mb-8">
+        <h4 className="font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+          <Calendar className="w-4 h-4" />
+          Duration
+        </h4>
+        <div className="space-y-1 md:space-y-2">
+          {['', '1-3 days', '4-7 days', '8-14 days', '15+ days'].map((duration) => {
+            const displayText = duration === '' ? 'Any Duration' : duration;
+            const isSelected = filters.duration === duration;
+            
+            return (
+              <label 
+                key={duration || 'any'} 
+                className={`flex items-center gap-3 cursor-pointer p-2.5 md:p-2 rounded-lg transition-colors min-h-[40px] ${
+                  isSelected ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="duration"
+                  checked={isSelected}
+                  onChange={() => handleFilterChange('duration', duration)}
+                  className="w-4 h-4 text-primary-500 focus:ring-primary-500"
+                />
+                <span className={`text-sm md:text-base text-gray-700 ${isSelected ? 'font-medium' : ''}`}>
+                  {displayText}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Difficulty */}
+      <div className="mb-2">
+        <h4 className="font-semibold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4" />
+          Difficulty
+        </h4>
+        <div className="space-y-1 md:space-y-2">
+          {['', ...difficulties].map((difficulty) => {
+            const displayText = difficulty === '' ? 'Any Difficulty' : difficulty;
+            const isSelected = filters.difficulty === difficulty;
+            
+            return (
+              <label 
+                key={difficulty || 'any'} 
+                className={`flex items-center gap-3 cursor-pointer p-2.5 md:p-2 rounded-lg transition-colors min-h-[40px] ${
+                  isSelected ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="difficulty"
+                  checked={isSelected}
+                  onChange={() => handleFilterChange('difficulty', difficulty)}
+                  className="w-4 h-4 text-primary-500 focus:ring-primary-500"
+                />
+                <span className={`text-sm md:text-base text-gray-700 ${isSelected ? 'font-medium' : ''}`}>
+                  {displayText}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* Hero Section - Updated to highlight tour features */}
-      <div className="relative py-20 bg-gradient-to-r from-primary-600 to-orange-600 text-white">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 overflow-x-hidden max-w-[100vw]">
+      {/* Hero Section */}
+      <div className="relative py-12 md:py-20 bg-gradient-to-r from-primary-600 to-orange-600 text-white">
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="container relative z-10 mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
+            <h1 className="text-3xl md:text-6xl font-heading font-bold mb-4 md:mb-6 leading-tight">
               Ethiopian Tour Packages
             </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl mx-auto px-2">
               Complete tour packages with detailed itineraries, clear pricing, and professional photos
             </p>
             
-            {/* Tour Features Highlight */}
-            <div className="mb-8 flex flex-wrap justify-center gap-4">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                <BookOpen className="w-4 h-4" />
+            {/* Tour Features Highlight - Optimized scroll container for small screens */}
+            <div className="mb-6 md:mb-8 flex flex-nowrap md:flex-wrap overflow-x-auto md:overflow-visible pb-3 md:pb-0 justify-start md:justify-center gap-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full flex-shrink-0 text-xs md:text-sm">
+                <BookOpen className="w-3.5 h-3.5" />
                 <span>Day-by-day itineraries</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                <DollarSign className="w-4 h-4" />
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full flex-shrink-0 text-xs md:text-sm">
+                <DollarSign className="w-3.5 h-3.5" />
                 <span>Clear pricing & inclusions</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Camera className="w-4 h-4" />
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full flex-shrink-0 text-xs md:text-sm">
+                <Camera className="w-3.5 h-3.5" />
                 <span>Professional photos</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Users className="w-4 h-4" />
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full flex-shrink-0 text-xs md:text-sm">
+                <Users className="w-3.5 h-3.5" />
                 <span>Local expert guides</span>
               </div>
             </div>
             
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
-              <div className="flex flex-col sm:flex-row gap-4 bg-white/20 backdrop-blur-lg rounded-2xl p-2">
-                <div className="flex-1 flex items-center">
-                  <Search className="w-5 h-5 text-white/60 ml-4 absolute" />
+            {/* Search Bar Container */}
+            <div className="max-w-2xl mx-auto px-1">
+              <div className="flex flex-col sm:flex-row gap-2.5 bg-white/20 backdrop-blur-lg rounded-2xl p-2 md:p-2.5">
+                <div className="flex-1 flex items-center relative">
+                  <Search className="w-5 h-5 text-white/60 left-4 absolute pointer-events-none" />
                   <input
                     type="text"
-                    placeholder="Search tours by destination, activity, or category..."
-                    className="w-full pl-12 pr-6 py-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Search destinations, activities..."
+                    className="w-full pl-11 pr-4 py-3 md:py-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm md:text-base"
                     value={filters.search}
                     onChange={(e) => handleFilterChange('search', e.target.value)}
                   />
                 </div>
                 <button 
-                  onClick={() => handleFilterChange('search', filters.search)} // Just trigger re-filter
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300"
+                  onClick={() => handleFilterChange('search', filters.search)}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 md:py-4 bg-white text-primary-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 min-h-[44px] text-sm md:text-base"
                 >
-                  <Filter className="w-5 h-5" />
+                  <Filter className="w-4 h-4 md:w-5 h-5" />
                   Search Tours
                 </button>
               </div>
             </div>
             
-            {/* Fallback warning */}
             {useFallback && (
-              <div className="mt-6 inline-flex items-center gap-2 bg-yellow-500/20 backdrop-blur-sm border border-yellow-400/30 text-yellow-100 px-4 py-2 rounded-lg">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-sm">Showing sample tours. Live data will load when available.</span>
+              <div className="mt-4 md:mt-6 inline-flex items-center gap-2 bg-yellow-500/20 backdrop-blur-sm border border-yellow-400/30 text-yellow-100 px-3 py-1.5 rounded-lg text-xs md:text-sm">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Showing sample tours. Live data will load when available.</span>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:w-1/4">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Filter className="w-5 h-5" />
-                  Filter Tours
-                  {getActiveFilterCount() > 0 && (
-                    <span className="bg-primary-500 text-white text-xs px-2 py-1 rounded-full">
-                      {getActiveFilterCount()} active
-                    </span>
-                  )}
-                </h3>
-                {getActiveFilterCount() > 0 && (
-                  <button 
-                    onClick={clearFilters}
-                    className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1"
-                  >
-                    <X className="w-4 h-4" />
-                    Clear All
-                  </button>
-                )}
-              </div>
+      {/* Mobile Floating Sticky Filter Button */}
+      <div className="lg:hidden fixed bottom-4 right-4 z-40">
+        <button
+          onClick={() => setIsMobileFilterOpen(true)}
+          className="flex items-center gap-2 bg-primary-500 text-white px-5 py-3 rounded-full shadow-xl font-bold tracking-wide text-sm active:scale-95 transition-transform border border-primary-400/20"
+        >
+          <Filter className="w-4 h-4" />
+          Filters ({getActiveFilterCount()})
+        </button>
+      </div>
 
-              {/* Categories - Updated with main categories */}
-              <div className="mb-8">
-                <h4 className="font-semibold text-gray-900 mb-4">Tour Categories</h4>
-                <div className="space-y-2">
-                  {['All Tours', ...mainCategories.map(c => c.name)].map((category) => {
-                    const isSelected = category === 'All Tours' 
-                      ? !filters.category 
-                      : filters.category === category;
-                    
-                    return (
-                      <label 
-                        key={category} 
-                        className={`flex items-center justify-between cursor-pointer p-2 rounded-lg transition-colors ${
-                          isSelected ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="radio"
-                            name="category"
-                            checked={isSelected}
-                            onChange={() => handleFilterChange('category', category === 'All Tours' ? '' : category)}
-                            className="w-4 h-4 text-primary-500 focus:ring-primary-500"
-                          />
-                          <span className={`text-gray-700 ${isSelected ? 'font-medium' : ''}`}>
-                            {category}
-                          </span>
-                        </div>
-                        <span className="text-gray-500 text-sm bg-gray-100 px-2 py-1 rounded">
-                          {calculatedCategoryCounts[category] || 0}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
+      {/* Mobile Sidebar Filter Sheet Backing Canvas */}
+      {isMobileFilterOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-xs z-50 transition-opacity"
+          onClick={() => setIsMobileFilterOpen(false)}
+        />
+      )}
 
-              {/* Regions */}
-              <div className="mb-8">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  Regions
-                </h4>
-                <div className="space-y-2">
-                  {regions.map((region) => (
-                    <label 
-                      key={region} 
-                      className={`flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-colors ${
-                        filters.region === region ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="region"
-                        checked={filters.region === region}
-                        onChange={() => handleFilterChange('region', filters.region === region ? '' : region)}
-                        className="w-4 h-4 text-primary-500 focus:ring-primary-500"
-                      />
-                      <span className={`text-gray-700 ${filters.region === region ? 'font-medium' : ''}`}>
-                        {region}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+      {/* Mobile Filter Sheet Compartment Drawer */}
+      <div className={`lg:hidden fixed inset-y-0 left-0 w-full max-w-xs bg-white z-50 p-6 shadow-2xl overflow-y-auto transform transition-transform duration-300 ease-in-out ${
+        isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        <div className="flex justify-end mb-4">
+          <button 
+            onClick={() => setIsMobileFilterOpen(false)}
+            className="p-2 text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full min-h-[40px] min-w-[40px] flex items-center justify-center"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <FilterFormControls />
+      </div>
 
-              {/* Duration */}
-              <div className="mb-8">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  Duration
-                </h4>
-                <div className="space-y-2">
-                  {['', '1-3 days', '4-7 days', '8-14 days', '15+ days'].map((duration) => {
-                    const displayText = duration === '' ? 'Any Duration' : duration;
-                    const isSelected = filters.duration === duration;
-                    
-                    return (
-                      <label 
-                        key={duration || 'any'} 
-                        className={`flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-colors ${
-                          isSelected ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="duration"
-                          checked={isSelected}
-                          onChange={() => handleFilterChange('duration', duration)}
-                          className="w-4 h-4 text-primary-500 focus:ring-primary-500"
-                        />
-                        <span className={`text-gray-700 ${isSelected ? 'font-medium' : ''}`}>
-                          {displayText}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Difficulty */}
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" />
-                  Difficulty
-                </h4>
-                <div className="space-y-2">
-                  {['', ...difficulties].map((difficulty) => {
-                    const displayText = difficulty === '' ? 'Any Difficulty' : difficulty;
-                    const isSelected = filters.difficulty === difficulty;
-                    
-                    return (
-                      <label 
-                        key={difficulty || 'any'} 
-                        className={`flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-colors ${
-                          isSelected ? 'bg-primary-50 border border-primary-100' : 'hover:bg-gray-50'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="difficulty"
-                          checked={isSelected}
-                          onChange={() => handleFilterChange('difficulty', difficulty)}
-                          className="w-4 h-4 text-primary-500 focus:ring-primary-500"
-                        />
-                        <span className={`text-gray-700 ${isSelected ? 'font-medium' : ''}`}>
-                          {displayText}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
+      {/* Main Main Content Grid Layer */}
+      <div className="container mx-auto px-4 py-6 md:py-12">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
+          {/* Desktop Filters Sidebar Component View */}
+          <div className="hidden lg:block lg:w-1/4">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6 border border-gray-100">
+              <FilterFormControls />
             </div>
 
-            {/* What's Included Section */}
             <div className="mt-6 bg-gradient-to-r from-primary-50 to-yellow-50 rounded-2xl p-6 border border-primary-100">
-              <h4 className="font-semibold text-gray-900 mb-4">Every Tour Includes:</h4>
+              <h4 className="font-semibold text-gray-900 mb-4 text-sm md:text-base">Every Tour Includes:</h4>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <BookOpen className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
@@ -940,85 +913,73 @@ export default function ToursPage() {
             </div>
           </div>
 
-          {/* Tours Grid */}
-          <div className="lg:w-3/4">
-            {/* Results Header */}
-            <div className="mb-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          {/* Tours Cards Display Matrix Segment */}
+          <div className="w-full lg:w-3/4">
+            {/* Results Title Info Blocks */}
+            <div className="mb-6 md:mb-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {filters.category ? `${filters.category} Tours` : 'All Tour Packages'}
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 flex flex-wrap items-center gap-2">
+                    <span>{filters.category ? `${filters.category} Tours` : 'All Tour Packages'}</span>
                     {filters.category && (
-                      <span className="ml-2 text-sm font-normal text-primary-600 bg-primary-50 px-3 py-1 rounded-full">
+                      <span className="text-xs font-normal text-primary-600 bg-primary-50 px-2.5 py-1 rounded-full whitespace-nowrap">
                         {filteredTours.length} {filteredTours.length === 1 ? 'tour' : 'tours'}
                       </span>
                     )}
                   </h2>
-                  <div className="flex items-center gap-2 mt-2">
-                    <p className="text-gray-600">
-                      {loading ? 'Loading tours...' : `Showing ${paginatedTours.length} of ${filteredTours.length} tours`}
-                    </p>
+                  <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs md:text-sm text-gray-600">
+                    <span>{loading ? 'Loading tours...' : `Showing ${paginatedTours.length} of ${filteredTours.length} tours`}</span>
                     {!loading && useFallback && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400">•</span>
-                        <span className="text-primary-600 text-sm font-medium flex items-center gap-1">
-                          <Sparkles className="w-3 h-3" />
-                          Sample Tours
+                      <>
+                        <span className="text-gray-300 hidden sm:inline">•</span>
+                        <span className="text-primary-600 font-medium flex items-center gap-1">
+                          <Sparkles className="w-3 h-3" /> Sample Tours
                         </span>
-                      </div>
+                      </>
                     )}
                     {!loading && getActiveFilterCount() > 0 && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400">•</span>
-                        <span className="text-primary-600 text-sm font-medium">
-                          Filtered ({getActiveFilterCount()})
-                        </span>
-                      </div>
+                      <>
+                        <span className="text-gray-300 hidden sm:inline">•</span>
+                        <span className="text-primary-600 font-medium">Filtered ({getActiveFilterCount()})</span>
+                      </>
                     )}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Loading State */}
+            {/* Loading Grid Mask State */}
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-2xl shadow p-6 animate-pulse">
-                    <div className="h-64 bg-gray-200 rounded-xl mb-4"></div>
-                    <div className="h-6 bg-gray-200 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded mb-4"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-2xl shadow p-5 animate-pulse border border-gray-100">
+                    <div className="h-48 md:h-64 bg-gray-200 rounded-xl mb-4"></div>
+                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
                   </div>
                 ))}
               </div>
             ) : (
               <>
-                {/* Active Filters Display */}
+                {/* Micro-Pill Indicator Panels for Active Filtering Criteria */}
                 {getActiveFilterCount() > 0 && (
-                  <div className="mb-6 flex flex-wrap gap-2">
+                  <div className="mb-5 flex flex-wrap gap-1.5 md:gap-2">
                     {Object.entries(filters).map(([key, value]) => {
                       if (!value || value === '') return null;
                       
                       let displayValue = value;
-                      let displayKey = key;
-                      
-                      // Format display names
-                      if (key === 'search') {
-                        displayKey = 'Search';
-                      } else {
-                        displayKey = key.charAt(0).toUpperCase() + key.slice(1);
-                      }
+                      let displayKey = key === 'search' ? 'Search' : key.charAt(0).toUpperCase() + key.slice(1);
                       
                       return (
                         <div 
                           key={key} 
-                          className="inline-flex items-center gap-2 px-3 py-2 bg-primary-100 text-primary-800 rounded-full text-sm"
+                          className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1 bg-primary-50 text-primary-800 rounded-full text-xs border border-primary-100/60"
                         >
-                          <span className="font-medium">{displayKey}:</span>
-                          <span>{displayValue}</span>
+                          <span className="font-semibold text-primary-600">{displayKey}:</span>
+                          <span className="truncate max-w-[120px]">{displayValue}</span>
                           <button
                             onClick={() => handleFilterChange(key as keyof Filters, '')}
-                            className="ml-1 hover:text-primary-900"
+                            className="p-0.5 rounded-full hover:bg-primary-200 transition-colors"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -1028,8 +989,8 @@ export default function ToursPage() {
                   </div>
                 )}
 
-                {/* Tours Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Main Cards Output Matrix */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
                   {paginatedTours.map((tour) => (
                     <TourCard 
                       key={tour._id} 
@@ -1039,43 +1000,56 @@ export default function ToursPage() {
                   ))}
                 </div>
 
-                {/* No Results */}
+                {/* Blank Dynamic Fallback Panel */}
                 {paginatedTours.length === 0 && !loading && (
-                  <div className="text-center py-12">
-                    <div className="text-gray-400 mb-4">No tours found matching your filters</div>
+                  <div className="text-center py-12 px-4 bg-white rounded-2xl border border-gray-100 shadow-xs max-w-md mx-auto mt-6">
+                    <div className="text-gray-400 text-sm md:text-base mb-4">No tours found matching your filter selection.</div>
                     <button
                       onClick={clearFilters}
-                      className="px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600"
+                      className="px-5 py-2.5 bg-primary-500 text-white font-medium rounded-xl hover:bg-primary-600 text-sm min-h-[40px] shadow-sm transition-all"
                     >
-                      Clear Filters
+                      Reset All Filters
                     </button>
                   </div>
                 )}
 
-                {/* Pagination */}
+                {/* Responsive Pagination Layout controls */}
                 {pagination.pages > 1 && (
-                  <div className="mt-12 flex justify-center">
-                    <nav className="flex items-center gap-2">
+                  <div className="mt-10 md:mt-12 flex justify-center px-2">
+                    <nav className="flex items-center gap-1 md:gap-2">
                       <button
                         onClick={() => handlePageChange(pagination.page - 1)}
                         disabled={!pagination.hasPrev}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-2 md:px-4 text-xs md:text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed min-h-[38px]"
                       >
-                        Previous
+                        Prev
                       </button>
-                      {[...Array(pagination.pages)].map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handlePageChange(i + 1)}
-                          className={`px-4 py-2 border rounded-lg ${pagination.page === i + 1 ? 'bg-primary-500 text-white border-primary-500' : 'border-gray-300 hover:bg-gray-50'}`}
-                        >
-                          {i + 1}
-                        </button>
-                      ))}
+                      {[...Array(pagination.pages)].map((_, i) => {
+                        // Display rules to hide excessive buttons on super compact mobile widths
+                        if (pagination.pages > 4 && Math.abs(pagination.page - (i + 1)) > 1 && i !== 0 && i !== pagination.pages - 1) {
+                          if (i === 1 || i === pagination.pages - 2) {
+                            return <span key={i} className="px-1 text-gray-400 text-xs">...</span>;
+                          }
+                          return null;
+                        }
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => handlePageChange(i + 1)}
+                            className={`px-3 py-2 md:px-4 text-xs md:text-sm border rounded-lg min-h-[38px] transition-colors ${
+                              pagination.page === i + 1 
+                                ? 'bg-primary-500 text-white border-primary-500 font-bold' 
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                            }`}
+                          >
+                            {i + 1}
+                          </button>
+                        );
+                      })}
                       <button
                         onClick={() => handlePageChange(pagination.page + 1)}
                         disabled={!pagination.hasNext}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-2 md:px-4 text-xs md:text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed min-h-[38px]"
                       >
                         Next
                       </button>
@@ -1085,46 +1059,43 @@ export default function ToursPage() {
               </>
             )}
 
-            {/* Call to Action - Updated with client's perspective */}
-            <div className="mt-16 text-center">
-              <div className="bg-gradient-to-r from-primary-50 to-yellow-50 rounded-2xl p-8 border border-primary-100">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Your Ethiopian Journey Awaits</h3>
-                <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            {/* Bottom Custom Call-To-Action Element Wrapper */}
+            <div className="mt-12 md:mt-16 text-center px-1">
+              <div className="bg-gradient-to-r from-primary-50 to-yellow-50 rounded-2xl p-6 md:p-8 border border-primary-100 shadow-xs">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2.5 md:mb-4">Your Ethiopian Journey Awaits</h3>
+                <p className="text-gray-600 text-xs md:text-sm mb-5 md:mb-6 max-w-2xl mx-auto leading-relaxed">
                   Each tour is carefully crafted with complete itineraries, clear pricing, and all necessary details 
                   to make your Ethiopian adventure seamless and memorable.
                 </p>
                 <button
                   onClick={handleCustomTourRequest}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 md:px-8 md:py-4 bg-primary-500 text-white font-bold rounded-xl hover:bg-primary-600 shadow-md transition-all text-xs md:text-sm min-h-[44px] active:scale-98"
                 >
-                  Get a Custom Itineraries
+                  Get Custom Itinerary
                 </button>
-                {useFallback && (
-                  <p className="mt-4 text-sm text-gray-500">
-                    Full tour details and booking available when connected
-                  </p>
-                )}
-                <div className="mt-6 flex justify-center gap-6 text-sm text-gray-500">
-                  <span className="flex items-center gap-1">
-                    <BookOpen className="w-4 h-4" />
+                
+                {/* Horizontal Features Legend Footer - Hidden or converted nicely on small screen break widths */}
+                <div className="mt-6 pt-4 border-t border-gray-200/60 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 text-xs text-gray-500">
+                  <span className="flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5 text-primary-500" />
                     Complete itineraries
                   </span>
-                  <span className="flex items-center gap-1">
-                    <DollarSign className="w-4 h-4" />
+                  <span className="flex items-center gap-1.5">
+                    <DollarSign className="w-3.5 h-3.5 text-primary-500" />
                     Transparent pricing
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Camera className="w-4 h-4" />
+                  <span className="flex items-center gap-1.5">
+                    <Camera className="w-3.5 h-3.5 text-primary-500" />
                     Professional photos
                   </span>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
       
-      {/* Apply Tour Modal */}
       <ApplyTourModal
         isOpen={isApplyModalOpen}
         onClose={handleCloseModal}

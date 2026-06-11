@@ -24,12 +24,15 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/* Banner Container with Simien Mountains Image */}
           <div className="mb-10 md:mb-12">
             <div className="relative h-56 md:h-96 rounded-xl md:rounded-2xl overflow-hidden shadow-md">
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/30 to-transparent z-10"></div>
-              <div className="absolute inset-0 bg-cover bg-center" style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1559561736-9e6dafa9e7b0?auto=format&fit=crop&w=1200&q=80)'
-              }}></div>
+              <div 
+                className="absolute inset-0 bg-cover bg-center" 
+style={{
+  backgroundImage: 'url(https://images.unsplash.com/photo-1621876402830-4e565985b88c?auto=format&fit=crop&w=1200&q=80)'
+}}              ></div>
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 md:p-8 text-white z-20">
                 <h2 className="text-lg md:text-2xl font-bold leading-tight">Land of Origins • 13 Months of Sunshine</h2>
               </div>
