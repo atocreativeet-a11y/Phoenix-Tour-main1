@@ -9,7 +9,7 @@ const Youtube = (Icons as any).Youtube;
 const MessageCircle = (Icons as any).MessageCircle;
 const ChevronRight = (Icons as any).ChevronRight;
 const X = (Icons as any).X;
-const linkedin = (Icons as any).linkedin;
+const Linkedin = (Icons as any).Linkedin;
 
 import { FaTiktok } from "react-icons/fa";
 
@@ -22,7 +22,7 @@ export default function Footer() {
     { icon: X, label: "X", url: "https://www.x.com/phoenixethiopiatours", color: "hover:text-gray-300" },
     { icon: FaTiktok, label: "TikTok", url: "https://www.tiktok.com/phoenixethiopiatours", color: "hover:text-gray-300" },
     { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/phoenixethiopiatours", color: "hover:text-red-500" },
-    { icon: linkedin, label: "linkedin", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
+    { icon: Linkedin, label: "Linkedin", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
 ];
 
   return (
