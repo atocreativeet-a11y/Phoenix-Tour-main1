@@ -46,7 +46,7 @@ export default function TourCard({ tour, onExploreClick }: TourCardProps) {
           100% { transform: translateX(-50%); }
         }
         .marquee-track {
-          animation: marquee 25s linear infinite;
+          animation: marquee 300s linear infinite;
         }
         .pause-marquee:hover .marquee-track,
         .pause-marquee:active .marquee-track {

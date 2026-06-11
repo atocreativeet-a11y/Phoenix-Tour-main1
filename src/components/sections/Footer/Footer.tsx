@@ -5,10 +5,8 @@ const MapPin = (Icons as any).MapPin;
 const Mail = (Icons as any).Mail;
 const Facebook = (Icons as any).Facebook;
 const Instagram = (Icons as any).Instagram;
-const Youtube = (Icons as any).Youtube;
 const MessageCircle = (Icons as any).MessageCircle;
 const ChevronRight = (Icons as any).ChevronRight;
-const X = (Icons as any).X;
 const Linkedin = (Icons as any).Linkedin;
 
 import { FaTiktok } from "react-icons/fa";
@@ -17,12 +15,10 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socials = [
+    { icon: Linkedin, label: "Linkedin", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
     { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/phoenixethiopiatours", color: "hover:text-blue-500" },
     { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/phoenixethiopiatours", color: "hover:text-pink-500" },
-    { icon: X, label: "X", url: "https://www.x.com/phoenixethiopiatours", color: "hover:text-gray-300" },
-    { icon: FaTiktok, label: "TikTok", url: "https://www.tiktok.com/phoenixethiopiatours", color: "hover:text-gray-300" },
-    { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/phoenixethiopiatours", color: "hover:text-red-500" },
-    { icon: Linkedin, label: "Linkedin", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
+
 ];
 
   return (

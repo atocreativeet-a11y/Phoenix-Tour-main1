@@ -67,6 +67,7 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
     }
   }, [isOpen, reset]);
 
+  // Updated handler sits safely inside the component block
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     setSubmitStatus('idle');
@@ -75,7 +76,7 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
       const response = await axios.post(
         'https://api.web3forms.com/submit',
         {
-          access_key: "26f34f6c-4e54-4fab-a10a-e887ff467271", 
+          access_key: "84ac6c55-c667-4f3e-bfda-3266af9e3471", 
           
           // User input fields
           name: data.name,
@@ -86,7 +87,7 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
           subject: `New Tour Booking Request: ${tour?.name || 'Selected Tour'}`,
           from_name: "Tour Booking System",
           
-          // Custom data payload (mapped with underscores for reliable API parsing)
+          // Custom data payload
           tour_name: tour?.name || 'Selected Tour',
           tour_id: tour?.id || 'N/A',
           tour_duration: tour?.duration || 'N/A',
@@ -100,15 +101,16 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
         }
       );
 
-      if (response.status === 200 || response.data.success) {
+      if (response.data && response.data.success === true) {
         setSubmitStatus('success');
         setReferenceId(response.data.id || 'TX-' + Math.floor(Math.random() * 90000 + 10000));
         reset();
       } else {
+        console.warn("Web3Forms rejected submission:", response.data);
         setSubmitStatus('error');
       }
-    } catch (error) {
-      console.error('Submission error:', error);
+    } catch (error: any) {
+      console.error('Submission error details:', error.response?.data || error.message || error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -133,7 +135,7 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
           <div className="bg-gradient-to-r from-primary-500 to-orange-500 px-6 py-8 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold">Apply for Tour</h2>
+                <h2 className="text-2xl font-bold">Book Now</h2>
                 <p className="text-primary-100 mt-2">Start your Ethiopian adventure</p>
               </div>
               <button
@@ -326,7 +328,7 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      Apply for This Tour
+                      Book Now
                     </>
                   )}
                 </button>
