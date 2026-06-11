@@ -33,7 +33,7 @@ const getApplicantEmail = (data: any) => `
 <p><strong>Reference Number:</strong> ${data.referenceId}</p>
 <p>Our team will contact you within 24 hours.</p>
 <hr>
-<p>For immediate assistance, call +251 (912) 345-6789</p>
+<p>For immediate assistance, call +251 911 92 04 11</p>
 `;
 
 export async function POST(request: NextRequest) {
@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
 
     // Email to admin
     const adminMailOptions = {
-      from: process.env.EMAIL_FROM || '"Phoenix Tour" <noreply@phoenixtouret.com>',
-      to: process.env.ADMIN_EMAIL || 'admin@phoenixtouret.com',
+      from: process.env.EMAIL_FROM || '"Phoenix Ethiopia Tours" <noreply@phoenixethiopiatours.com>',
+      to: process.env.ADMIN_EMAIL || 'admin@phoenixethiopiatours.com',
       subject: `📋 New Tour Application: ${tourName || 'Selected Tour'}`,
       html: getAdminEmail({
         name,
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     // Email to applicant
     const applicantMailOptions = {
-      from: process.env.EMAIL_FROM || '"Phoenix Tour" <noreply@phoenixtouret.com>',
+      from: process.env.EMAIL_FROM || '"Phoenix Ethiopia Tours" <noreply@phoenixethiopiatours.com>',
       to: email,
       subject: `🎉 Application Received: ${tourName || 'Selected Tour'}`,
       html: getApplicantEmail({

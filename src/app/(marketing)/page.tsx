@@ -55,11 +55,11 @@ export default function HomePage() {
   const homepageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    '@id': 'https://www.phoenixtourethiopia.et/#webpage',
-    url: 'https://www.phoenixtourethiopia.et',
+    '@id': 'https://www.phoenixethiopiatours.com/#webpage',
+    url: 'https://www.phoenixethiopiatours.com',
     name: 'Ethiopia Cultural & Adventure Tours | Phoenix Tours Ethiopia',
     description: 'Authentic Ethiopian tours with local experts',
-    image: 'https://www.phoenixtourethiopia.et/images/logos/logo4.png', // Full URL for schema
+    image: 'https://www.phoenixethiopiatours.com/images/logos/logo4.png', // Full URL for schema
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
@@ -67,7 +67,7 @@ export default function HomePage() {
           '@type': 'ListItem',
           position: 1,
           name: 'Home',
-          item: 'https://www.phoenixtourethiopia.et',
+          item: 'https://www.phoenixethiopiatours.com',
         },
       ],
     },
@@ -75,13 +75,12 @@ export default function HomePage() {
       '@type': 'TravelAgency',
       name: 'Phoenix Ethiopia Tours',
       description: 'Local Ethiopian tour operator specializing in cultural, adventure, and historical tours',
-      image: 'https://www.phoenixtourethiopia.et/images/logo.png', // Add your logo
+      image: 'https://www.phoenixethiopiatours.com/images/logo.png', // Add your logo
     },
   };
 
   return (
     <>
-      {/* Add structured data scripts */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -91,13 +90,10 @@ export default function HomePage() {
       
       <FAQSchema questions={faqData} />
       
-      {/* Optional: Add breadcrumbs for SEO */}
-      {/* <Breadcrumbs items={[{ label: 'Home', href: '/' }]} /> */}
       
       <main className="min-h-screen">
         <Hero />
         <FeaturedTours id="tours" />
-        {/* <WhyChooseUs /> */}
         <Testimonials />
       </main>
       <SimpleWhatsAppButton/>

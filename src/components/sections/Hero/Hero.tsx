@@ -81,7 +81,7 @@ export default function Hero() {
               onClick={() => setShowModal(true)}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/30"
             >
-              Get a Custom Itinerary
+              Get a Custom Itineraries
               <ArrowRight className="w-5 h-5" />
             </button>
 

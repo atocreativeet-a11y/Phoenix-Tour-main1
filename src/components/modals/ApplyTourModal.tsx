@@ -336,10 +336,10 @@ export default function ApplyTourModal({ isOpen, onClose, tour }: ApplyTourModal
                   <p className="text-sm text-gray-500">
                     Prefer to call?{' '}
                     <a 
-                      href="tel:+251911920411" 
+                      href="tel:+251 911 92 04 11" 
                       className="text-primary-500 font-medium hover:text-primary-600"
                     >
-                      +251911920411
+                      +251 911 92 04 11
                     </a>
                   </p>
                 </div>

@@ -1097,7 +1097,7 @@ export default function ToursPage() {
                   onClick={handleCustomTourRequest}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-all duration-300"
                 >
-                  Get a Custom Itinerary
+                  Get a Custom Itineraries
                 </button>
                 {useFallback && (
                   <p className="mt-4 text-sm text-gray-500">

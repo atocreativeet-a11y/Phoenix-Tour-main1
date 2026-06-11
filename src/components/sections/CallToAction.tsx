@@ -81,7 +81,7 @@ export default function CallToAction() {
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
               </div>
               <div className="text-white font-semibold text-lg mb-2">Call Our Addis Ababa Office</div>
-              <div className="text-white/80 text-xl font-semibold mb-1">+251 11 123 4567</div>
+              <div className="text-white/80 text-xl font-semibold mb-1">+251 911 92 04 11</div>
               <div className="text-white/80">(Ethiopian Office)</div>
               <div className="text-white/60 text-sm mt-2">Mon-Sun, 8am-8pm EAT</div>
             </div>
@@ -92,7 +92,7 @@ export default function CallToAction() {
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full animate-pulse"></div>
               </div>
               <div className="text-white font-semibold text-lg mb-2">Email Our Local Team</div>
-              <div className="text-white/80 text-lg">tours@phoenixtourethiopia.et</div>
+              <div className="text-white/80 text-lg">contact@phoenixethiopiatours.com</div>
               <div className="text-white/80 text-sm">(Primary Ethiopian Contact)</div>
               <div className="text-white/60 text-sm mt-2">Response within 1 hour during business hours</div>
             </div>
@@ -103,7 +103,7 @@ export default function CallToAction() {
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
               </div>
               <div className="text-white font-semibold text-lg mb-2">WhatsApp Support</div>
-              <div className="text-white/80 text-xl font-semibold mb-1">+251 91 234 5678</div>
+              <div className="text-white/80 text-xl font-semibold mb-1">+251 911 92 04 11</div>
               <div className="text-white/80">(Preferred by Local Guides)</div>
               <div className="text-white/60 text-sm mt-2">24/7 for urgent inquiries</div>
             </div>

@@ -14,7 +14,7 @@ const testimonials = [
     id: 1,
     name: 'Selamawi T.',
     role: 'Ethiopian Diaspora Returnee',
-    content: 'Phoenix Tour showed me parts of Ethiopia I never knew existed. The Omo Valley tour was life-changing - authentic, respectful, and deeply moving.',
+    content: 'Phoenix Ethiopia Tours showed me parts of Ethiopia I never knew existed. The Omo Valley tour was life-changing - authentic, respectful, and deeply moving.',
     rating: 5,
     origin: 'Addis Ababa, Ethiopia',
     date: '3 weeks ago',
@@ -24,7 +24,7 @@ const testimonials = [
     id: 2,
     name: 'Dr. James Wilson',
     role: 'Anthropology Professor',
-    content: 'As an academic studying East African cultures, I was impressed by Phoenix Tour\'s ethical approach. Their guides have deep local knowledge and genuine relationships with communities.',
+    content: 'As an academic studying East African cultures, I was impressed by Phoenix Ethiopia Tour\'s ethical approach. Their guides have deep local knowledge and genuine relationships with communities.',
     rating: 5,
     origin: 'London, UK',
     date: '1 month ago',
@@ -44,7 +44,7 @@ const testimonials = [
     id: 4,
     name: 'Amina Hassan',
     role: 'Documentary Filmmaker',
-    content: 'I\'ve traveled with many tour companies in Africa, but Phoenix Tour stands out. Their commitment to supporting local communities is real. The coffee ceremony experience was authentic and unforgettable.',
+    content: 'I\'ve traveled with many tour companies in Africa, but Phoenix Ethiopia Tours stands out. Their commitment to supporting local communities is real. The coffee ceremony experience was authentic and unforgettable.',
     rating: 5,
     origin: 'Nairobi, Kenya',
     date: '6 weeks ago',
@@ -99,7 +99,7 @@ export default function Testimonials() {
             <span className="text-primary-500">Authentic Experiences</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-10">
-            Hear from travelers who have discovered Ethiopia's wonders with Phoenix Tour. 
+            Hear from travelers who have discovered Ethiopia's wonders with Phoenix Ethiopia Tours. 
             From diaspora returnees to international explorers, our guests share their journeys.
           </p>
 

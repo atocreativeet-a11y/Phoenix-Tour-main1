@@ -170,7 +170,7 @@ export default function AdvancedGallery() {
       likes: 1876,
       views: 23456,
       date: '2024-01-19',
-      photographer: 'Phoenix Ethiopia',
+      photographer: 'Phoenix Ethiopia Tours',
       duration: '3:20'
     }
   ]);

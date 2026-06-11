@@ -385,7 +385,7 @@ export default function FAQ() {
                   WhatsApp Chat
                 </a>
                 <a
-                  href="tel:+251911234567"
+                  href="tel:+251 911 92 04 11"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary-600 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
                 >
                   <Phone className="w-5 h-5" />
@@ -401,7 +401,7 @@ export default function FAQ() {
                   <Phone className="w-4 h-4" />
                   <span className="font-medium">Addis Ababa Office</span>
                 </div>
-                <div className="text-lg font-semibold">+251 11 123 4567</div>
+                <div className="text-lg font-semibold">+251 911 92 04 11</div>
               </div>
               <div className="text-center">
                 <div className="inline-flex items-center gap-2 mb-2">

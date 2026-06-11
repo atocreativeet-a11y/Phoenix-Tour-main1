@@ -9,6 +9,7 @@ const Youtube = (Icons as any).Youtube;
 const MessageCircle = (Icons as any).MessageCircle;
 const ChevronRight = (Icons as any).ChevronRight;
 const X = (Icons as any).X;
+const linkedin = (Icons as any).linkedin;
 
 import { FaTiktok } from "react-icons/fa";
 
@@ -16,22 +17,20 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socials = [
-    { icon: Facebook, label: "Facebook", url: "https://www.fb.com/phoenixettours", color: "hover:text-blue-500" },
-    { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/phoenixettours", color: "hover:text-pink-500" },
-    { icon: X, label: "X", url: "https://www.x.com/phoenixettours", color: "hover:text-gray-300" },
-    { icon: FaTiktok, label: "TikTok", url: "https://www.tiktok.com/@phoenixettours", color: "hover:text-white" },
-    { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/phoenixettours", color: "hover:text-red-500" }
-  ];
+    { icon: Facebook, label: "Facebook", url: "https://www.facebook.com/phoenixethiopiatours", color: "hover:text-blue-500" },
+    { icon: Instagram, label: "Instagram", url: "https://www.instagram.com/phoenixethiopiatours", color: "hover:text-pink-500" },
+    { icon: X, label: "X", url: "https://www.x.com/phoenixethiopiatours", color: "hover:text-gray-300" },
+    { icon: FaTiktok, label: "TikTok", url: "https://www.tiktok.com/phoenixethiopiatours", color: "hover:text-gray-300" },
+    { icon: Youtube, label: "YouTube", url: "https://www.youtube.com/phoenixethiopiatours", color: "hover:text-red-500" },
+    { icon: linkedin, label: "linkedin", url: "https://www.linkedin.com/phoenixethiopiatours", color: "hover:text-blue-500" },
+];
 
   return (
     <footer className="w-full bg-gray-900 text-white">
-      {/* 🔴 FIXED CONTAINER: Standardized max-width and responsive horizontal padding */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-        {/* Responsive Grid Structure: 1 col on mobile, 2 cols on tablets, 3 cols on desktops */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
 
-          {/* Brand */}
           <div>
             <h3 className="text-xl font-bold mb-2">Phoenix Ethiopia Tours</h3>
             <p className="text-gray-400 text-sm mb-3">
@@ -44,23 +43,21 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Contact */}
           <div>
             <h4 className="text-lg font-semibold mb-5">Contact</h4>
-            <div className="space-y-4 text-gray-300 text-sm">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary-500 flex-shrink-0" />
-                <span>Bole Road, Addis Ababa, Ethiopia</span>
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-primary-500 flex-shrink-0" />
+                <span>contact@phoenixethiopiantours.com</span>
               </div>
-
               <div className="flex items-center gap-3">
                 <MessageCircle className="w-5 h-5 text-primary-500 flex-shrink-0" />
                 <span>+251 911 92 04 11 (WhatsApp)</span>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-primary-500 flex-shrink-0" />
-                <span>contact@phoenixethiopiantours.com</span>
+            <div className="space-y-4 text-gray-300 text-sm">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-primary-500 flex-shrink-0" />
+                <span>Bole Road, Addis Ababa, Ethiopia</span>
               </div>
             </div>
           </div>
@@ -103,7 +100,7 @@ export default function Footer() {
               Privacy Policy
             </Link>
             <Link href="/terms" className="hover:text-primary-500">
-              Terms
+              Terms & Conditions
             </Link>
             <Link href="/cookies" className="hover:text-primary-500">
               Cookies
@@ -115,7 +112,6 @@ export default function Footer() {
 
         </div>
 
-        {/* Centered Creator Credit */}
         <div className="text-center text-xs text-gray-500 mt-8">
           Powered by{" "}
           <a 

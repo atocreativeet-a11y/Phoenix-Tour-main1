@@ -1,4 +1,3 @@
-// src/app/blog/page.tsx
 import type { Metadata } from 'next';
 import BlogListingPage from '@/components/blog/BlogListingPage';
 
@@ -21,5 +20,9 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  return <BlogListingPage />;
+  return (
+    <div className="w-full min-h-screen overflow-x-hidden max-w-[100vw]">
+      <BlogListingPage />
+    </div>
+  );
 }

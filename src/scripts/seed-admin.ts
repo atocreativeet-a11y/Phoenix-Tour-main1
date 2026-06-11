@@ -25,7 +25,7 @@ async function seedAdmin() {
     const Admin = mongoose.models.Admin || mongoose.model('Admin', AdminSchema);
 
     // Check if admin already exists
-    const existingAdmin = await Admin.findOne({ email: 'admin@phoenixtourethiopia.et' });
+    const existingAdmin = await Admin.findOne({ email: 'admin@phoenixethiopiatours.com' });
     
     if (existingAdmin) {
       console.log('⚠️ Admin user already exists');
@@ -38,7 +38,7 @@ async function seedAdmin() {
     
     const admin = new Admin({
       name: 'System Administrator',
-      email: 'admin@phoenixtourethiopia.et',
+      email: 'admin@phoenixethiopiatours.com',
       password: hashedPassword,
       role: 'super_admin',
       isActive: true,
@@ -58,7 +58,7 @@ async function seedAdmin() {
 
     await admin.save();
     console.log('✅ Admin user created successfully');
-    console.log('📧 Email: admin@phoenixtourethiopia.et');
+    console.log('📧 Email: admin@phoenixethiopiatours.com');
     console.log('🔑 Password: admin123');
     console.log('⚠️ Please change the password after first login!');
 

@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-bold text-slate-900 mb-4 font-poppins">1. Information We Collect</h2>
             <p className="mb-4">
-              At Phoenix Ethiopia Tours, accessible from https://www.phoenixtourethiopia.et, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by our platform and how we use it.
+              At Phoenix Ethiopia Tours, accessible from https://www.phoenixethiopiatours.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by our platform and how we use it.
             </p>
             <p>
               If you contact us directly to book a tour (such as a Lalibela, Omo Valley, or Danakil Depression package), we may receive additional information about you such as your name, email address, phone number, and the contents of your message.
@@ -58,7 +58,7 @@ export default function PrivacyPolicyPage() {
               If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact our compliance team directly at:
             </p>
             <div className="mt-4 p-4 bg-white rounded-lg border border-slate-200 inline-block font-mono text-sm">
-              Email: info@phoenixtourethiopia.et
+              Email: contact@phoenixethiopiatours.com
             </div>
           </section>
         </div>

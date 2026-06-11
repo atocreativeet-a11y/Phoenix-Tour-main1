@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     'Ethiopia photography tours'
   ],
   authors: [{ name: 'Phoenix Ethiopia Tours' }],
-  creator: 'Phoenix Ethiopia Tours',
+  creator: 'ato creative solutions',
   publisher: 'Phoenix Ethiopia Tours',
   formatDetection: {
     email: false,
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://www.phoenixtourethiopia.et',
+    url: 'https://www.phoenixethiopiatours.com',
     title: 'Phoenix Ethiopia Tours | Best Local Tour Operator in Ethiopia',
     description: 'Authentic Ethiopian tours with local experts. Cultural, historical, adventure & wildlife tours in Ethiopia.',
     siteName: 'Phoenix Ethiopia Tours',
@@ -98,17 +98,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <head>
-        {/* Schema.org JSON-LD for Local Business */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'TravelAgency',
-              '@id': 'https://www.phoenixtourethiopia.et/#organization',
+              '@id': 'https://www.phoenixethiopiatours.com/#organization',
               name: 'Phoenix Ethiopia Tours',
-              url: 'https://www.phoenixtourethiopia.et',
-              logo: 'https://www.phoenixtourethiopia.et/logo.png',
+              url: 'https://www.phoenixethiopiatours.com',
+              logo: 'https://www.phoenixethiopiatours.com/logo.png',
               description: 'Authentic Ethiopian tours with local experts. Cultural, historical, adventure & wildlife tours in Ethiopia.',
               address: {
                 '@type': 'PostalAddress',
@@ -123,14 +122,17 @@ export default function RootLayout({
                 latitude: '9.0320',
                 longitude: '38.7465',
               },
-              telephone: '+251-11-123-4567',
-              email: 'info@phoenixtourethiopia.et',
+              telephone: '+251 911 92 04 11',
+              email: 'contact@phoenixethiopiatours.com',
               openingHours: 'Mo-Su 08:00-20:00',
               priceRange: '$$$',
               sameAs: [
-                'https://www.facebook.com/PhoenixEthiopiaTours',
+                'https://www.facebook.com/Phoenixethiopiatours',
                 'https://www.instagram.com/phoenixethiopiatours',
-                'https://twitter.com/PhoenixEthTours',
+                'https://youtube.com/phoenixethiopiatours',
+                'https://www.linkedin.com/phoenixEthiopiaTours',
+                'https://www.instagram.com/phoenixethiopiatours',
+                'https://tiktok.com/phoenixethiopiatours',
               ],
               areaServed: {
                 '@type': 'Country',
@@ -160,29 +162,23 @@ export default function RootLayout({
           }}
         />
         
-        {/* Favicon and App Icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         
-        {/* Preconnect to important domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         
-        {/* Canonical tag */}
-        <link rel="canonical" href="https://www.phoenixtourethiopia.et" />
+        <link rel="canonical" href="https://www.phoenixethiopiatours.com" />
         
-        {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <Providers>
-          {/* 👈 Reverted to clean setup so individual page layouts control constraints */}
           {children}
         </Providers>
         
-        {/* --- Google Translate Auto-Translation Scripts --- */}
         <Script
           src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
           strategy="afterInteractive"
@@ -200,7 +196,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Google Analytics Script */}
         <script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}

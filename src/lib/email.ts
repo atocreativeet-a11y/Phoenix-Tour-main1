@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 export async function sendBookingConfirmation(booking: any) {
   const mailOptions = {
-    from: '"Phoenix Tour Ethiopia" <bookings@phoenixtourethiopia.et>',
+    from: '"Phoenix Ethiopia Tours" <contact@phoenixethiopiatours.com>',
     to: booking.email,
     subject: `Booking Confirmation: ${booking.bookingNumber} - ${booking.tourName}`,
     html: `
@@ -42,7 +42,7 @@ export async function sendBookingConfirmation(booking: any) {
           
           <div style="text-align: center; padding: 20px; background: #dcfce7; border-radius: 8px;">
             <p style="margin: 0; color: #065f46;">Need help? Contact our Addis Ababa office:</p>
-            <p style="margin: 10px 0 0; font-size: 18px; color: #059669;">+251 11 123 4567</p>
+            <p style="margin: 10px 0 0; font-size: 18px; color: #059669;">+251 911 92 04 11</p>
           </div>
         </div>
       </div>

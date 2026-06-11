@@ -61,14 +61,14 @@ class SecurityCheckApp extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  "assets/cbe.jpg",
+                  "assets/phoenixethiopiatours.jpg",
                   height: 70,
                   width: 70,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 20),
                 Text(
-                  ' CBEBirr Agent App',
+                  ' Phoenix Ethiopia Tours',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -567,7 +567,7 @@ class _SecureAppWrapperState extends State<SecureAppWrapper> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CBEBirr Agent App',
+      title: 'Phoenix Ethiopia Tours',
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
@@ -612,14 +612,14 @@ class _SecureAppWrapperState extends State<SecureAppWrapper> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                "assets/cbe.jpg",
+                "assets/Phoenixethiopiatours.jpg",
                 height: 70,
                 width: 70,
                 fit: BoxFit.cover,
               ),
               SizedBox(height: 20),
               const Text(
-                'CBEBirr Agent App',
+                'Phoenix Ethiopia Tours',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,

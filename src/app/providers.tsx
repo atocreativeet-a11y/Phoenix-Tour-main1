@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <SessionProvider> {/* 2. Wrap everything in the session provider */}
+    <SessionProvider>
       <I18nProvider>
         {children}
       </I18nProvider>

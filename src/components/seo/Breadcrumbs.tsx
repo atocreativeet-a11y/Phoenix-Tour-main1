@@ -23,7 +23,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.label,
-      item: `https://www.phoenixtourethiopia.et${item.href}`,
+      item: `https://www.phoenixethiopiatours.com${item.href}`,
     })),
   };
 

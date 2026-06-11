@@ -212,7 +212,7 @@ export default function TourCard({ tour, onExploreClick }: TourCardProps) {
                 onClick={onExploreClick}
                 className="flex-1 px-4 py-3 bg-gradient-to-r from-primary-500 to-orange-500 text-white font-medium rounded-xl hover:from-primary-600 hover:to-orange-600 transition-all duration-300 flex items-center justify-center gap-2 group/explore"
               >
-                <span>Apply For Visit</span>
+                <span>Book Now</span>
                 <ArrowRight className="w-4 h-4 group-hover/explore:translate-x-1 transition-transform" />
               </button>
               
